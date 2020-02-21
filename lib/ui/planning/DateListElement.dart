@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:tinder_cards/ui/planning/date/DatePage.dart';
+import 'package:tinder_cards/ui/planning/DateWrapper.dart';
 
 class DateListElement extends StatelessWidget{
 
@@ -16,7 +16,8 @@ class DateListElement extends StatelessWidget{
         onTap: ()=> Navigator.of(context).push(
             MaterialPageRoute<void>(
                 builder: (BuildContext context){
-                  return DatePage(userId: this.userId, dateId: this.dateId);
+                  //return DatePage(userId: this.userId, dateId: this.dateId);
+                  return DateWrapper();
                 }
             )
         ),
