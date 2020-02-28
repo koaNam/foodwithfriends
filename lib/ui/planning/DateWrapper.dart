@@ -4,6 +4,11 @@ import 'package:tinder_cards/ui/planning/date/DatePage.dart';
 
 class DateWrapper extends StatefulWidget{
 
+  int userId;
+  int dateId;
+
+  DateWrapper(this.userId, this.dateId);
+
   @override
   State<StatefulWidget> createState() {
     return DateWrapperState();
@@ -19,7 +24,7 @@ class DateWrapperState extends State<DateWrapper>{
     return PageView(
       scrollDirection: Axis.horizontal,
       children: <Widget>[
-        DatePage(),
+        DatePage(userId: widget.userId, dateId: widget.dateId),
         ChatPage()
       ],
     );

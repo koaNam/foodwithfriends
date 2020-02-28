@@ -6,6 +6,7 @@ class Mutation{
 
   static const String INSERT="objects:";
   static const String UPDATE="_set:";
+  static const String DELETE=" ";
   static const String NONE ="";
 
   String name;

@@ -15,7 +15,7 @@ class PlanningPage extends StatelessWidget {
         body: Container(
             child: ListView(
               children: <Widget>[
-                DateListElement(dateId: 1, userId: this.userId)
+                DateListElement(userId: this.userId)
               ],
             )
         )

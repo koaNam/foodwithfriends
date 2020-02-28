@@ -28,7 +28,7 @@ class ProfileBloc{
     User user=await this._profileService.findUserByName(username);
     if(user == null){
       developer.log("user not found, creating it", name: LOG);
-      user=await this._profileService.insertUser(User(0, username, null, null));
+      user=await this._profileService.insertUser(User(0, username, "https://moonvillageassociation.org/wp-content/uploads/2018/06/default-profile-picture1.jpg", null));
     }
     this._profileService.updateLocation(user, currentLocation);
 

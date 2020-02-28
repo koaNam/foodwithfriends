@@ -76,7 +76,6 @@ class ProfilePage extends StatelessWidget{
                     ),
                     Container(
                       height: 40,
-                      color: Colors.green,
                       margin: EdgeInsets.only(bottom: 80),
                       child:RaisedButton(
                         child: Text("Add Property"),
