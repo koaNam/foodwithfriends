@@ -1,4 +1,4 @@
-package de.koanam.graphdemo.crud;
+package de.koanam.foodwithfriends.matching.crud;
 
 import java.util.List;
 
@@ -6,7 +6,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.query.Param;
 
-import de.koanam.graphdemo.model.DateMatch;
+import de.koanam.foodwithfriends.matching.model.DateMatch;
 
 public interface DateMatchRepository extends CrudRepository<DateMatch, Long>{
 	

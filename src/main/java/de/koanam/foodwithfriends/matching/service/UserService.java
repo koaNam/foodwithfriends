@@ -1,4 +1,4 @@
-package de.koanam.graphdemo.service;
+package de.koanam.foodwithfriends.matching.service;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -8,9 +8,9 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Service;
 
-import de.koanam.graphdemo.crud.UserRepository;
-import de.koanam.graphdemo.model.Property;
-import de.koanam.graphdemo.model.User;
+import de.koanam.foodwithfriends.matching.crud.UserRepository;
+import de.koanam.foodwithfriends.matching.model.Property;
+import de.koanam.foodwithfriends.matching.model.User;
 
 @Service
 public class UserService {

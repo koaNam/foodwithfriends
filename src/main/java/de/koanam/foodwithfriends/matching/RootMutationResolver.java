@@ -1,13 +1,13 @@
-package de.koanam.graphdemo;
+package de.koanam.foodwithfriends.matching;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import com.coxautodev.graphql.tools.GraphQLMutationResolver;
 
-import de.koanam.graphdemo.model.Date;
-import de.koanam.graphdemo.model.UserMatch;
-import de.koanam.graphdemo.service.UserMatchService;
+import de.koanam.foodwithfriends.matching.model.Date;
+import de.koanam.foodwithfriends.matching.model.UserMatch;
+import de.koanam.foodwithfriends.matching.service.UserMatchService;
 
 @Component
 public class RootMutationResolver implements GraphQLMutationResolver{

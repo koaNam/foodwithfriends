@@ -1,4 +1,4 @@
-package de.koanam.graphdemo.model;
+package de.koanam.foodwithfriends.matching.model;
 
 import java.util.Set;
 

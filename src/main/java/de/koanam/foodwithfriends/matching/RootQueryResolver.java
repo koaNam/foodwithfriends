@@ -1,4 +1,4 @@
-package de.koanam.graphdemo;
+package de.koanam.foodwithfriends.matching;
 
 import java.util.Collection;
 import java.util.List;
@@ -8,10 +8,10 @@ import org.springframework.stereotype.Component;
 
 import com.coxautodev.graphql.tools.GraphQLQueryResolver;
 
-import de.koanam.graphdemo.model.User;
-import de.koanam.graphdemo.model.DateMatch;
-import de.koanam.graphdemo.service.UserMatchService;
-import de.koanam.graphdemo.service.UserService;
+import de.koanam.foodwithfriends.matching.model.DateMatch;
+import de.koanam.foodwithfriends.matching.model.User;
+import de.koanam.foodwithfriends.matching.service.UserMatchService;
+import de.koanam.foodwithfriends.matching.service.UserService;
 
 @Component
 public class RootQueryResolver implements GraphQLQueryResolver {

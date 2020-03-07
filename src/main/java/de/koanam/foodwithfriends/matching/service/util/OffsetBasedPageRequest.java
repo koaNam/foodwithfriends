@@ -1,4 +1,4 @@
-package de.koanam.graphdemo.service.util;
+package de.koanam.foodwithfriends.matching.service.util;
 
 import java.io.Serializable;
 

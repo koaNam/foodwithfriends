@@ -1,4 +1,4 @@
-package de.koanam.graphdemo.service;
+package de.koanam.foodwithfriends.matching.service;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -12,16 +12,16 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import de.koanam.graphdemo.crud.DateMatchRepository;
-import de.koanam.graphdemo.crud.DateRepository;
-import de.koanam.graphdemo.crud.UserDateMatchRepository;
-import de.koanam.graphdemo.crud.UserMatchRepository;
-import de.koanam.graphdemo.crud.UserRepository;
-import de.koanam.graphdemo.model.User;
-import de.koanam.graphdemo.model.UserDateMatch;
-import de.koanam.graphdemo.model.Date;
-import de.koanam.graphdemo.model.DateMatch;
-import de.koanam.graphdemo.model.UserMatch;
+import de.koanam.foodwithfriends.matching.crud.DateMatchRepository;
+import de.koanam.foodwithfriends.matching.crud.DateRepository;
+import de.koanam.foodwithfriends.matching.crud.UserDateMatchRepository;
+import de.koanam.foodwithfriends.matching.crud.UserMatchRepository;
+import de.koanam.foodwithfriends.matching.crud.UserRepository;
+import de.koanam.foodwithfriends.matching.model.Date;
+import de.koanam.foodwithfriends.matching.model.DateMatch;
+import de.koanam.foodwithfriends.matching.model.User;
+import de.koanam.foodwithfriends.matching.model.UserDateMatch;
+import de.koanam.foodwithfriends.matching.model.UserMatch;
 
 @Service
 public class UserMatchService {

@@ -1,4 +1,4 @@
-package de.koanam.graphdemo.model;
+package de.koanam.foodwithfriends.matching.model;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;

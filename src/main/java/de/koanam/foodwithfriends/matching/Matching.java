@@ -1,13 +1,13 @@
-package de.koanam.graphdemo;
+package de.koanam.foodwithfriends.matching;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class GraphdemoApplication {
+public class Matching {
 
 	public static void main(String[] args) {
-		SpringApplication.run(GraphdemoApplication.class, args);
+		SpringApplication.run(Matching.class, args);
 	}
 
 
