@@ -11,7 +11,7 @@ Date _$DateFromJson(Map<String, dynamic> json) {
     ..id = json['id'] as int
     ..users = (json['user_dates'] as List)
         ?.map(
-            (e) => e == null ? null : User.fromJson(e["user"] as Map<String, dynamic>))
+            (e) => e == null ? null : User.fromJson(e['user'] as Map<String, dynamic>))
         ?.toList()
     ..votes = (json['votes'] as List)
         ?.map(

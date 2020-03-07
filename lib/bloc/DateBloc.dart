@@ -1,5 +1,6 @@
 import 'package:rxdart/rxdart.dart';
 import 'package:tinder_cards/model/Date.dart';
+import 'package:tinder_cards/model/User.dart';
 import 'package:tinder_cards/service/PlanningService.dart';
 import 'package:tinder_cards/service/graphql/field.dart';
 
@@ -39,6 +40,12 @@ class DateBloc{
       await this._planningService.deleteVote(voteId, userId);
       this.loadDate(dateId);
     }
+  }
+
+  Future<List<User>> loadUsers(int dateId) async{
+    developer.log("loading date users", name: LOG);
+    Date date = await this._planningService.getDateWithUsers(dateId);
+    return date.users;
   }
 
 }

@@ -65,7 +65,6 @@ class PlanningService{
         headers: GraphQlConstants.HEADERS);
 
     if(result.statusCode == HttpStatus.ok) {
-      print(result.body);
       Map<String, dynamic> resultMap = convert.json.decode(result.body);
       Date date = Date.fromJson(resultMap["data"]["date"][0]);
       return date;
@@ -127,4 +126,27 @@ class PlanningService{
     }
     return;
   }
+
+  Future<Date> getDateWithUsers(int dateId) async{
+    Graph graph=new Graph("date")
+        .add(Graph("user_dates")
+          .add(Graph("user")
+            .add(Field("id"))
+            .add(Field("name"))
+            .add(Field("profile_picture"))
+          )
+      ).condition(Condition(Field("id"), Condition.EQUALS, dateId));
+
+    http.Response result = await http.post(
+        GraphQlConstants.URL, body: graph.build(),
+        headers: GraphQlConstants.HEADERS);
+
+    if(result.statusCode == HttpStatus.ok) {
+      Map<String, dynamic> resultMap = convert.json.decode(result.body);
+      Date date = Date.fromJson(resultMap["data"]["date"][0]);
+      return date;
+    }
+    return null;
+  }
+
 }

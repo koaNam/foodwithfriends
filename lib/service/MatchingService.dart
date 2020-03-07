@@ -9,7 +9,6 @@ import 'package:tinder_cards/service/graphql/field.dart';
 import 'package:tinder_cards/service/graphql/graph.dart';
 
 import 'package:http/http.dart' as http;
-import 'package:tinder_cards/service/graphql/graphql_element.dart';
 import 'package:tinder_cards/service/graphql/mutation.dart';
 import 'dart:convert' as convert;
 
@@ -111,8 +110,6 @@ class MatchingService {
         .addReturning(Graph("users")
           .add(Field("id"))
         );
-
-    print(mutation.build());
 
     http.Response result = await http.post(
         GraphQlConstants.URL, body: mutation.build(),

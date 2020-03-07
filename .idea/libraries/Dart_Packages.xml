@@ -44,6 +44,13 @@
             </list>
           </value>
         </entry>
+        <entry key="bubble">
+          <value>
+            <list>
+              <option value="G:/flutter/.pub-cache/hosted/pub.dartlang.org/bubble-1.1.9+1/lib" />
+            </list>
+          </value>
+        </entry>
         <entry key="build">
           <value>
             <list>
@@ -478,6 +485,13 @@
             </list>
           </value>
         </entry>
+        <entry key="stomp">
+          <value>
+            <list>
+              <option value="G:/flutter/.pub-cache/hosted/pub.dartlang.org/stomp-0.8.0/lib" />
+            </list>
+          </value>
+        </entry>
         <entry key="stream_channel">
           <value>
             <list>
@@ -585,6 +599,7 @@
       <root url="file://G:/flutter/.pub-cache/hosted/pub.dartlang.org/args-1.5.2/lib" />
       <root url="file://G:/flutter/.pub-cache/hosted/pub.dartlang.org/async-2.4.0/lib" />
       <root url="file://G:/flutter/.pub-cache/hosted/pub.dartlang.org/boolean_selector-1.0.5/lib" />
+      <root url="file://G:/flutter/.pub-cache/hosted/pub.dartlang.org/bubble-1.1.9+1/lib" />
       <root url="file://G:/flutter/.pub-cache/hosted/pub.dartlang.org/build-1.2.2/lib" />
       <root url="file://G:/flutter/.pub-cache/hosted/pub.dartlang.org/build_config-0.4.1+1/lib" />
       <root url="file://G:/flutter/.pub-cache/hosted/pub.dartlang.org/build_daemon-2.1.2/lib" />
@@ -644,6 +659,7 @@
       <root url="file://G:/flutter/.pub-cache/hosted/pub.dartlang.org/source_gen-0.9.4+6/lib" />
       <root url="file://G:/flutter/.pub-cache/hosted/pub.dartlang.org/source_span-1.5.5/lib" />
       <root url="file://G:/flutter/.pub-cache/hosted/pub.dartlang.org/stack_trace-1.9.3/lib" />
+      <root url="file://G:/flutter/.pub-cache/hosted/pub.dartlang.org/stomp-0.8.0/lib" />
       <root url="file://G:/flutter/.pub-cache/hosted/pub.dartlang.org/stream_channel-2.0.0/lib" />
       <root url="file://G:/flutter/.pub-cache/hosted/pub.dartlang.org/stream_transform-0.0.20/lib" />
       <root url="file://G:/flutter/.pub-cache/hosted/pub.dartlang.org/string_scanner-1.0.5/lib" />

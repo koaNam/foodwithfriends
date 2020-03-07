@@ -25,7 +25,7 @@ class DateWrapperState extends State<DateWrapper>{
       scrollDirection: Axis.horizontal,
       children: <Widget>[
         DatePage(userId: widget.userId, dateId: widget.dateId),
-        ChatPage()
+        ChatPage(userId: widget.userId, dateId: widget.dateId)
       ],
     );
   }
