@@ -24,7 +24,7 @@ class ChatPage extends StatelessWidget{
 
   Future<void> _init() async {
     _users = this._dateBloc.loadUsers(this.dateId);
-    this._chatBloc.connectService(this.dateId, await _users);
+    this._chatBloc.connectService(this.dateId, this.userId, await _users);
   }
 
   @override
@@ -60,28 +60,13 @@ class ChatPage extends StatelessWidget{
 
                 } else {
                   chat = ListView(
-                    children: <Widget>[
-                      Bubble(
-                        margin: BubbleEdges.only(top: 10),
-                        alignment: Alignment.topRight,
-                        nip: BubbleNip.rightTop,
-                        color: Color.fromRGBO(225, 255, 199, 1.0),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.end,
-                          children: <Widget>[
-                            Text("username", textAlign: TextAlign.right),
-                            Text('Hello, World!', textAlign: TextAlign.right)
-                          ],
-                        ),
-                      ),
-                    ],
+                    children: <Widget>[],
                   );
                 }
                 return Scaffold(
                     appBar: AppBar(title: Text("Chat"), centerTitle: true,),
                     body: SingleChildScrollView(
                       child: Container(
-                        color: Colors.grey,
                         height: MediaQuery.of(context).size.height - 81,
                         child: Flex(
                               direction: Axis.vertical,

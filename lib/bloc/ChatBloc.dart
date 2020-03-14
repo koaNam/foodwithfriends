@@ -21,21 +21,31 @@ class ChatBloc {
   BehaviorSubject<List<ChatMessage>> _messageController = BehaviorSubject<List<ChatMessage>>();
   Observable<List<ChatMessage>> get messageStream =>_messageController.stream;
 
-  Future<void> connectService(int dateId, List<User> users) async {
+  Future<void> connectService(int dateId, int userId, List<User> users) async {
     String chatId = "$dateId:";
     users.forEach((u) => chatId += "${u.id}:");
     this._chatId = chatId.hashCode.toString();
+    //this._stompClient =  await this.connect("ws://ec2-3-121-201-73.eu-central-1.compute.amazonaws.com:8081/fwfchat/websocket");
+    this._stompClient =  await this.connect("ws://10.0.2.2:8081/fwfchat/websocket");
 
-    this._stompClient =  await this.connect("ws://10.0.2.2:8080/fwfchat/websocket");
-    this._stompClient.subscribeString("1", "/room/${this._chatId}", (Map<String, String> header, String msg) {;
+    this._stompClient.subscribeString("1", "/user/$userId/**", (Map<String, String> header, String msg) {
+      List<dynamic> result = convert.jsonDecode(msg);
+      for(var message in result){
+        this._messages.add(ChatMessage.fromJson(message));
+      }
+      this._messageController.add(this._messages);
+    });
+
+     this._stompClient.subscribeString("2", "/room/${this._chatId}", (Map<String, String> header, String msg) {
       ChatMessage message = ChatMessage.fromJson(convert.jsonDecode(msg));
       this._messages.add(message);
       this._messageController.add(this._messages);
     });
+
+    this._stompClient.sendString("/chat/user/$userId/${this._chatId}/getAll", "dummy");
   }
 
   Future<void> send(int userId, String message) async{
-    print(convert.jsonEncode(ChatMessage(user: User(userId, null, null, null), message: message).toJson()));
     this._stompClient.sendString("/chat/room/${this._chatId}/message.send", convert.jsonEncode(ChatMessage(user: User(userId, null, null, null), message: message).toJson()));
   }
 
