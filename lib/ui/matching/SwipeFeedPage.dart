@@ -33,7 +33,6 @@ class SwipeFeedPage extends StatelessWidget {
                   return data;
                 },
                 itemBuilder: (DrawableCard drawable, Function accept, Function decline) {
-                  print(drawable);
                   if(drawable is User) {
                     return new ProfileCard(user: drawable, accept: accept, decline: decline, matchingBloc: this._matchingBloc, myId: this.userId,);
                   } else {

@@ -6,6 +6,7 @@ import "package:stomp/stomp.dart";
 import 'package:tinder_cards/bloc/DateBloc.dart';
 import 'package:tinder_cards/model/ChatMessage.dart';
 import 'package:tinder_cards/model/User.dart';
+import 'package:tinder_cards/service/graphql/graphql_constants.dart';
 import 'package:web_socket_channel/io.dart';
 
 import 'package:web_socket_channel/status.dart' as status;
@@ -25,8 +26,7 @@ class ChatBloc {
     String chatId = "$dateId:";
     users.forEach((u) => chatId += "${u.id}:");
     this._chatId = chatId.hashCode.toString();
-    //this._stompClient =  await this.connect("ws://ec2-3-121-201-73.eu-central-1.compute.amazonaws.com:8081/fwfchat/websocket");
-    this._stompClient =  await this.connect("ws://10.0.2.2:8081/fwfchat/websocket");
+    this._stompClient =  await this.connect(GraphQlConstants.CHAT_URL);
 
     this._stompClient.subscribeString("1", "/user/$userId/**", (Map<String, String> header, String msg) {
       List<dynamic> result = convert.jsonDecode(msg);

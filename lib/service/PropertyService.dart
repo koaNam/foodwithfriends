@@ -57,4 +57,38 @@ class PropertyService{
     }
   }
 
+  Future<void> deleteUserProperty(int userId, int propertyId) async{
+    Map<String, dynamic> id=new Map();
+    id["_eq"]=userId;
+    Map<String, dynamic> where=new Map();
+    where["user_id"]=id;
+
+    Map<String, dynamic> and=new Map();
+    and["_eq"]=propertyId;
+    Map<String, dynamic> andWhere=new Map();
+    andWhere["property_id"]=and;
+
+    where["_and"]=andWhere;
+
+    Mutation mutation = Mutation("delete_user_property", Mutation.DELETE)
+        .addObjects("where: ${convert.json.encode(where)}")
+        .addReturning(Field("user_id"))
+        .addReturning(Field("property_id"));
+
+    print(mutation.build());
+
+    http.Response result = await http.post(
+        GraphQlConstants.URL, body: mutation.build(),
+        headers: GraphQlConstants.HEADERS);
+
+    if(result.statusCode == HttpStatus.ok) {
+      Map<String, dynamic> resultMap = convert.json.decode(result.body);
+      if(resultMap.containsKey("errors")){  //TODO throw exception
+        return null;
+      }
+      return;
+    }
+    return;
+  }
+
 }

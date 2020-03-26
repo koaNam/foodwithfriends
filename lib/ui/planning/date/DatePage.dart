@@ -1,10 +1,10 @@
 
 import 'package:flutter/material.dart';
-import 'package:location/location.dart';
 import 'package:tinder_cards/bloc/DateBloc.dart';
 import 'package:tinder_cards/model/Date.dart';
 import 'package:tinder_cards/model/User.dart';
 import 'package:tinder_cards/model/Voter.dart';
+import 'package:tinder_cards/ui/planning/date/FloationActionButtonRow.dart';
 
 
 class DatePage extends StatelessWidget{
@@ -26,12 +26,12 @@ class DatePage extends StatelessWidget{
           if (data.connectionState == ConnectionState.active) {
             Date date=data.data;
             return Scaffold(
-                appBar: AppBar(title: Text("Votes"), centerTitle: true,),
+                appBar: AppBar(title: Text(""), centerTitle: true,),
                 floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
-                floatingActionButton: FloatingActionButton(
-                  backgroundColor: Colors.blue,
-                  child: Icon(Icons.add),
-                  onPressed: () => this._dateBloc.addVote(this.dateId),
+                floatingActionButton: Container(
+                  height: 110,
+                  alignment: Alignment.bottomCenter,
+                  child: FloatingActionButtonRow(userId: this.userId, dataId: this.dateId)
                 ),
                 body: Column(
                   children: <Widget>[
@@ -63,7 +63,7 @@ class DatePage extends StatelessWidget{
                                       ),
                                       Padding(
                                         child: InkWell(
-                                          child: ((v.voters.where((vo) => vo.user.id == this.userId).isEmpty) ? Icon(Icons.thumb_down) : Icon(Icons.thumb_up, color: Colors.grey,)),
+                                          child: ((v.voters.where((vo) => vo.user.id == this.userId).isEmpty) ? Icon(Icons.thumb_down) : Icon(Icons.thumb_down, color: Colors.grey,)),
                                           onTap: () => this._dateBloc.vote(this.dateId, v.id, this.userId, "no", v.voters.where((vo) => vo.user.id == this.userId).isEmpty),
                                         ),
                                         padding: EdgeInsets.only(left:  MediaQuery.of(context).size.width  / 2.5),

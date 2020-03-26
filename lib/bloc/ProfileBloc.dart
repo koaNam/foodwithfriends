@@ -5,6 +5,8 @@ import 'package:location/location.dart';
 
 import 'dart:developer' as developer;
 
+import 'package:tinder_cards/service/PropertyService.dart';
+
 class ProfileBloc{
 
   static const String LOG="bloc.ProfileBloc";
@@ -13,11 +15,13 @@ class ProfileBloc{
   Observable<User> get profileStream =>_profileController.stream;
 
   ProfileService _profileService;
+  PropertyService _propertyService;
 
   String username;
 
   ProfileBloc(){
     _profileService=new ProfileService();
+    _propertyService = new PropertyService();
   }
 
   Future<void> login(String username) async{
@@ -38,6 +42,12 @@ class ProfileBloc{
   Future<void> loadProfile(int id) async {
     developer.log("finding user by id", name: LOG);
     User user=await this._profileService.findUserById(id);
+    this._profileController.add(user);
+  }
+
+  Future<void> deleteProperty(int userId, int propertyId)async{
+    await this._propertyService.deleteUserProperty(userId, propertyId);
+    User user=await this._profileService.findUserById(userId);
     this._profileController.add(user);
   }
 

@@ -14,7 +14,7 @@ class BottomNavigation extends StatelessWidget{
         selectedFontSize: 10,
         items: [
           BottomNavigationBarItem(
-            icon: Icon(Icons.home, color: Colors.blue,),
+            icon: Icon(Icons.add_circle, color: Colors.blue,),
             title: Text(""),
           ),
           BottomNavigationBarItem(
@@ -22,7 +22,7 @@ class BottomNavigation extends StatelessWidget{
             title: Text(""),
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.alarm, color: Colors.blue,),
+            icon: Icon(Icons.person, color: Colors.blue,),
             title: Text(""),
           )
         ]

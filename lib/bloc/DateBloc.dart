@@ -2,11 +2,9 @@ import 'package:rxdart/rxdart.dart';
 import 'package:tinder_cards/model/Date.dart';
 import 'package:tinder_cards/model/User.dart';
 import 'package:tinder_cards/service/PlanningService.dart';
-import 'package:tinder_cards/service/graphql/field.dart';
 
 import 'dart:developer' as developer;
 
-import 'package:tinder_cards/service/graphql/mutation.dart';
 
 class DateBloc{
   static const String LOG="bloc.DateBloc";
@@ -27,14 +25,10 @@ class DateBloc{
     this._dateController.add(date);
   }
 
-  Future<void> addVote(int dateId) async{
-    developer.log("adding vote", name: LOG);
-  }
-
   Future<void> vote(int dateId, int voteId, int userId, String vote, bool isUpvote) async{
     if(isUpvote) {
       developer.log("vote", name: LOG);
-      await this._planningService.addVote(voteId, userId, vote);
+      await this._planningService.vote(voteId, userId, vote);
       this.loadDate(dateId);
     }else{
       await this._planningService.deleteVote(voteId, userId);

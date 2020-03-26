@@ -1,6 +1,5 @@
 import 'package:bubble/bubble.dart';
 import 'package:flutter/material.dart';
-import 'package:dash_chat/dash_chat.dart';
 import 'package:tinder_cards/bloc/ChatBloc.dart';
 import 'package:tinder_cards/bloc/DateBloc.dart';
 import 'package:tinder_cards/model/User.dart';

@@ -23,7 +23,7 @@ class AddPropertyPage extends StatelessWidget{
           )
         ],
       ),
-      body: Text(this.userId.toString()),
+      body: Text(""),
     );
   }
 }
