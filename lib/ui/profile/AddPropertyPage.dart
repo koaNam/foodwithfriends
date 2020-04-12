@@ -1,14 +1,16 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:tinder_cards/bloc/ProfileBloc.dart';
 import 'package:tinder_cards/bloc/PropertyBloc.dart';
 import 'package:tinder_cards/model/Property.dart';
 
 class AddPropertyPage extends StatelessWidget{
 
   final int userId;
-  final PropertyBloc _propertyBloc=new PropertyBloc();
+  final PropertyBloc propertyBloc=new PropertyBloc();
+  final ProfileBloc profileBloc;
 
-  AddPropertyPage({this.userId});
+  AddPropertyPage({this.userId, this.profileBloc});
 
   @override
   Widget build(BuildContext context) {
@@ -18,7 +20,7 @@ class AddPropertyPage extends StatelessWidget{
           IconButton(
             icon: Icon(Icons.search),
             onPressed: () {
-              showSearch(context: context, delegate: SearchPropertyDelegate(this._propertyBloc, this.userId));
+              showSearch(context: context, delegate: SearchPropertyDelegate(this.propertyBloc, this.profileBloc, this.userId));
             },
           )
         ],
@@ -31,9 +33,10 @@ class AddPropertyPage extends StatelessWidget{
 class SearchPropertyDelegate extends SearchDelegate{
 
   final PropertyBloc _propertyBloc;
+  final ProfileBloc _profileBloc;
   final int userId;
 
-  SearchPropertyDelegate(this._propertyBloc, this.userId);
+  SearchPropertyDelegate(this._propertyBloc, this._profileBloc, this.userId);
 
   @override
   List<Widget> buildActions(BuildContext context) {
@@ -80,7 +83,7 @@ class SearchPropertyDelegate extends SearchDelegate{
               RaisedButton(
                 child: Text(e.name),
                 onPressed: () {
-                  this._propertyBloc.addProperty(this.userId, e.id);
+                  this._profileBloc.addProperty(this.userId, e.id);
                   Navigator.of(context).pop();
                 },
               )

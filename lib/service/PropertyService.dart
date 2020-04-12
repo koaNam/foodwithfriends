@@ -75,8 +75,6 @@ class PropertyService{
         .addReturning(Field("user_id"))
         .addReturning(Field("property_id"));
 
-    print(mutation.build());
-
     http.Response result = await http.post(
         GraphQlConstants.URL, body: mutation.build(),
         headers: GraphQlConstants.HEADERS);

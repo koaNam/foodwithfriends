@@ -18,7 +18,12 @@ class PlanningService{
   Future<List<Date>> getDates(int userId) async {
     Graph graph=new Graph("user_date")
       .add(Graph("date")
-        .add(Field("id")
+        .add(Field("id"))
+        .add(Graph("user_dates")
+          .add(Graph("user")
+            .add(Field("profile_picture")
+          )
+        )
       )
     ).condition(Condition(Field("user_id"), Condition.EQUALS, userId));
 

@@ -8,23 +8,26 @@ Alignment cardAlign;
 Size cardSize;
 
 class CardsSection extends StatefulWidget {
-
   final int loadThreshold;
   final Function onLoadData;
   final Function itemBuilder;
 
-  CardsSection({BuildContext context, this.loadThreshold, this.onLoadData, this.itemBuilder}) {
+  CardsSection(
+      {BuildContext context,
+      this.loadThreshold,
+      this.onLoadData,
+      this.itemBuilder}) {
     cardAlign = new Alignment(0.0, 0.0);
-    cardSize = new Size(MediaQuery.of(context).size.width * 0.9, MediaQuery.of(context).size.height);
+    cardSize = new Size(MediaQuery.of(context).size.width * 0.9,
+        MediaQuery.of(context).size.height);
   }
 
   @override
   _CardsSectionState createState() => new _CardsSectionState();
 }
 
-
-class _CardsSectionState extends State<CardsSection> with SingleTickerProviderStateMixin {
-
+class _CardsSectionState extends State<CardsSection>
+    with SingleTickerProviderStateMixin {
   int cardsCounter = 0;
 
   List<SuggestionCard> cards = new List();
@@ -37,11 +40,11 @@ class _CardsSectionState extends State<CardsSection> with SingleTickerProviderSt
   @override
   void initState() {
     super.initState();
-    for(Object o in widget.onLoadData(null)){
-      cards.add(widget.itemBuilder(o, (){
+    for (Object o in widget.onLoadData(null)) {
+      cards.add(widget.itemBuilder(o, () {
         frontCardAlign = frontCardAlign.add(Alignment(40.0, 0.0));
         this.animateCards();
-      }, (){
+      }, () {
         frontCardAlign = frontCardAlign.add(Alignment(-40.0, 0.0));
         this.animateCards();
       }));
@@ -54,7 +57,7 @@ class _CardsSectionState extends State<CardsSection> with SingleTickerProviderSt
         duration: new Duration(milliseconds: 700), vsync: this);
     _controller.addListener(() => setState(() {}));
     _controller.addStatusListener((AnimationStatus status) {
-      if (status == AnimationStatus.completed){
+      if (status == AnimationStatus.completed) {
         changeCardsOrder();
       }
     });
@@ -63,56 +66,64 @@ class _CardsSectionState extends State<CardsSection> with SingleTickerProviderSt
   @override
   Widget build(BuildContext context) {
     return new Expanded(
-      child: Container(
-          color: Colors.white,
-        child: new Stack(
-      children: <Widget>[
-        backCard(),
-        frontCard(),
-        _controller.status != AnimationStatus.forward
-            ? new SizedBox.expand(
-                child: new GestureDetector(
-                // While dragging the first card
-                onPanUpdate: (DragUpdateDetails details) {
-                  // Add what the user swiped in the last frame to the alignment of the card
-                  setState(() {
-                    // 20 is the "speed" at which moves the card
-                    frontCardAlign = new Alignment(
-                        frontCardAlign.x + 20 * details.delta.dx / MediaQuery.of(context).size.width,
-                        frontCardAlign.y + 40 * details.delta.dy / MediaQuery.of(context).size.height
-                    );
+        child: Container(
+            color: Colors.white,
+            child: new Stack(
+              children: <Widget>[
+                backCard(),
+                frontCard(),
+                _controller.status != AnimationStatus.forward
+                    ? new SizedBox.expand(
+                        child: new GestureDetector(
+                        // While dragging the first card
+                        onPanUpdate: (DragUpdateDetails details) {
+                          // Add what the user swiped in the last frame to the alignment of the card
+                          setState(() {
+                            // 20 is the "speed" at which moves the card
+                            frontCardAlign = new Alignment(
+                                frontCardAlign.x +
+                                    20 *
+                                        details.delta.dx /
+                                        MediaQuery.of(context).size.width,
+                                frontCardAlign.y +
+                                    40 *
+                                        details.delta.dy /
+                                        MediaQuery.of(context).size.height);
 
-                    frontCardRot = frontCardAlign.x; // * rotation speed;
-                  });
-                },
-                // When releasing the first card
-                onPanEnd: (_) {
-                  // If the front card was swiped far enough to count as swiped
-                  if (frontCardAlign.x > 3.0) {
-                    animateCards();
-                    cards.first.onSwipeRight();
-                  } else if(frontCardAlign.x < -3.0){
-                    animateCards();
-                    cards.first.onSwipeLeft();
-                  } else {
-                    // Return to the initial rotation and alignment
-                    setState(() {
-                      frontCardAlign = defaultFrontCardAlign;
-                      frontCardRot = 0.0;
-                    });
-                  }
-                },
-              ))
-            : new Container(),
-      ],
+                            frontCardRot =
+                                frontCardAlign.x; // * rotation speed;
+                          });
+                        },
+                        // When releasing the first card
+                        onPanEnd: (_) {
+                          // If the front card was swiped far enough to count as swiped
+                          if (frontCardAlign.x > 3.0) {
+                            animateCards();
+                            cards.first.onSwipeRight();
+                          } else if (frontCardAlign.x < -3.0) {
+                            animateCards();
+                            cards.first.onSwipeLeft();
+                          } else {
+                            // Return to the initial rotation and alignment
+                            setState(() {
+                              frontCardAlign = defaultFrontCardAlign;
+                              frontCardRot = 0.0;
+                            });
+                          }
+                        },
+                      ))
+                    : new Container(),
+              ],
+            )
         )
-    ));
+    );
   }
 
   Widget backCard() {
     return new Align(
       alignment: cardAlign,
-      child: new SizedBox.fromSize(size: cardSize, child: cards[1] as StatelessWidget),
+      child: new SizedBox.fromSize(
+          size: cardSize, child: cards[1] as StatelessWidget),
     );
   }
 
@@ -125,7 +136,8 @@ class _CardsSectionState extends State<CardsSection> with SingleTickerProviderSt
             : frontCardAlign,
         child: new Transform.rotate(
           angle: (pi / 180.0) * frontCardRot,
-          child: new SizedBox.fromSize(size: cardSize, child: cards[0] as StatelessWidget),
+          child: new SizedBox.fromSize(
+              size: cardSize, child: cards[0] as StatelessWidget),
         ));
   }
 
@@ -133,13 +145,13 @@ class _CardsSectionState extends State<CardsSection> with SingleTickerProviderSt
     setState(() {
       cards.removeAt(0);
 
-      if(cards.length < widget.loadThreshold){
-        for(Object o in widget.onLoadData(cards.last)){
-          SuggestionCard card=widget.itemBuilder(o, (){
+      if (cards.length < widget.loadThreshold) {
+        for (Object o in widget.onLoadData(cards.last)) {
+          SuggestionCard card = widget.itemBuilder(o, () {
             frontCardAlign = frontCardAlign.add(Alignment(40.0, 0.0));
             this.animateCards();
-          }, (){
-            frontCardAlign =  frontCardAlign.add(Alignment(-40.0, 0.0));
+          }, () {
+            frontCardAlign = frontCardAlign.add(Alignment(-40.0, 0.0));
             this.animateCards();
           });
           cards.add(card);

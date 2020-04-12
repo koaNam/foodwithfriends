@@ -60,7 +60,7 @@ class ProfilePageState extends State<ProfilePage>{
                                   onPressed: () =>Navigator.of(context).push(
                                       MaterialPageRoute<void>(
                                           builder: (BuildContext context){
-                                            return CameraPage();
+                                            return CameraPage(this.userId, this._profileBloc);
                                           }
                                       )
                                   ),
@@ -124,7 +124,7 @@ class ProfilePageState extends State<ProfilePage>{
                               onPressed: () =>Navigator.of(context).push(
                                   MaterialPageRoute<void>(
                                       builder: (BuildContext context){
-                                        return AddPropertyPage(userId: this.userId,);
+                                        return AddPropertyPage(userId: this.userId, profileBloc: this._profileBloc,);
                                       }
                                   )
                               ),

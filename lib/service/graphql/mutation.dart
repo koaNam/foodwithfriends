@@ -45,20 +45,26 @@ class Mutation{
       mutation.write(", "+object);
     }
 
-    mutation.write(") {");
-    if(kind != NONE){
-      mutation.write(" returning {");
-    }
+    mutation.write(")");
 
-    for(GraphQlElement returning in this.returning){
-      mutation.write(returning.toString());
-      mutation.write(" ");
-    }
-    mutation.write("}}");
+    if(returning != null){
+      mutation.write("{");
 
-    if(kind != NONE){
+      if(kind != NONE){
+        mutation.write(" returning {");
+      }
+
+      for(GraphQlElement returning in this.returning){
+        mutation.write(returning.toString());
+        mutation.write(" ");
+      }
       mutation.write("}");
+
+      if(kind != NONE){
+        mutation.write("}");
+      }
     }
+    mutation.write("}");
 
     Map<String, String> request=new Map();
     request["query"]=mutation.toString();

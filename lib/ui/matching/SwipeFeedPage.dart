@@ -22,25 +22,30 @@ class SwipeFeedPage extends StatelessWidget {
       builder: (context, AsyncSnapshot snap){
         if(snap.connectionState == ConnectionState.active) {
           List<DrawableCard> data=snap.data;
-          return new Flex(
-            direction: Axis.vertical,
-            children: <Widget>[
-              new CardsSection(
-                context: context,
-                loadThreshold: 2,
-                onLoadData: (lastElement) {
-                  _matchingBloc.loadMatch(this.userId, 10); //TODO innerRadius
-                  return data;
-                },
-                itemBuilder: (DrawableCard drawable, Function accept, Function decline) {
-                  if(drawable is User) {
-                    return new ProfileCard(user: drawable, accept: accept, decline: decline, matchingBloc: this._matchingBloc, myId: this.userId,);
-                  } else {
-                    return new DateCard(dateMatch: drawable, accept: accept, decline: decline, matchingBloc: this._matchingBloc, myId: this.userId,);
-                  }
-                },
-              )
-            ],
+          return Container(
+            color: Colors.blue,
+            child:  SafeArea(
+              child: Flex(
+                direction: Axis.vertical,
+                children: <Widget>[
+                  new CardsSection(
+                    context: context,
+                    loadThreshold: 2,
+                    onLoadData: (lastElement) {
+                      _matchingBloc.loadMatch(this.userId, 10); //TODO innerRadius
+                      return data;
+                    },
+                    itemBuilder: (DrawableCard drawable, Function accept, Function decline) {
+                      if(drawable is User) {
+                        return new ProfileCard(user: drawable, accept: accept, decline: decline, matchingBloc: this._matchingBloc, myId: this.userId,);
+                      } else {
+                        return new DateCard(dateMatch: drawable, accept: accept, decline: decline, matchingBloc: this._matchingBloc, myId: this.userId,);
+                      }
+                    },
+                  )
+                ],
+              ),
+            ),
           );
         }else{
           return CircularProgressIndicator();

@@ -41,7 +41,24 @@ class DateListElement extends StatelessWidget{
     for(Date date in dates){
       result.add(
         InkWell(
-          child: Text(date.id.toString()),
+          child: Container(
+            decoration: BoxDecoration(border: Border(bottom: BorderSide(color: Colors.grey, width: 1))),
+            height: MediaQuery.of(context).size.height / 10,
+            child: Row(
+              children: <Widget>[
+                Container(
+                  width: MediaQuery.of(context).size.width / 6,
+                  child: GridView.count(
+                    crossAxisCount: 2,
+                    children: date.users.take(4).map((e) => Image.network(e.profilePicture,  fit: BoxFit.cover)).toList(),
+                  ),
+                ),
+                Expanded(
+                  child: Text("Match mit ${date.users.length} Personen am 31.05 um 18 Uhr TODOOOOOOOOOO"),
+                )
+              ],
+            ),
+          ),
           onTap: ()=> Navigator.of(context).push(
               MaterialPageRoute<void>(
                   builder: (BuildContext context){

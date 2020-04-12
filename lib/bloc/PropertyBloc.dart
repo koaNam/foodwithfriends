@@ -24,9 +24,4 @@ class PropertyBloc{
     this._propertyController.add(result);
   }
 
-  Future<void> addProperty(int userId, int propertyId) async{
-    developer.log("adding property to user", name: LOG);
-    await this._propertyService.addUserProperty(userId, propertyId);
-  }
-
 }

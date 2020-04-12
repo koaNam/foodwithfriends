@@ -1,5 +1,6 @@
 import 'package:rxdart/rxdart.dart';
 import 'package:tinder_cards/model/User.dart';
+import 'package:tinder_cards/service/CameraService.dart';
 import 'package:tinder_cards/service/ProfileService.dart';
 import 'package:location/location.dart';
 
@@ -16,12 +17,14 @@ class ProfileBloc{
 
   ProfileService _profileService;
   PropertyService _propertyService;
+  CameraService _cameraService;
 
   String username;
 
   ProfileBloc(){
     _profileService=new ProfileService();
     _propertyService = new PropertyService();
+    _cameraService = new CameraService();
   }
 
   Future<void> login(String username) async{
@@ -47,6 +50,24 @@ class ProfileBloc{
 
   Future<void> deleteProperty(int userId, int propertyId)async{
     await this._propertyService.deleteUserProperty(userId, propertyId);
+    User user=await this._profileService.findUserById(userId);
+    this._profileController.add(user);
+  }
+
+  Future<void> addProperty(int userId, int propertyId) async{
+    developer.log("adding property to user", name: LOG);
+    await this._propertyService.addUserProperty(userId, propertyId);
+
+    User user=await this._profileService.findUserById(userId);
+    this._profileController.add(user);
+  }
+
+  Future<void> changeProfilePicture(int userId, String name, String base64String) async{
+    developer.log("changing profile  picture", name: LOG);
+
+    this._profileService.updateProfilePicture(userId, name);
+    await this._cameraService.addProfilePicture(name, base64String);
+
     User user=await this._profileService.findUserById(userId);
     this._profileController.add(user);
   }

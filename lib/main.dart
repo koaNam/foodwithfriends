@@ -11,7 +11,7 @@ class MyApp extends StatelessWidget
   {
     return new MaterialApp
     (
-      title: 'Tinder cards demo',
+      title: 'FoodWithFriends',
       theme: new ThemeData(primarySwatch: Colors.blue),
       home: new Home(),
     );

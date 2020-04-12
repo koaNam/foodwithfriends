@@ -81,11 +81,9 @@ class DateCard extends StatelessWidget implements SuggestionCard{
 
   List<Widget> _buildPictures(List<User> users) {
     List<Widget> widgets = new List();
-
     for (User user in users) {
       widgets.add(new Image.network(user.profilePicture, fit: BoxFit.cover),);
     }
-
     return widgets;
   }
 
