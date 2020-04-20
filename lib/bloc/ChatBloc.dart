@@ -46,7 +46,7 @@ class ChatBloc {
   }
 
   Future<void> send(int userId, String message) async{
-    this._stompClient.sendString("/chat/room/${this._chatId}/message.send", convert.jsonEncode(ChatMessage(user: User(userId, null, null, null), message: message).toJson()));
+    this._stompClient.sendString("/chat/room/${this._chatId}/message.send", convert.jsonEncode(ChatMessage(user: User(userId, null, null, null, null, null), message: message).toJson()));
   }
 
 

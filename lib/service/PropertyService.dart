@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:http/http.dart' as http;
 
 import 'package:tinder_cards/model/Property.dart';
+import 'package:tinder_cards/service/graphql/ConditionElement.dart';
 
 import 'package:tinder_cards/service/graphql/condition.dart';
 import 'package:tinder_cards/service/graphql/field.dart';
@@ -20,7 +21,9 @@ class PropertyService{
         .add(Field("id"))
         .add(Field("name"))
         .add(Field("colour"))
-      .condition(Condition(Field("name"), Condition.LIKE, likeName));
+      .condition(Condition.element(ConditionElement<String>(Field("name"), Condition.ILIKE, likeName)));
+
+    print(graph.build());
 
     http.Response result = await http.post(
         GraphQlConstants.URL, body: graph.build(),

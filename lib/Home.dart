@@ -1,45 +1,63 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_auth_buttons/flutter_auth_buttons.dart';
 import 'package:tinder_cards/bloc/ProfileBloc.dart';
+import 'package:tinder_cards/service/social/FacebookService.dart';
 import 'package:tinder_cards/ui/MainPageWrapper.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 
 import 'model/User.dart';
 
-class Home extends StatelessWidget{
-
+class Home extends StatelessWidget {
+  final ProfileBloc profileBloc = new ProfileBloc();
 
   @override
   Widget build(BuildContext context) {
-
-    ProfileBloc profileBloc=new ProfileBloc();
-
     return StreamBuilder(
-      stream: profileBloc.profileStream,
-      builder: (_, AsyncSnapshot<User> snapshot) {
-        if(snapshot.connectionState != ConnectionState.active){
-          return Scaffold(
-            body: Row(
-              children: <Widget>[
-                Expanded(
-                  child: TextField(
-                    onSubmitted: (String value){
-                     profileBloc.username = value;
-                    },
-                  ),
+        stream: profileBloc.profileStream,
+        builder: (_, AsyncSnapshot<User> snapshot) {
+          if (snapshot.connectionState != ConnectionState.active) {
+            return Scaffold(
+                backgroundColor: Colors.white,
+                body: Container(
+                  decoration: BoxDecoration(
+                    image: DecorationImage(
+                      image: AssetImage('assets/start_screen.png'),
+                      fit: BoxFit.cover
+                    )
                 ),
-                RaisedButton(
-                  child: Text("login"),
-                  onPressed: () => profileBloc.login(profileBloc.username),
+                  child: Center(
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: <Widget>[
+                          FacebookSignInButton(
+                            onPressed: this.facebookLogin,
+                            text: "Weiter mit Facebook",
+                          ),
+                          GoogleSignInButton(
+                            onPressed: this.googleLogin,
+                            text: "Anmelden mit Google",
+                          ),
+                        ],
+                      )
+                  ),
                 )
-              ],
-            ),
-          );
-        } else {
-          User user=snapshot.data;
-          return MainPageWrapper(user.id);
-          //return MainPageWrapper(1);
+            );
+          } else {
+            User user = snapshot.data;
+            return MainPageWrapper(user.id);
+          }
         }
-      }
-    );
+      );
   }
 
+  Future facebookLogin() async {
+    this.profileBloc.loginSocial(FacebookService());
+  }
+
+  Future googleLogin() async {
+    print("hier");
+    GoogleSignIn googleSignIn = GoogleSignIn();
+    GoogleSignInAccount result = await googleSignIn.signIn();
+    print(result);
+  }
 }

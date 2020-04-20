@@ -11,6 +11,7 @@ class Vote{
   int id;
   String title;
   String description;
+  String result;
   @JsonKey(name: "source_user_id")
   int sourceUserId;
   @JsonKey(name: "date_id")
@@ -19,7 +20,7 @@ class Vote{
 
   Vote();
 
-  Vote.vote(this.title, this.description, this.sourceUserId, this.dateId);
+  Vote.vote(this.title, this.description, this.result, this.sourceUserId, this.dateId);
 
   factory Vote.fromJson(Map<String, dynamic> json) => _$VoteFromJson(json);
 

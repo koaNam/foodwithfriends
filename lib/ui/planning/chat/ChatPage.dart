@@ -63,9 +63,20 @@ class ChatPage extends StatelessWidget{
                   );
                 }
                 return Scaffold(
-                    appBar: AppBar(title: Text("Chat"), centerTitle: true,),
+                    appBar: AppBar(
+                      backgroundColor: Colors.white,
+                      iconTheme: IconThemeData(
+                        color: Colors.black, //change your color here
+                      ),
+                      title: Text(
+                        "Chat",
+                        style: TextStyle(color: Colors.black),
+                      ),
+                      centerTitle: true,
+                    ),
                     body: SingleChildScrollView(
                       child: Container(
+                        color: Colors.grey.shade100,
                         height: MediaQuery.of(context).size.height - 81,
                         child: Flex(
                               direction: Axis.vertical,

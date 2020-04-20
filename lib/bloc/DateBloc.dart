@@ -25,15 +25,14 @@ class DateBloc{
     this._dateController.add(date);
   }
 
-  Future<void> vote(int dateId, int voteId, int userId, String vote, bool isUpvote) async{
-    if(isUpvote) {
+  Future<void> vote(int dateId, int voteId, int userId, String vote, bool isNewVote) async{
+    await this._planningService.deleteVote(voteId, userId);
+    print(vote);
+    if(isNewVote) {
       developer.log("vote", name: LOG);
       await this._planningService.vote(voteId, userId, vote);
-      this.loadDate(dateId);
-    }else{
-      await this._planningService.deleteVote(voteId, userId);
-      this.loadDate(dateId);
     }
+    this.loadDate(dateId);
   }
 
   Future<List<User>> loadUsers(int dateId) async{

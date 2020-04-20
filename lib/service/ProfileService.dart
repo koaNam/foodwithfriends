@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:tinder_cards/model/User.dart';
+import 'package:tinder_cards/service/graphql/ConditionElement.dart';
 import 'package:tinder_cards/service/graphql/condition.dart';
 import 'package:tinder_cards/service/graphql/field.dart';
 import 'package:tinder_cards/service/graphql/graph.dart';
@@ -48,12 +49,34 @@ class ProfileService{
         .add(Field("id"))
         .add(Field("name"))
         .add(Field("colour"))))
-        .condition(Condition(Field("name"), Condition.EQUALS, name));
+        .condition(Condition.element(ConditionElement<String>(Field("name"), Condition.EQUALS, name)));
 
     http.Response result = await http.post(
         GraphQlConstants.URL, body: graph.build(),
         headers: GraphQlConstants.HEADERS);
 
+    if(result.statusCode == HttpStatus.ok) {
+      Map<String, dynamic> resultMap = convert.json.decode(result.body);
+      return _buildUserFromJson(resultMap);
+    }
+    return null;
+  }
+
+  Future<User> findUserByOauth(int id, String service) async{
+    Graph graph=Graph("user")
+        .add(Field("id"))
+        .add(Field("name"))
+        .add(Field("profile_picture"))
+        .add(Graph("user_properties")
+        .add(Graph("property")
+        .add(Field("id"))
+        .add(Field("name"))
+        .add(Field("colour"))))
+        .condition(Condition.element(ConditionElement<String>(Field("oauth_service"), Condition.EQUALS, service)).addCondition(ConditionElement<int>(Field("oauth_id"), Condition.EQUALS, id)));
+
+    http.Response result = await http.post(
+        GraphQlConstants.URL, body: graph.build(),
+        headers: GraphQlConstants.HEADERS);
     if(result.statusCode == HttpStatus.ok) {
       Map<String, dynamic> resultMap = convert.json.decode(result.body);
       return _buildUserFromJson(resultMap);
@@ -127,8 +150,6 @@ class ProfileService{
         .addObjects(convert.jsonEncode(set))
         .addObjects("where: ${convert.json.encode(where)}")
         .addReturning(Field("id"));
-
-    print(mutation.build());
 
     http.Response result = await http.post(
         GraphQlConstants.URL, body: mutation.build(),

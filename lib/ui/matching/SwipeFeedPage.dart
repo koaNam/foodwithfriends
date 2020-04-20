@@ -20,36 +20,51 @@ class SwipeFeedPage extends StatelessWidget {
     return StreamBuilder(
       stream: _matchingBloc.matchingStream,
       builder: (context, AsyncSnapshot snap){
+        Widget body;
         if(snap.connectionState == ConnectionState.active) {
           List<DrawableCard> data=snap.data;
-          return Container(
-            color: Colors.blue,
-            child:  SafeArea(
-              child: Flex(
-                direction: Axis.vertical,
-                children: <Widget>[
-                  new CardsSection(
-                    context: context,
-                    loadThreshold: 2,
-                    onLoadData: (lastElement) {
-                      _matchingBloc.loadMatch(this.userId, 10); //TODO innerRadius
-                      return data;
-                    },
-                    itemBuilder: (DrawableCard drawable, Function accept, Function decline) {
-                      if(drawable is User) {
-                        return new ProfileCard(user: drawable, accept: accept, decline: decline, matchingBloc: this._matchingBloc, myId: this.userId,);
-                      } else {
-                        return new DateCard(dateMatch: drawable, accept: accept, decline: decline, matchingBloc: this._matchingBloc, myId: this.userId,);
-                      }
-                    },
-                  )
-                ],
+          body = Scaffold(
+            body: Container(
+              color: Colors.grey.shade100,
+              child:  SafeArea(
+                child: Flex(
+                  direction: Axis.vertical,
+                  children: <Widget>[
+                    new CardsSection(
+                      context: context,
+                      loadThreshold: 2,
+                      onLoadData: (lastElement) {
+                        _matchingBloc.loadMatch(this.userId, 10); //TODO innerRadius
+                        return data;
+                      },
+                      itemBuilder: (DrawableCard drawable, Function accept, Function decline) {
+                        if(drawable is User) {
+                          return new ProfileCard(user: drawable, accept: accept, decline: decline, matchingBloc: this._matchingBloc, myId: this.userId,);
+                        } else {
+                          return new DateCard(dateMatch: drawable, accept: accept, decline: decline, matchingBloc: this._matchingBloc, myId: this.userId,);
+                        }
+                      },
+                    )
+                  ],
+                ),
               ),
             ),
           );
         }else{
-          return CircularProgressIndicator();
+          body = CircularProgressIndicator();
         }
+
+        return Scaffold(
+            appBar: AppBar(
+              title: Text(
+                "Profile",
+                style: TextStyle(color: Colors.black),
+              ),
+              centerTitle: true,
+              backgroundColor: Colors.white,
+            ),
+            body: body
+        );
       }
     );
   }

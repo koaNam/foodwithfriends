@@ -1,39 +1,42 @@
 
 
+import 'package:tinder_cards/service/graphql/ConditionElement.dart';
+
 import 'graph.dart';
 import 'graphql_element.dart';
 
 class Condition<T>{
   static const String EQUALS="_eq";
   static const String LIKE="_like";
+  static const String ILIKE="_ilike";
 
   GraphQlElement field;
   String operator;
   T value;
 
-  Condition(this.field, this.operator, this.value);
+  List<ConditionElement> conditions = [];
+
+  Condition(GraphQlElement field, String operator, T value){
+    conditions.add(ConditionElement<T>(field, operator, value));
+  }
+
+  Condition.element(ConditionElement element){
+    conditions.add(element);
+  }
+
+  Condition addCondition(ConditionElement element){
+    conditions.add(element);
+    return this;
+  }
 
   @override
   String toString(){
-    GraphQlElement temp=this.field;
-    String fieldName=temp.name;
-    int levels=0;
-    while(temp.runtimeType == Graph){
-      temp = (temp as Graph).children[0];
-      fieldName += ":{" + temp.name;
-      levels++;
+    StringBuffer condition=new StringBuffer("where: {");
+    for(ConditionElement element in this.conditions){
+      condition.write(element.toString());
+      condition.write(",");
     }
 
-    StringBuffer condition=new StringBuffer("where: {");
-    condition.write(fieldName);
-    condition.write(":{");
-    condition.write(this.operator);
-    condition.write(":");
-    condition.write('"${this.value}"');
-    condition.write("}");
-    for(int i=0; i<levels; i++){
-      condition.write("}");
-    }
     condition.write("}, ");
     return condition.toString();
   }

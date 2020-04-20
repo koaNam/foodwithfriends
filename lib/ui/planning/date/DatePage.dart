@@ -26,59 +26,82 @@ class DatePage extends StatelessWidget{
           if (data.connectionState == ConnectionState.active) {
             Date date=data.data;
             return Scaffold(
-                appBar: AppBar(title: Text(""), centerTitle: true,),
+                appBar: AppBar(
+                  backgroundColor: Colors.white,
+                  iconTheme: IconThemeData(
+                    color: Colors.black, //change your color here
+                  ),
+                  title: Text(""),
+                  centerTitle: true,
+                ),
                 floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
                 floatingActionButton: Container(
                   height: 110,
                   alignment: Alignment.bottomCenter,
                   child: FloatingActionButtonRow(userId: this.userId, dataId: this.dateId)
                 ),
-                body: Column(
-                  children: <Widget>[
-                    Stack(
-                      alignment: Alignment.bottomLeft,
-                      children: this.buildProfilePictures(date.users, context),
-                    ),
-                    Expanded(
-                      child: ListView(
-                        children: date.votes.map((v) =>
-                            Container(
-                              margin: EdgeInsets.only(bottom: 20),
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: <Widget>[
-                                  Text(v.title, style: TextStyle(fontWeight: FontWeight.bold, fontSize: 22),),
-                                  Text(v.description),
-                                  Row(
-                                    crossAxisAlignment: CrossAxisAlignment.end,
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    children: <Widget>[
-                                      InkWell(
-                                        child: ((v.voters.where((vo) => vo.user.id == this.userId).isEmpty) ? Icon(Icons.thumb_up) : Icon(Icons.thumb_up, color: Colors.grey,)),
-                                        onTap: () => this._dateBloc.vote(this.dateId, v.id, this.userId, "yes", v.voters.where((vo) => vo.user.id == this.userId).isEmpty),
-                                      ),
-                                      Padding(
-                                        child: Text(this.getUpvotes(v.voters).toString()),
-                                        padding: EdgeInsets.only(right:  MediaQuery.of(context).size.width  / 2.5),
-                                      ),
-                                      Padding(
-                                        child: InkWell(
-                                          child: ((v.voters.where((vo) => vo.user.id == this.userId).isEmpty) ? Icon(Icons.thumb_down) : Icon(Icons.thumb_down, color: Colors.grey,)),
-                                          onTap: () => this._dateBloc.vote(this.dateId, v.id, this.userId, "no", v.voters.where((vo) => vo.user.id == this.userId).isEmpty),
+                body: Container(
+                  color: Colors.grey.shade100,
+                  child: Column(
+                      children: <Widget>[
+                        Container(
+                          child: Stack(
+                            alignment: Alignment.bottomLeft,
+                            children: this.buildProfilePictures(date.users, context),
+                          ),
+                          padding: EdgeInsets.only(bottom: 5, top: 5),
+                        ),
+                        Expanded(
+                            child: ListView(
+                                children: date.votes.map((v) =>
+                                    Container(
+                                      decoration: BoxDecoration(
+                                        color: Colors.white,
+                                        border: Border(
+                                          bottom: BorderSide(color: Colors.grey, width: 1),
+                                          top: BorderSide(color: Colors.grey, width: 1),
                                         ),
-                                        padding: EdgeInsets.only(left:  MediaQuery.of(context).size.width  / 2.5),
                                       ),
-                                      Text(this.getDownvotes(v.voters).toString()),
-                                    ],
-                                  ),
-                                ],
-                              ),
+                                      padding: EdgeInsets.only(bottom: 10, top: 5),
+                                      margin: EdgeInsets.only(left: 5, right: 5),
+                                      child: Column(
+                                        crossAxisAlignment: CrossAxisAlignment.start,
+                                        children: <Widget>[
+                                          Text(v.title, style: TextStyle(fontWeight:  v.result == "accepted" ? FontWeight.bold: FontWeight.normal, fontSize: 22, color: v.result == "declined" ? Color.fromRGBO(170, 175, 180, 100): Colors.black)),
+                                          Text(v.description, style: TextStyle(fontWeight:  v.result == "accepted" ? FontWeight.bold: FontWeight.normal, color: v.result == "declined" ? Color.fromRGBO(170, 175, 180, 100): Colors.black)),
+                                          Container(
+                                            margin: EdgeInsets.only(top: 5),
+                                            child: Row(
+                                              crossAxisAlignment: CrossAxisAlignment.end,
+                                              mainAxisAlignment: MainAxisAlignment.center,
+                                              children: <Widget>[
+                                                InkWell(
+                                                  child: ((v.voters.where((vo) => vo.user.id == this.userId && vo.vote == "yes").isEmpty) ? Icon(Icons.thumb_up) : Icon(Icons.thumb_up, color: Colors.blue,)),
+                                                  onTap: () => this._dateBloc.vote(this.dateId, v.id, this.userId, "yes", v.voters.where((vo) => (vo.user.id == this.userId && vo.vote == "yes")).isEmpty),
+                                                ),
+                                                Padding(
+                                                  child: Text(this.getUpvotes(v.voters).toString()),
+                                                  padding: EdgeInsets.only(right:  MediaQuery.of(context).size.width  / 2.6),
+                                                ),
+                                                Padding(
+                                                  child: InkWell(
+                                                    child: ((v.voters.where((vo) => vo.user.id == this.userId && vo.vote == "no").isEmpty) ? Icon(Icons.thumb_down) : Icon(Icons.thumb_down, color: Colors.blue,)),
+                                                    onTap: () => this._dateBloc.vote(this.dateId, v.id, this.userId, "no", v.voters.where((vo) => (vo.user.id == this.userId && vo.vote == "no")).isEmpty),
+                                                  ),
+                                                  padding: EdgeInsets.only(left: MediaQuery.of(context).size.width  / 2.5),),
+                                                Text(this.getDownvotes(v.voters).toString()),
+                                              ],
+                                            ),
+                                          )
+                                        ],
+                                      ),
+                                    )
+                                ).toList()
                             )
-                        ).toList()
                         )
-                    )
-                  ]
-                 ),
+                      ]
+                  ),
+                )
                 );
           } else {
             return CircularProgressIndicator();

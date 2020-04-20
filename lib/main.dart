@@ -9,10 +9,10 @@ class MyApp extends StatelessWidget
   @override
   Widget build(BuildContext context)
   {
+    precacheImage(AssetImage('assets/start_screen.png'), context);
     return new MaterialApp
     (
       title: 'FoodWithFriends',
-      theme: new ThemeData(primarySwatch: Colors.blue),
       home: new Home(),
     );
   }

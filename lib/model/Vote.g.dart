@@ -11,6 +11,7 @@ Vote _$VoteFromJson(Map<String, dynamic> json) {
     ..id = json['id'] as int
     ..title = json['title'] as String
     ..description = json['description'] as String
+    ..result = json['result'] as String
     ..sourceUserId = json['source_user_id'] as int
     ..dateId = json['date_id'] as int
     ..voters = (json['voters'] as List)
@@ -23,6 +24,7 @@ Map<String, dynamic> _$VoteToJson(Vote instance) => <String, dynamic>{
       'id': instance.id,
       'title': instance.title,
       'description': instance.description,
+      'result': instance.result,
       'source_user_id': instance.sourceUserId,
       'date_id': instance.dateId,
       'voters': instance.voters,

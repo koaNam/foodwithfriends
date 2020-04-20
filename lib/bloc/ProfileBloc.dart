@@ -7,6 +7,7 @@ import 'package:location/location.dart';
 import 'dart:developer' as developer;
 
 import 'package:tinder_cards/service/PropertyService.dart';
+import 'package:tinder_cards/service/social/SocialService.dart';
 
 class ProfileBloc{
 
@@ -19,26 +20,46 @@ class ProfileBloc{
   PropertyService _propertyService;
   CameraService _cameraService;
 
-  String username;
-
   ProfileBloc(){
     _profileService=new ProfileService();
     _propertyService = new PropertyService();
     _cameraService = new CameraService();
   }
 
+  Future<void> loginSocial(SocialService service) async{
+    LocationData currentLocation = await this._getLocation();
+
+    developer.log("trying to log in user", name: LOG);
+
+    await service.loadData();
+    print(service.id);
+    print(service.name);
+
+    User user = await this._profileService.findUserByOauth(service.id, service.getIdentifier());
+
+    if(user == null){
+      developer.log("user not found, creating it", name: LOG);
+      user=await this._profileService.insertUser(User(0, service.name, "https://moonvillageassociation.org/wp-content/uploads/2018/06/default-profile-picture1.jpg", service.id, service.getIdentifier(), null));
+    }
+    if(currentLocation != null) {
+      this._profileService.updateLocation(user, currentLocation);
+    }
+    this._profileController.add(user);
+
+  }
+
   Future<void> login(String username) async{
-    Location location = new Location();
-    LocationData currentLocation = await location.getLocation();
+    LocationData currentLocation = await this._getLocation();
 
     developer.log("trying to log in user", name: LOG);
     User user=await this._profileService.findUserByName(username);
     if(user == null){
       developer.log("user not found, creating it", name: LOG);
-      user=await this._profileService.insertUser(User(0, username, "https://moonvillageassociation.org/wp-content/uploads/2018/06/default-profile-picture1.jpg", null));
+      user=await this._profileService.insertUser(User(0, username, "https://moonvillageassociation.org/wp-content/uploads/2018/06/default-profile-picture1.jpg", null, null, null));
     }
-    this._profileService.updateLocation(user, currentLocation);
-
+    if(currentLocation != null) {
+      this._profileService.updateLocation(user, currentLocation);
+    }
     this._profileController.add(user);
   }
 
@@ -70,6 +91,29 @@ class ProfileBloc{
 
     User user=await this._profileService.findUserById(userId);
     this._profileController.add(user);
+  }
+
+  Future<LocationData> _getLocation() async{
+    Location location = new Location();
+
+    bool serviceEnabled = await location.serviceEnabled();
+    if (!serviceEnabled) {
+      serviceEnabled = await location.requestService();
+      if (!serviceEnabled) {
+        return null;
+      }
+    }
+
+    bool  permissionGranted = await location.hasPermission();
+    if (!permissionGranted) {
+      permissionGranted = await location.requestPermission();
+      if (!permissionGranted ) {
+        return null;
+      }
+    }
+
+    LocationData currentLocation = await location.getLocation();
+    return currentLocation;
   }
 
   void dispose() {

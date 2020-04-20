@@ -33,7 +33,7 @@ class VoteBloc{
       print(title);
       print(description);
 
-      Vote vote = new Vote.vote(title, description, userId, dateId);
+      Vote vote = new Vote.vote(title, description, null, userId, dateId);
       this._planningService.addVote(vote);
     }
   }

@@ -11,8 +11,16 @@ class PlanningPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(title: Text("Matches"), centerTitle: true,),
+        appBar: AppBar(
+          title: Text(
+            "Matches",
+            style: TextStyle(color: Colors.black),
+          ),
+          centerTitle: true,
+          backgroundColor: Colors.white,
+        ),
         body: Container(
+          color: Colors.grey.shade100,
             child: ListView(
               children: <Widget>[
                 DateListElement(userId: this.userId)

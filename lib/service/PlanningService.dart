@@ -57,6 +57,7 @@ class PlanningService{
           .add(Field("id"))
           .add(Field("title"))
           .add(Field("description"))
+          .add(Field("result"))
           .add(Graph("voters")
             .add(Graph("user")
                 .add(

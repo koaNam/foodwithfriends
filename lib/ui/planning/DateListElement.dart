@@ -42,8 +42,13 @@ class DateListElement extends StatelessWidget{
       result.add(
         InkWell(
           child: Container(
-            decoration: BoxDecoration(border: Border(bottom: BorderSide(color: Colors.grey, width: 1))),
+            decoration: BoxDecoration(
+              color: Colors.white,
+              border: Border(bottom: BorderSide(color: Colors.grey, width: 1)),
+            ),
             height: MediaQuery.of(context).size.height / 10,
+            margin: EdgeInsets.only(top: 5, left: 5, right: 5),
+            padding: EdgeInsets.only(bottom: 5),
             child: Row(
               children: <Widget>[
                 Container(

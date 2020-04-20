@@ -13,8 +13,12 @@ class User implements DrawableCard{
   String profilePicture;
   @JsonKey(name: "user_properties")
   List<Property> userProperties;
+  @JsonKey(name: "oauth_id")
+  int oauthId;
+  @JsonKey(name: "oauth_service")
+  String oauthService;
 
-  User(this.id, this.name, this.profilePicture, this.userProperties);
+  User(this.id, this.name, this.profilePicture, this.oauthId, this.oauthService, this.userProperties);
 
   factory User.fromJson(Map<String, dynamic> json) => _$UserFromJson(json);
 

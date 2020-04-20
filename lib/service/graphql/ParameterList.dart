@@ -1,5 +1,4 @@
 import 'package:tinder_cards/service/graphql/condition.dart';
-import 'package:tinder_cards/service/graphql/graphql_element.dart';
 
 class ParameterList<T> extends Condition<T>{
 
