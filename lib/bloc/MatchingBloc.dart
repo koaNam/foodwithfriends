@@ -2,6 +2,7 @@ import 'package:rxdart/rxdart.dart';
 import 'package:tinder_cards/model/DateMatch.dart';
 import 'package:tinder_cards/model/DrawableCard.dart';
 import 'package:tinder_cards/model/User.dart';
+import 'package:tinder_cards/model/UserMatch.dart';
 import 'package:tinder_cards/service/MatchingService.dart';
 import 'package:tinder_cards/model/Match.dart';
 
@@ -25,10 +26,10 @@ class MatchingBloc{
   Future<void> loadMatch(int userId, int innerRadius) async{
     developer.log("loading matches", name: LOG);
 
-    Future<List<User>> fMatches=this._matchingService.getMatches(userId, innerRadius);
+    Future<List<UserMatch>> fMatches=this._matchingService.getMatches(userId, innerRadius);
     Future<List<DateMatch>> fDates= this._matchingService.getDateMatches(userId, innerRadius);
 
-    List<User> matches=await fMatches;
+    List<UserMatch> matches=await fMatches;
     List<DateMatch> dates=await fDates;
 
     List<DrawableCard> matchingCards=new List();
@@ -38,16 +39,16 @@ class MatchingBloc{
     this._matchingController.add(matchingCards);
   }
 
-  Future<void> addMatch(int userId, int partnerId) async {
+  Future<void> setMatchStatus(int matchId, bool status) async {
     developer.log("add match", name: LOG);
 
-    await this._matchingService.addMatch(userId, partnerId);
+    await this._matchingService.setMatchStatus(matchId, status);
   }
 
-  Future<void> addDateMatch(int userId, int dateMatchId) async {
+  Future<void> setDateMatchStatus(int userId, int dateMatchId, bool status) async {
     developer.log("add date match", name: LOG);
 
-    await this._matchingService.addDateMatch(userId, dateMatchId);
+    await this._matchingService.setDateMatchStatus(userId, dateMatchId, status);
   }
 
 }

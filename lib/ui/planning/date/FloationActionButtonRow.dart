@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:tinder_cards/ui/planning/date/AddVotePage.dart';
+import 'package:tinder_cards/ui/planning/date/AddVotePageWrapper.dart';
 
 class FloatingActionButtonRow extends StatefulWidget {
 
@@ -53,7 +53,7 @@ class _FloatingActionButtonRowState extends State<FloatingActionButtonRow>
             Navigator.of(context).push(
                 MaterialPageRoute<void>(
                     builder: (BuildContext context){
-                      return AddVotePage(userId: widget.userId, dateId: widget.dataId,);
+                      return AddVotePageWrapper(userId: widget.userId, dateId: widget.dataId,);
                     }
                 )
             );

@@ -5,6 +5,7 @@ import 'package:tinder_cards/bloc/MatchingBloc.dart';
 import 'package:flutter/material.dart';
 import 'package:tinder_cards/model/Property.dart';
 import 'package:tinder_cards/model/User.dart';
+import 'package:tinder_cards/model/UserMatch.dart';
 
 import 'SuggestionCard.dart';
 
@@ -13,11 +14,11 @@ class ProfileCard extends StatelessWidget implements SuggestionCard{
   final MatchingBloc matchingBloc;
 
   final int myId;
-  final User user;
+  final UserMatch userMatch;
   final Function() accept;
   final Function() decline;
 
-  ProfileCard({this.user, this.accept, this.decline, this.matchingBloc, this.myId});
+  ProfileCard({this.userMatch, this.accept, this.decline, this.matchingBloc, this.myId});
 
   @override
   Widget build(BuildContext context) {
@@ -29,7 +30,7 @@ class ProfileCard extends StatelessWidget implements SuggestionCard{
             new SizedBox.expand(
               child: new Material(
                 borderRadius: new BorderRadius.circular(12.0),
-                child: new Image.network(this.user.profilePicture,
+                child: new Image.network(this.userMatch.match.profilePicture,
                     fit: BoxFit.cover),
               ),
             ),
@@ -51,7 +52,7 @@ class ProfileCard extends StatelessWidget implements SuggestionCard{
                     mainAxisAlignment: MainAxisAlignment.end,
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: <Widget>[
-                      new Text(this.user.name,
+                      new Text(this.userMatch.match.name,
                           style: new TextStyle(
                               color: Colors.white,
                               fontSize: 20.0,
@@ -68,7 +69,7 @@ class ProfileCard extends StatelessWidget implements SuggestionCard{
         childAspectRatio: 5,
         physics: NeverScrollableScrollPhysics(),
         crossAxisCount: 2,
-        children: this.buildProperties(this.user.userProperties),
+        children: this.buildProperties(this.userMatch.match.userProperties),
       ),
       Container(
           child: Padding(
@@ -110,13 +111,12 @@ class ProfileCard extends StatelessWidget implements SuggestionCard{
 
   @override
   void onSwipeLeft() {
-    print("left from card");
-    this.matchingBloc.addMatch(this.myId, this.user.id);
+    this.matchingBloc.setMatchStatus(this.userMatch.id, true);
   }
 
   @override
   void onSwipeRight() {
-    print("right from card");
+    this.matchingBloc.setMatchStatus(this.userMatch.id, false);
   }
 
 }

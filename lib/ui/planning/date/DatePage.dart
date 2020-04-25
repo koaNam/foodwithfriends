@@ -6,6 +6,8 @@ import 'package:tinder_cards/model/User.dart';
 import 'package:tinder_cards/model/Voter.dart';
 import 'package:tinder_cards/ui/planning/date/FloationActionButtonRow.dart';
 
+import 'AddVotePageWrapper.dart';
+
 
 class DatePage extends StatelessWidget{
 
@@ -35,10 +37,19 @@ class DatePage extends StatelessWidget{
                   centerTitle: true,
                 ),
                 floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
-                floatingActionButton: Container(
-                  height: 110,
-                  alignment: Alignment.bottomCenter,
-                  child: FloatingActionButtonRow(userId: this.userId, dataId: this.dateId)
+                floatingActionButton: FloatingActionButton(
+                  heroTag: "AddProperty",
+                  child: Container(
+                    child: Icon(Icons.add),
+                  ),
+                  onPressed: () =>
+                      Navigator.of(context).push(
+                          MaterialPageRoute<void>(
+                              builder: (BuildContext context){
+                                return AddVotePageWrapper(userId: this.userId, dateId: this.dateId);
+                              }
+                          )
+                      )
                 ),
                 body: Container(
                   color: Colors.grey.shade100,

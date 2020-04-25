@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:tinder_cards/bloc/MatchingBloc.dart';
 import 'package:tinder_cards/model/DrawableCard.dart';
 import 'package:tinder_cards/model/User.dart';
+import 'package:tinder_cards/model/UserMatch.dart';
 import 'DateCard.dart';
 import 'CardsSection.dart';
 import 'ProfileCard.dart';
@@ -38,8 +39,8 @@ class SwipeFeedPage extends StatelessWidget {
                         return data;
                       },
                       itemBuilder: (DrawableCard drawable, Function accept, Function decline) {
-                        if(drawable is User) {
-                          return new ProfileCard(user: drawable, accept: accept, decline: decline, matchingBloc: this._matchingBloc, myId: this.userId,);
+                        if(drawable is UserMatch) {
+                          return new ProfileCard(userMatch: drawable, accept: accept, decline: decline, matchingBloc: this._matchingBloc, myId: this.userId,);
                         } else {
                           return new DateCard(dateMatch: drawable, accept: accept, decline: decline, matchingBloc: this._matchingBloc, myId: this.userId,);
                         }
@@ -56,10 +57,6 @@ class SwipeFeedPage extends StatelessWidget {
 
         return Scaffold(
             appBar: AppBar(
-              title: Text(
-                "Profile",
-                style: TextStyle(color: Colors.black),
-              ),
               centerTitle: true,
               backgroundColor: Colors.white,
             ),

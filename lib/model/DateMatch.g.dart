@@ -8,7 +8,7 @@ part of 'DateMatch.dart';
 
 DateMatch _$DateMatchFromJson(Map<String, dynamic> json) {
   return DateMatch()
-    ..id = int.parse(json['id'])
+    ..id = json['id'] as int
     ..users = (json['userDateMatches'] as List)
         ?.map(
             (e) => e == null ? null : User.fromJson(e['user'] as Map<String, dynamic>))

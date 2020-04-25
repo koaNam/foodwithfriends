@@ -6,7 +6,7 @@ import 'package:tinder_cards/model/Property.dart';
 part 'User.g.dart';
 
 //@JsonSerializable()
-class User implements DrawableCard{
+class User{
   int id;
   String name;
   @JsonKey(name: "profile_picture")

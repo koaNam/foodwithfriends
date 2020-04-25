@@ -70,13 +70,12 @@ class DateCard extends StatelessWidget implements SuggestionCard{
 
   @override
   void onSwipeLeft() {
-    print("left from date");
-    this.matchingBloc.addDateMatch(this.myId, this.dateMatch.id);
+    this.matchingBloc.setDateMatchStatus(this.myId, this.dateMatch.id, true);
   }
 
   @override
   void onSwipeRight() {
-    print("right from date");
+    this.matchingBloc.setDateMatchStatus(this.myId, this.dateMatch.id, false);
   }
 
   List<Widget> _buildPictures(List<User> users) {

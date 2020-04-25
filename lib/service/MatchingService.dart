@@ -4,12 +4,13 @@ import 'dart:core';
 
 import 'package:tinder_cards/model/DateMatch.dart';
 import 'package:tinder_cards/model/User.dart';
+import 'package:tinder_cards/model/UserMatch.dart';
 import 'package:tinder_cards/service/graphql/ParameterList.dart';
 import 'package:tinder_cards/service/graphql/field.dart';
 import 'package:tinder_cards/service/graphql/graph.dart';
 
 import 'package:http/http.dart' as http;
-import 'package:tinder_cards/service/graphql/mutation.dart';
+import 'graphql/mutation.dart';
 import 'dart:convert' as convert;
 
 import 'graphql/graphql_constants.dart';
@@ -18,14 +19,17 @@ class MatchingService {
 
   static const int COUNT=10;
 
-  Future<List<User>> getMatches(int userId, int innerRadius) async{
+  Future<List<UserMatch>> getMatches(int userId, int innerRadius) async{
     Graph graph=new Graph("matches")
       .add(Field("id"))
-      .add(Field("profile_picture"))
-      .add(Field("name"))
-      .add(Graph("properties")
+      .add(Graph("match")
+        .add(Field("id"))
+        .add(Field("profile_picture"))
         .add(Field("name"))
-        .add(Field("colour"))
+        .add(Graph("properties")
+          .add(Field("name"))
+          .add(Field("colour"))
+      )
     )
     .condition(ParameterList()
       .addParameter("userId", userId.toString())
@@ -70,10 +74,10 @@ class MatchingService {
     return null;
   }
 
-  List<User> _buildMatchFromJson(Map<String, dynamic> json){
-    List<User> matches=new List();
+  List<UserMatch> _buildMatchFromJson(Map<String, dynamic> json){
+    List<UserMatch> matches=new List();
     for(Map<String, dynamic> data in json["data"]["matches"]){
-      User user=User.fromJson(data);
+      UserMatch user=UserMatch.fromJson(data);
       matches.add(user);
     }
     return matches;
@@ -88,15 +92,16 @@ class MatchingService {
     return dateMatches;
   }
 
-  Future<void> addMatch(int userId, int matchId) async {
+  Future<void> setMatchStatus(int matchId, bool status)  async {
 
-    Mutation mutation = new Mutation("addMatch", Mutation.NONE)
-      .addObjects("userId: $userId, matchId: $matchId")
+    Mutation mutation = new Mutation("setMatchStatus", Mutation.NONE)
+      .addObjects("matchId: $matchId, status: $status")
       .addReturning(Field("id"));
 
     http.Response result = await http.post(
         GraphQlConstants.URL, body: mutation.build(),
         headers: GraphQlConstants.HEADERS);
+
     if(result.statusCode == HttpStatus.ok) {
       return;
     }else {
@@ -104,9 +109,9 @@ class MatchingService {
     }
   }
   
-  Future<void> addDateMatch(int userId, int dateMatchId) async {
-    Mutation mutation=new Mutation("acceptUserDate", Mutation.NONE)
-        .addObjects("userId: $userId, dateMatchId: $dateMatchId")
+  Future<void> setDateMatchStatus(int userId, int dateMatchId, bool status) async {
+    Mutation mutation=new Mutation("setUserDateStatus", Mutation.NONE)
+        .addObjects("userId: $userId, dateMatchId: $dateMatchId, status: $status")
         .addReturning(Graph("users")
           .add(Field("id"))
         );
