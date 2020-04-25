@@ -43,16 +43,10 @@ public class UserMatchService {
 	@Autowired
 	private DateRepository dateRepository;
 
-	public UserMatch addMatch(Long userId, Long matchId) {
+	public UserMatch setMatchStatus(long matchId, boolean status) {
+		UserMatch userMatch=this.userMatchRepository.findById(matchId).orElseThrow();
 		
-		User user=new User();
-		user.setId(userId);
-		
-		User match=new User();
-		match.setId(matchId);
-		
-		UserMatch userMatch=new UserMatch(user, match);
-		
+		userMatch.setAccepted(status);
 		userMatch = this.userMatchRepository.save(userMatch);
 		
 		return userMatch;
@@ -61,14 +55,14 @@ public class UserMatchService {
 	public Collection<DateMatch> getDateMatches(long userId, double innerRadius, int count){
 		User me=this.userRepository.findById(userId).get();
 		
-		List<User> baseMatches = this.userMatchRepository.findByUserId(userId).stream().map(e -> e.getMatch()).collect(Collectors.toList());
+		List<User> baseMatches = this.userMatchRepository.findByUserIdAndAccepted(userId, true).stream().map(e -> e.getMatch()).collect(Collectors.toList());
 		LOG.info("found {} matches for user {}", baseMatches.size(), userId);
 		
 		List<List<User>> matchIntersections=new ArrayList<>();
 		for(User user: baseMatches) {
 			List<User> intersection = new ArrayList<>(baseMatches);
 			
-			List<User> matches= this.userMatchRepository.findByUserId(user.getId()).stream().map(e -> e.getMatch()).collect(Collectors.toList());
+			List<User> matches= this.userMatchRepository.findByUserIdAndAccepted(user.getId(), true).stream().map(e -> e.getMatch()).collect(Collectors.toList());
 			matches.add(user);
 			intersection.retainAll(matches);
 			matchIntersections.add(intersection);
@@ -111,7 +105,7 @@ public class UserMatchService {
 		
 		List<DateMatch> result=new ArrayList<>();
 		
-		result.addAll(this.dateMatchRepository.findByUserId(userId));
+		result.addAll(this.dateMatchRepository.findByUserIdAndAcceptedIsNull(userId));
 		LOG.info("User with id {} has already {} dateMatches", userId, result.size());
 		
 		for(DateMatch d: intersections) {
@@ -125,34 +119,36 @@ public class UserMatchService {
 		return result;
 	}
 	
-	public Date acceptDateMatch(Long userId, Long dateMatchId) throws NoResultException{
+	public Date setDateMatchStatus(Long userId, Long dateMatchId, boolean status) throws NoResultException{
 		UserDateMatch userDateMatch=this.userDateMatchRepository.findByUserUserIdAndDateMatchId(userId, dateMatchId);
 		if(userDateMatch == null) {
 			throw new NoResultException("No DateMatch found for id: "+ dateMatchId +" with user: " + userId);
 		}
 		
-		userDateMatch.setAccepted(true);
+		userDateMatch.setAccepted(status);
 		userDateMatch = this.userDateMatchRepository.save(userDateMatch);
 		
 		List<UserDateMatch> matches=this.userDateMatchRepository.findByUserDateMatchId(dateMatchId);
 		
-		boolean accepted=true;
-		for(UserDateMatch match: matches) {
-			if(!match.isAccepted()) {
-				accepted = false;
-				break;
+		if(status) {	// if DateMatch was accepted by User, check if all participants have accepted
+			boolean accepted=true;
+			for(UserDateMatch match: matches) {
+				if(match.isAccepted() != null && !match.isAccepted()) {
+					accepted = false;
+					break;
+				}
+			}
+			
+			if(accepted) {
+				List<User> participants=matches.stream().map(m -> m.getUser()).collect(Collectors.toList());
+				Date date=new Date(participants);
+				this.dateRepository.save(date);
+				
+				return date;
 			}
 		}
-		
-		if(accepted) {
-			List<User> participants=matches.stream().map(m -> m.getUser()).collect(Collectors.toList());
-			Date date=new Date(participants);
-			this.dateRepository.save(date);
-			
-			return date;
-		}
-		
 		return null;
 	}
+	
 	
 }

@@ -10,8 +10,8 @@
 		<relativePath /> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>de.koanam</groupId>
-	<artifactId>graphdemo</artifactId>
-	<version>0.0.2</version>
+	<artifactId>foodwithfriends-matching</artifactId>
+	<version>1.0.0</version>
 	<name>graphdemo</name>
 	<description>GraphDemo</description>
 
@@ -75,6 +75,10 @@
 				<artifactId>spring-boot-maven-plugin</artifactId>
 				<configuration>
         		  <skipTests>true</skipTests>
+        		  <jvmArguments>
+			         -Xms64m
+			         -Xmx124m
+			      </jvmArguments>
         		</configuration>
 			</plugin>
 		</plugins>

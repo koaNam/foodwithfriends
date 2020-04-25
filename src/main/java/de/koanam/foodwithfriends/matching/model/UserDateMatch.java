@@ -12,49 +12,55 @@ public class UserDateMatch {
 	@Id
 	@GeneratedValue(strategy = GenerationType.SEQUENCE)
 	private Long id;
-	
+
 	@ManyToOne
 	private User user;
-	
+
 	@ManyToOne
 	private DateMatch dateMatch;
-	
-	private boolean accepted;
-	
+
+	private Boolean accepted;
+
 	public UserDateMatch() {
 		super();
 	}
-	
+
 	public Long getId() {
 		return id;
 	}
+
 	public void setId(Long id) {
 		this.id = id;
 	}
+
 	public User getUser() {
 		return user;
 	}
+
 	public void setUser(User user) {
 		this.user = user;
 	}
+
 	public DateMatch getDateMatch() {
 		return dateMatch;
 	}
+
 	public void setDateMatch(DateMatch dateMatch) {
 		this.dateMatch = dateMatch;
 	}
-	public boolean isAccepted() {
+
+	public Boolean isAccepted() {
 		return accepted;
 	}
-	public void setAccepted(boolean accepted) {
+
+	public void setAccepted(Boolean accepted) {
 		this.accepted = accepted;
 	}
+
 	public UserDateMatch(User user) {
 		this.user = user;
 	}
 
-	
-	
 	@Override
 	public int hashCode() {
 		final int prime = 31;
@@ -79,7 +85,5 @@ public class UserDateMatch {
 			return false;
 		return true;
 	}
-	
-	
-	
+
 }

@@ -8,25 +8,25 @@ type User {
 }
  
 type Property {
-    id: ID!
+    id: Int!
     name: String!
     colour: String!
 }
 
 type Property {
-    id: ID!
+    id: Int!
     name: String!
     colour: String!
 }
 
 type UserMatch{
-	id: ID!
+	id: Int!
 	user: User!
 	match: User
 }
 
 type DateMatch{
-	id: ID!
+	id: Int!
 	userDateMatches: [UserDateMatch]!
 }
 
@@ -39,11 +39,11 @@ type Date{
 }
 
 type Query {
-    matches(userId: Int!, innerRadius: Float!, count: Int!): [User]!
+    matches(userId: Int!, innerRadius: Float!, count: Int!): [UserMatch]!
     dateMatches(userId: Int!, innerRadius: Float!, count: Int!): [DateMatch]!
 }
 
 type Mutation{
-	addMatch(userId: Int!, matchId: Int!): UserMatch!
-	acceptUserDate(userId: Int!, dateMatchId: Int!): Date
+	setMatchStatus(matchId: Int!, status: Boolean!): UserMatch!
+	setUserDateStatus(userId: Int!, dateMatchId: Int!, status: Boolean!): Date
 }

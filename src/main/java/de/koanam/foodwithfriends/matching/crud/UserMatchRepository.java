@@ -8,6 +8,8 @@ import de.koanam.foodwithfriends.matching.model.UserMatch;
 
 public interface UserMatchRepository extends JpaRepository<UserMatch, Long>{
 
+	public List<UserMatch> findByUserIdAndAccepted(Long userId, Boolean accepted);
+	public List<UserMatch> findByUserIdAndAcceptedIsNull(Long userId);
 	public List<UserMatch> findByUserId(Long userId);
 	
 }

@@ -15,14 +15,14 @@ public class RootMutationResolver implements GraphQLMutationResolver{
 	@Autowired
 	private UserMatchService userMatchService;
 	
-	public UserMatch addMatch(long userId, long matchId) {
-		UserMatch userMatch=this.userMatchService.addMatch(userId, matchId);
+	public UserMatch setMatchStatus(long matchId, boolean status) {
+		UserMatch userMatch=this.userMatchService.setMatchStatus(matchId, status);
 		
 		return userMatch;
 	}
 	
-	public Date acceptUserDate(long userId, long dateMatchId) {
-		Date date=this.userMatchService.acceptDateMatch(userId, dateMatchId);
+	public Date setUserDateStatus(long userId, long dateMatchId, boolean status) {
+		Date date=this.userMatchService.setDateMatchStatus(userId, dateMatchId, status);
 		return date;
 	}
 	

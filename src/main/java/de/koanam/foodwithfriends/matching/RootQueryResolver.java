@@ -9,7 +9,7 @@ import org.springframework.stereotype.Component;
 import com.coxautodev.graphql.tools.GraphQLQueryResolver;
 
 import de.koanam.foodwithfriends.matching.model.DateMatch;
-import de.koanam.foodwithfriends.matching.model.User;
+import de.koanam.foodwithfriends.matching.model.UserMatch;
 import de.koanam.foodwithfriends.matching.service.UserMatchService;
 import de.koanam.foodwithfriends.matching.service.UserService;
 
@@ -22,10 +22,10 @@ public class RootQueryResolver implements GraphQLQueryResolver {
 	@Autowired
 	private UserMatchService userMatchService;
 	
-	public List<User> getMatches(long userId, double innerRadius, int count) {
-		List<User> users=this.userService.findTopUsers(userId, innerRadius, count);
+	public List<UserMatch> getMatches(long userId, double innerRadius, int count) {
+		List<UserMatch> matches=this.userService.getMatches(userId, innerRadius, count);
 
-		return users;
+		return matches;
 	}
 	
 	public Collection<DateMatch> getDateMatches(long userId, double innerRadius, int count) {

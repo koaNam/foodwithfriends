@@ -19,6 +19,8 @@ public class UserMatch {
 	@OneToOne
 	private User match;
 
+	private Boolean accepted;
+	
 	public UserMatch() {
 		super();
 	}
@@ -52,10 +54,14 @@ public class UserMatch {
 	public void setMatch(User match) {
 		this.match = match;
 	}
-	
 
-	
-	
+	public Boolean isAccepted() {
+		return accepted;
+	}
 
+	public void setAccepted(Boolean accepted) {
+		this.accepted = accepted;
+	}
+	
 		
 }
