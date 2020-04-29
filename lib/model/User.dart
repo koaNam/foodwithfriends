@@ -5,7 +5,7 @@ import 'package:tinder_cards/model/Property.dart';
 
 part 'User.g.dart';
 
-//@JsonSerializable()
+@JsonSerializable()
 class User{
   int id;
   String name;

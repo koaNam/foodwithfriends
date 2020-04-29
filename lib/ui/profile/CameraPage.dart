@@ -1,6 +1,3 @@
-import 'dart:io';
-import 'dart:math';
-
 import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
 import 'package:path/path.dart';
@@ -11,7 +8,6 @@ import 'package:path_provider/path_provider.dart';
 import 'package:tinder_cards/bloc/ProfileBloc.dart';
 import 'package:tinder_cards/ui/profile/DisplayPicturePage.dart';
 
-import 'package:image/image.dart' as image;
 
 class CameraPage extends StatefulWidget {
   static const String LOG = "ui.profile.CameraPage";

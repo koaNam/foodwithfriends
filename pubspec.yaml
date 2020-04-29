@@ -4,29 +4,30 @@ description: A new Flutter project.
 version: 1.12.13+hotfix.5
 
 environment:
-  sdk: ">=2.2.2 <3.0.0"
+  sdk: ">=2.5.0 <3.0.0"
 
 dependencies:
   flutter:
     sdk: flutter
+  flutter_localizations:
+    sdk: flutter
   json_annotation: 3.0.0
   rxdart: 0.22.6
   http: ^0.12.0+2
-  provider: 3.0.0
+  provider: 4.0.5
   location : 2.3.5
   flutter_rating_bar: ^3.0.1+1
   camera:
   path_provider:
   path:
-  stomp: 0.8.0
-  web_socket_channel: 1.1.0
   bubble: 1.1.9+1
-  flutter_speed_dial: 1.2.5
-  unicorndial: ^1.1.5
-  image:
   flutter_facebook_login: 3.0.0
   google_sign_in: 4.4.2
   flutter_auth_buttons: 0.8.0
+  mqtt_client: 6.2.1
+  intl: ^0.16.0
+  flutter_time_picker_spinner: 1.0.6
+
 
 
 

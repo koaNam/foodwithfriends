@@ -1,10 +1,9 @@
-
 import 'package:flutter/material.dart';
 import 'package:tinder_cards/bloc/DateBloc.dart';
 import 'package:tinder_cards/model/Date.dart';
+import 'package:tinder_cards/model/TextVote.dart';
 import 'package:tinder_cards/model/User.dart';
 import 'package:tinder_cards/model/Voter.dart';
-import 'package:tinder_cards/ui/planning/date/FloationActionButtonRow.dart';
 
 import 'AddVotePageWrapper.dart';
 
@@ -64,7 +63,7 @@ class DatePage extends StatelessWidget{
                         ),
                         Expanded(
                             child: ListView(
-                                children: date.votes.map((v) =>
+                                children: date.votes.whereType<TextVote>().map((v) =>
                                     Container(
                                       decoration: BoxDecoration(
                                         color: Colors.white,

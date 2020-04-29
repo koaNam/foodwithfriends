@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
-import 'package:tinder_cards/bloc/VoteBloc.dart';
+import 'package:tinder_cards/bloc/vote/VoteBloc.dart';
 import 'package:tinder_cards/ui/planning/date/AbstractAddVotePage.dart';
 
 class AddVotePage extends StatelessWidget implements AbstractAddVotePage{
 
-  final VoteBloc voteBloc;
+  final VoteBloc _voteBloc;
   final int dateId;
   final int userId;
 
-  AddVotePage({this.voteBloc, this.dateId, this.userId});
+  AddVotePage(this._voteBloc, this.dateId, this.userId);
 
   @override
   Widget build(BuildContext context) {
@@ -23,7 +23,7 @@ class AddVotePage extends StatelessWidget implements AbstractAddVotePage{
           border: OutlineInputBorder(),
         ),
         onChanged: (text) => {
-          voteBloc.text = text
+          _voteBloc.text = text
         },
       ),
     );
@@ -31,7 +31,7 @@ class AddVotePage extends StatelessWidget implements AbstractAddVotePage{
 
   @override
   void onSubmit() {
-    voteBloc.addVote(this.dateId, this.userId);
+    _voteBloc.addVote(this.dateId, this.userId);
   }
 
 }

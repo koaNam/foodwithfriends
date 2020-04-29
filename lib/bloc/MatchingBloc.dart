@@ -1,14 +1,11 @@
 import 'package:rxdart/rxdart.dart';
 import 'package:tinder_cards/model/DateMatch.dart';
 import 'package:tinder_cards/model/DrawableCard.dart';
-import 'package:tinder_cards/model/User.dart';
 import 'package:tinder_cards/model/UserMatch.dart';
 import 'package:tinder_cards/service/MatchingService.dart';
-import 'package:tinder_cards/model/Match.dart';
 
 import 'dart:developer' as developer;
 
-import 'package:tinder_cards/service/graphql/mutation.dart';
 
 class MatchingBloc{
 

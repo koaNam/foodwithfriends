@@ -22,6 +22,7 @@ class PlanningBloc{
     developer.log("getting Dates", name: LOG);
 
     List<Date> dates=await this._planningService.getDates(userId);
+
     this._dateListController.add(dates);
   }
   

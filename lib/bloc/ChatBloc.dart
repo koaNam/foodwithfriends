@@ -1,135 +1,103 @@
 import 'dart:async';
+import 'dart:io';
 
+import 'package:mqtt_client/mqtt_client.dart';
+import 'package:mqtt_client/mqtt_server_client.dart';
 import 'package:rxdart/rxdart.dart';
-import 'package:stomp/impl/plugin.dart';
-import "package:stomp/stomp.dart";
-import 'package:tinder_cards/bloc/DateBloc.dart';
 import 'package:tinder_cards/model/ChatMessage.dart';
 import 'package:tinder_cards/model/User.dart';
-import 'package:tinder_cards/service/graphql/graphql_constants.dart';
-import 'package:web_socket_channel/io.dart';
-
-import 'package:web_socket_channel/status.dart' as status;
 import 'dart:convert' as convert;
+import 'package:path_provider/path_provider.dart';
 
 class ChatBloc {
 
-  StompClient _stompClient;
-  String _chatId;
-
+  MqttServerClient client;
   List<ChatMessage> _messages = new List();
+  String _chatId;
 
   BehaviorSubject<List<ChatMessage>> _messageController = BehaviorSubject<List<ChatMessage>>();
   Observable<List<ChatMessage>> get messageStream =>_messageController.stream;
 
   Future<void> connectService(int dateId, int userId, List<User> users) async {
-    String chatId = "$dateId:";
-    users.forEach((u) => chatId += "${u.id}:");
-    this._chatId = chatId.hashCode.toString();
-    this._stompClient =  await this.connect(GraphQlConstants.CHAT_URL);
+    //this.dispose();
+    if(this.client == null || this.client.connectionStatus.state != MqttConnectionState.connected) {
+      client = MqttServerClient('wss://b-9c6d043a-3ff3-4ee4-b8e1-0d2352d3f377-1.mq.eu-central-1.amazonaws.com', '');
+      client.useWebSocket = true;
+      client.port = 61619;
+      client.keepAlivePeriod = 30;
 
-    this._stompClient.subscribeString("1", "/user/$userId/**", (Map<String, String> header, String msg) {
-      List<dynamic> result = convert.jsonDecode(msg);
-      for(var message in result){
-        this._messages.add(ChatMessage.fromJson(message));
-      }
-      this._messageController.add(this._messages);
-    });
+      final connMess = MqttConnectMessage()
+          .withClientIdentifier(userId.toString())
+          .withWillQos(MqttQos.atLeastOnce)
+          .keepAliveFor(30)
+          .authenticateAs("***REMOVED***", "***REMOVED******REMOVED***");
 
-     this._stompClient.subscribeString("2", "/room/${this._chatId}", (Map<String, String> header, String msg) {
-      ChatMessage message = ChatMessage.fromJson(convert.jsonDecode(msg));
-      this._messages.add(message);
-      this._messageController.add(this._messages);
-    });
+      client.connectionMessage = connMess;
+      await client.connect();
 
-    this._stompClient.sendString("/chat/user/$userId/${this._chatId}/getAll", "dummy");
+      String chatId = "$dateId:";
+      users..sort((f, s) => f.id - s.id)..forEach((u) => chatId += "${u.id}:");
+      this._chatId = chatId.hashCode.toString();
+
+      String topic = 'chat/${this._chatId}';
+      client.subscribe(topic, MqttQos.atLeastOnce);
+
+      client.updates.listen((List<MqttReceivedMessage<MqttMessage>> c) async {
+        final MqttPublishMessage recMess = c[0].payload;
+        final msg = MqttPublishPayload.bytesToStringAsString(recMess.payload.message);
+        Map<String, dynamic> result = convert.jsonDecode(msg);
+        this._messages.add(ChatMessage.fromJson(result));
+
+        this._messageController.add(this._messages);
+
+        this._saveMessage(msg);
+      });
+
+      List<ChatMessage> oldMessages = await this._readMessages();
+      this._messages.addAll(oldMessages);
+      this._messageController.add(oldMessages);
+    }
   }
 
   Future<void> send(int userId, String message) async{
-    this._stompClient.sendString("/chat/room/${this._chatId}/message.send", convert.jsonEncode(ChatMessage(user: User(userId, null, null, null, null, null), message: message).toJson()));
+    final builder = MqttClientPayloadBuilder();
+    builder.addString(convert.jsonEncode(ChatMessage(user: User(userId, null, null, null, null, null), message: message).toJson()));
+    client.publishMessage('chat/${this._chatId}', MqttQos.exactlyOnce, builder.payload);
   }
 
-
-  Future<StompClient> connect(String url,
-      {String host,
-        String login,
-        String passcode,
-        List<int> heartbeat,
-        void onConnect(StompClient client, Map<String, String> headers),
-        void onDisconnect(StompClient client),
-        void onError(StompClient client, String message, String detail,
-            Map<String, String> headers),
-        void onFault(StompClient client, error, stackTrace)}) async {
-      return connectWith(await IOWebSocketChannel.connect(url),
-          host: host,
-          login: login,
-          passcode: passcode,
-          heartbeat: heartbeat,
-          onConnect: onConnect,
-          onDisconnect: onDisconnect,
-          onError: onError,
-          onFault: onFault);
+  dispose(){
+    this._messages = new List();
+    if(this.client != null) {
+      this.client.unsubscribe('chat/${this._chatId}');
+      this.client.disconnect();
+    }
   }
-  Future<StompClient> connectWith(IOWebSocketChannel channel,
-      {String host,
-        String login,
-        String passcode,
-        List<int> heartbeat,
-        void onConnect(StompClient client, Map<String, String> headers),
-        void onDisconnect(StompClient client),
-        void onError(StompClient client, String message, String detail,
-            Map<String, String> headers),
-        void onFault(StompClient client, error, stackTrace)}){
-      return StompClient.connect(_WSStompConnector.startWith(channel),
-          host: host,
-          login: login,
-          passcode: passcode,
-          heartbeat: heartbeat,
-          onConnect: onConnect,
-          onDisconnect: onDisconnect,
-          onError: onError,
-          onFault: onFault);
+
+  _saveMessage(String message) async {
+    final directory = await getApplicationDocumentsDirectory();
+    String path = directory.path;
+    File file = File('$path/${this._chatId}');
+    file.writeAsString("$message;", mode: FileMode.append);
+  }
+
+  Future<List<ChatMessage>> _readMessages() async {
+    final directory = await getApplicationDocumentsDirectory();
+    String path = directory.path;
+    File file = File('$path/${this._chatId}');
+    if(file.existsSync()) {
+      String data = file.readAsStringSync();
+      List<String> messageStrings = data.split(";");
+
+      List<ChatMessage> messages = new List();
+      for (String messageString in messageStrings) {
+        if (messageString.isNotEmpty) {
+          ChatMessage message = ChatMessage.fromJson(convert.jsonDecode(messageString));
+          messages.add(message);
+        }
       }
-}
-
-class _WSStompConnector extends StringStompConnector {
-  final IOWebSocketChannel _socket;
-  StreamSubscription _listen;
-
-
-  static _WSStompConnector startWith(IOWebSocketChannel socket) =>
-      new _WSStompConnector(socket);
-
-  _WSStompConnector(this._socket) {
-    _init();
+      return messages;
+    }
+    return new List();
   }
 
-  void _init() {
-    _listen = _socket.stream.listen((data) {
-      if (data != null) {
-        final String sdata = data.toString();
-        if (sdata.isNotEmpty) onString(sdata);
-      }
-    });
-    _listen.onError((err) => onError(err, null));
-    _listen.onDone(() => onClose());
-
-    _socket.stream.handleError((error) => onError(error, null));
-
-    _socket.sink.done.then((v) {
-      onClose();
-    });
-  }
-
-  @override
-  void writeString_(String string) {
-    _socket.sink.add(string);
-  }
-
-  @override
-  Future close() {
-    _listen.cancel();
-    _socket.sink.close(status.goingAway);
-    return new Future.value();
-  }
 }

@@ -1,5 +1,4 @@
 import 'package:json_annotation/json_annotation.dart';
-import 'package:tinder_cards/model/User.dart';
 
 import 'Voter.dart';
 
@@ -9,8 +8,6 @@ part 'Vote.g.dart';
 class Vote{
 
   int id;
-  String title;
-  String description;
   String result;
   @JsonKey(name: "source_user_id")
   int sourceUserId;
@@ -20,7 +17,7 @@ class Vote{
 
   Vote();
 
-  Vote.vote(this.title, this.description, this.result, this.sourceUserId, this.dateId);
+  Vote.vote(this.result, this.sourceUserId, this.dateId);
 
   factory Vote.fromJson(Map<String, dynamic> json) => _$VoteFromJson(json);
 

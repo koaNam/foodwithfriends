@@ -32,9 +32,6 @@ class ProfileBloc{
     developer.log("trying to log in user", name: LOG);
 
     await service.loadData();
-    print(service.id);
-    print(service.name);
-
     User user = await this._profileService.findUserByOauth(service.id, service.getIdentifier());
 
     if(user == null){

@@ -1,19 +1,21 @@
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-import 'package:tinder_cards/bloc/VoteBloc.dart';
+import 'package:tinder_cards/bloc/vote/DateVoteBloc.dart';
+import 'package:tinder_cards/bloc/vote/VoteBloc.dart';
 import 'package:tinder_cards/ui/planning/date/AbstractAddVotePage.dart';
+import 'package:tinder_cards/ui/planning/date/AddDateVotePage.dart';
 import 'package:tinder_cards/ui/planning/date/AddVotePage.dart';
 
 class AddVotePageWrapper extends StatelessWidget {
   final int dateId;
   final int userId;
 
-  final VoteBloc _voteBloc=new VoteBloc();
-
   final List<AbstractAddVotePage> addVotePages = new List();
   int index = 0;
 
   AddVotePageWrapper({this.dateId, this.userId}){
-    addVotePages.add(AddVotePage(voteBloc: this._voteBloc, dateId: this.dateId, userId: this.userId));
+    addVotePages.add(AddVotePage(new VoteBloc(), this.dateId, this.userId));
+    addVotePages.add(AddDateVotePage(new DateVoteBloc(), this.dateId, this.userId));
   }
 
   @override
@@ -36,7 +38,9 @@ class AddVotePageWrapper extends StatelessWidget {
           ],
         ),
         body: PageView(
+          dragStartBehavior: DragStartBehavior.down,
           onPageChanged: (e) => {
+          FocusScope.of(context).unfocus(),
             this.index = e
           },
           scrollDirection: Axis.horizontal,

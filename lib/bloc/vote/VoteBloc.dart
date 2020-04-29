@@ -1,10 +1,12 @@
 import 'dart:developer' as developer;
 
+import 'package:tinder_cards/bloc/vote/AbstractVoteBloc.dart';
+import 'package:tinder_cards/model/TextVote.dart';
 import 'package:tinder_cards/model/Vote.dart';
 import 'package:tinder_cards/service/PlanningService.dart';
 
 
-class VoteBloc{
+class VoteBloc extends AbstractVoteBloc{
   static const String LOG="bloc.VoteBloc";
 
   String text;
@@ -17,7 +19,7 @@ class VoteBloc{
 
   Future<void> addVote(int dateId, int userId) async{
     if(this.text!= null) {
-      developer.log("adding vote", name: LOG);
+      developer.log("adding text vote", name: LOG);
       int titleEnd = text.indexOf("\n");
       String title;
       String description;
@@ -33,8 +35,8 @@ class VoteBloc{
       print(title);
       print(description);
 
-      Vote vote = new Vote.vote(title, description, null, userId, dateId);
-      this._planningService.addVote(vote);
+      Vote vote = new TextVote.textVote(title, description, null, userId, dateId);
+      this._planningService.addTextVote(vote);
     }
   }
 

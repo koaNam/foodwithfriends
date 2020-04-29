@@ -5,7 +5,7 @@ import 'package:tinder_cards/model/User.dart';
 part 'DateMatch.g.dart';
 
 
-//@JsonSerializable()
+@JsonSerializable()
 class DateMatch implements DrawableCard{
 
   int id;

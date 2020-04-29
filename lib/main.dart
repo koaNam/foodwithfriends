@@ -1,4 +1,9 @@
+import 'dart:ffi';
+
 import 'package:flutter/material.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:provider/provider.dart';
+import 'package:tinder_cards/bloc/ChatBloc.dart';
 
 import 'Home.dart';
 
@@ -10,10 +15,24 @@ class MyApp extends StatelessWidget
   Widget build(BuildContext context)
   {
     precacheImage(AssetImage('assets/start_screen.png'), context);
-    return new MaterialApp
-    (
-      title: 'FoodWithFriends',
-      home: new Home(),
+    return MultiProvider(
+      providers: [
+        Provider<ChatBloc>(
+          create: (_) => ChatBloc(),
+          dispose: (_, ChatBloc bloc) => bloc.dispose(),
+        )
+      ],
+      child: new MaterialApp
+        (
+        title: 'FoodWithFriends',
+        home: new Home(),
+        supportedLocales: [
+          const Locale('de', "DE"),
+        ],
+        localizationsDelegates: [
+          GlobalMaterialLocalizations.delegate,
+        ],
+      )
     );
   }
 }
