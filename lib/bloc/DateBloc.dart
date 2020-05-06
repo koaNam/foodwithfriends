@@ -1,5 +1,6 @@
 import 'package:rxdart/rxdart.dart';
 import 'package:tinder_cards/model/Date.dart';
+import 'package:tinder_cards/model/DateVote.dart';
 import 'package:tinder_cards/model/TextVote.dart';
 import 'package:tinder_cards/model/User.dart';
 import 'package:tinder_cards/service/PlanningService.dart';
@@ -24,6 +25,8 @@ class DateBloc{
 
     Date date = await this._planningService.getDate(dateId);
     List<TextVote> textVotes= await this._planningService.getTextVotes(dateId);
+    List<DateVote> dateVotes= await this._planningService.getDateVotes(dateId);
+    date.votes.addAll(dateVotes);
     date.votes.addAll(textVotes);
     this._dateController.add(date);
   }

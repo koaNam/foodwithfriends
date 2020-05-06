@@ -8,7 +8,6 @@ import 'package:path_provider/path_provider.dart';
 import 'package:tinder_cards/bloc/ProfileBloc.dart';
 import 'package:tinder_cards/ui/profile/DisplayPicturePage.dart';
 
-
 class CameraPage extends StatefulWidget {
   static const String LOG = "ui.profile.CameraPage";
 
@@ -80,28 +79,35 @@ class CameraPageState extends State<CameraPage> {
                             child: Container(
                                 width: MediaQuery.of(context).size.width,
                                 height: MediaQuery.of(context).size.width / _controller.value.aspectRatio,
-                                child: CameraPreview(_controller)),
+                                child: CameraPreview(_controller)
+                            ),
                           ),
                         ),
                       ),
                     ),
                   ),
                   Align(
-                    alignment: Alignment.bottomRight,
-                    child: FloatingActionButton(
-                      heroTag: "switch",
-                      child: Icon(Icons.swap_horiz),
-                      onPressed: () => {
-                      setState(() {
-                        this._cameraIndex = (this._cameraIndex + 1) % this._cameras.length;
-                        this._controller = CameraController(
-                          _cameras[this._cameraIndex],
-                          ResolutionPreset.veryHigh,
-                        );
-                      }),
-                      _initializeControllerFuture = _controller.initialize()},
-                    ),
-                  )
+                      alignment: Alignment.bottomRight,
+                      child: Container(
+                          margin: EdgeInsets.only(bottom: 27.5, right: 10),
+                          height: 60,
+                          child: FittedBox(
+                            child: FloatingActionButton(
+                              backgroundColor: Colors.grey,
+                              heroTag: "switch",
+                              child: Icon(Icons.swap_horiz),
+                              onPressed: () => {
+                                setState(() {
+                                  this._cameraIndex = (this._cameraIndex + 1) % this._cameras.length;
+                                  this._controller = CameraController(
+                                    _cameras[this._cameraIndex],
+                                    ResolutionPreset.veryHigh,
+                                  );
+                                }),
+                                _initializeControllerFuture = _controller.initialize()
+                              },
+                            ),
+                          )))
                 ],
               );
             } else {
@@ -110,35 +116,49 @@ class CameraPageState extends State<CameraPage> {
           },
         ),
         floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
-        floatingActionButton: FloatingActionButton(
-          heroTag: "takePic",
-          child: Icon(Icons.camera_alt),
-          onPressed: () async {
-            try {
-              await _initializeControllerFuture;
-              final path = join(
-                (await getTemporaryDirectory()).path,
-                '${DateTime.now()}.png',
-              );
-
-              // Attempt to take a picture and log where it's been saved.
-              await _controller.takePicture(path);
-              // If the picture was taken, display it on a new screen.
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => DisplayPicturePage(
-                    userId: widget.userId,
-                    imagePath: path,
-                    profileBloc: widget._profileBloc,
-                  ),
+        floatingActionButton: Container(
+            margin: EdgeInsets.only(bottom: 20),
+            height: 75,
+            child: FittedBox(
+              child: FloatingActionButton(
+                backgroundColor: Colors.white,
+                heroTag: "takePic",
+                child: Stack(
+                  children: <Widget>[
+                    Container(
+                      height: 50,
+                      decoration: BoxDecoration(
+                          color: Colors.grey, shape: BoxShape.circle),
+                    ),
+                  ],
                 ),
-              );
-            } catch (e) {
-              // If an error occurs, log the error to the console.
-              print(e);
-            }
-          },
+                onPressed: () async {
+                  try {
+                    await _initializeControllerFuture;
+                    final path = join(
+                      (await getTemporaryDirectory()).path,
+                      '${DateTime.now()}.png',
+                    );
+                    // Attempt to take a picture and log where it's been saved.
+                    await _controller.takePicture(path);
+                    // If the picture was taken, display it on a new screen.
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => DisplayPicturePage(
+                          userId: widget.userId,
+                          imagePath: path,
+                          profileBloc: widget._profileBloc,
+                        ),
+                      ),
+                    );
+                  } catch (e) {
+                    // If an error occurs, log the error to the console.
+                    print(e);
+                  }
+                },
+              ),
+            )
         ),
       ),
     );

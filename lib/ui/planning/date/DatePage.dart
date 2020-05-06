@@ -1,11 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:tinder_cards/bloc/DateBloc.dart';
 import 'package:tinder_cards/model/Date.dart';
+import 'package:tinder_cards/model/DateVote.dart';
 import 'package:tinder_cards/model/TextVote.dart';
 import 'package:tinder_cards/model/User.dart';
 import 'package:tinder_cards/model/Voter.dart';
+import 'package:tinder_cards/ui/planning/date/vote/VoteWidget.dart';
 
-import 'AddVotePageWrapper.dart';
+import 'vote/AddVotePageWrapper.dart';
 
 
 class DatePage extends StatelessWidget{
@@ -24,33 +27,10 @@ class DatePage extends StatelessWidget{
     return StreamBuilder(
         stream: this._dateBloc.dateStream,
         builder: (_, AsyncSnapshot<Date> data) {
+          Widget body;
           if (data.connectionState == ConnectionState.active) {
             Date date=data.data;
-            return Scaffold(
-                appBar: AppBar(
-                  backgroundColor: Colors.white,
-                  iconTheme: IconThemeData(
-                    color: Colors.black, //change your color here
-                  ),
-                  title: Text(""),
-                  centerTitle: true,
-                ),
-                floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
-                floatingActionButton: FloatingActionButton(
-                  heroTag: "AddProperty",
-                  child: Container(
-                    child: Icon(Icons.add),
-                  ),
-                  onPressed: () =>
-                      Navigator.of(context).push(
-                          MaterialPageRoute<void>(
-                              builder: (BuildContext context){
-                                return AddVotePageWrapper(userId: this.userId, dateId: this.dateId);
-                              }
-                          )
-                      )
-                ),
-                body: Container(
+            body = Container(
                   color: Colors.grey.shade100,
                   child: Column(
                       children: <Widget>[
@@ -64,58 +44,69 @@ class DatePage extends StatelessWidget{
                         Expanded(
                             child: ListView(
                                 children: date.votes.whereType<TextVote>().map((v) =>
-                                    Container(
-                                      decoration: BoxDecoration(
-                                        color: Colors.white,
-                                        border: Border(
-                                          bottom: BorderSide(color: Colors.grey, width: 1),
-                                          top: BorderSide(color: Colors.grey, width: 1),
+                                    VoteWidget(
+                                      child: Container(
+                                        child: Column(
+                                          crossAxisAlignment: CrossAxisAlignment.start,
+                                          children: <Widget>[
+                                            Text(v.title, style: TextStyle(fontWeight:  v.result == "accepted" ? FontWeight.bold: FontWeight.normal, fontSize: 22, color: v.result == "declined" ? Color.fromRGBO(170, 175, 180, 100): Colors.black)),
+                                            Text(v.description, style: TextStyle(fontWeight:  v.result == "accepted" ? FontWeight.bold: FontWeight.normal, color: v.result == "declined" ? Color.fromRGBO(170, 175, 180, 100): Colors.black)),
+                                          ],
                                         ),
                                       ),
-                                      padding: EdgeInsets.only(bottom: 10, top: 5),
-                                      margin: EdgeInsets.only(left: 5, right: 5),
-                                      child: Column(
-                                        crossAxisAlignment: CrossAxisAlignment.start,
-                                        children: <Widget>[
-                                          Text(v.title, style: TextStyle(fontWeight:  v.result == "accepted" ? FontWeight.bold: FontWeight.normal, fontSize: 22, color: v.result == "declined" ? Color.fromRGBO(170, 175, 180, 100): Colors.black)),
-                                          Text(v.description, style: TextStyle(fontWeight:  v.result == "accepted" ? FontWeight.bold: FontWeight.normal, color: v.result == "declined" ? Color.fromRGBO(170, 175, 180, 100): Colors.black)),
-                                          Container(
-                                            margin: EdgeInsets.only(top: 5),
-                                            child: Row(
-                                              crossAxisAlignment: CrossAxisAlignment.end,
-                                              mainAxisAlignment: MainAxisAlignment.center,
-                                              children: <Widget>[
-                                                InkWell(
-                                                  child: ((v.voters.where((vo) => vo.user.id == this.userId && vo.vote == "yes").isEmpty) ? Icon(Icons.thumb_up) : Icon(Icons.thumb_up, color: Colors.blue,)),
-                                                  onTap: () => this._dateBloc.vote(this.dateId, v.id, this.userId, "yes", v.voters.where((vo) => (vo.user.id == this.userId && vo.vote == "yes")).isEmpty),
-                                                ),
-                                                Padding(
-                                                  child: Text(this.getUpvotes(v.voters).toString()),
-                                                  padding: EdgeInsets.only(right:  MediaQuery.of(context).size.width  / 2.6),
-                                                ),
-                                                Padding(
-                                                  child: InkWell(
-                                                    child: ((v.voters.where((vo) => vo.user.id == this.userId && vo.vote == "no").isEmpty) ? Icon(Icons.thumb_down) : Icon(Icons.thumb_down, color: Colors.blue,)),
-                                                    onTap: () => this._dateBloc.vote(this.dateId, v.id, this.userId, "no", v.voters.where((vo) => (vo.user.id == this.userId && vo.vote == "no")).isEmpty),
-                                                  ),
-                                                  padding: EdgeInsets.only(left: MediaQuery.of(context).size.width  / 2.5),),
-                                                Text(this.getDownvotes(v.voters).toString()),
-                                              ],
-                                            ),
-                                          )
-                                        ],
-                                      ),
+                                      userId: this.userId,
+                                      vote: v,
+                                      onVoteUp: () => this._dateBloc.vote(this.dateId, v.id, this.userId, "yes", v.voters.where((vo) => (vo.user.id == this.userId && vo.vote == "yes")).isEmpty),
+                                      onVoteDown: () => this._dateBloc.vote(this.dateId, v.id, this.userId, "no", v.voters.where((vo) => (vo.user.id == this.userId && vo.vote == "no")).isEmpty),
                                     )
                                 ).toList()
+                                ..addAll(
+                                    date.votes.whereType<DateVote>().map((v) =>
+                                        VoteWidget(
+                                          userId: this.userId,
+                                          vote: v,
+                                          child: Column(
+                                            crossAxisAlignment: CrossAxisAlignment.start,
+                                            children: <Widget>[
+                                              Text("Termin", style: TextStyle(fontWeight:  v.result == "accepted" ? FontWeight.bold: FontWeight.normal, fontSize: 22, color: v.result == "declined" ? Color.fromRGBO(170, 175, 180, 100): Colors.black)),
+                                              Text("Am ${new DateFormat("dd.MM.yyyy").format(v.datetime)} um ${new DateFormat("HH:mm").format(v.datetime)} Uhr", style: TextStyle(fontWeight:  v.result == "accepted" ? FontWeight.bold: FontWeight.normal, color: v.result == "declined" ? Color.fromRGBO(170, 175, 180, 100): Colors.black)),
+                                            ],
+                                          ),
+                                          onVoteUp: () => this._dateBloc.vote(this.dateId, v.id, this.userId, "yes", v.voters.where((vo) => (vo.user.id == this.userId && vo.vote == "yes")).isEmpty),
+                                          onVoteDown: () => this._dateBloc.vote(this.dateId, v.id, this.userId, "no", v.voters.where((vo) => (vo.user.id == this.userId && vo.vote == "no")).isEmpty),
+                                        )
+                                    )
+                                ),
                             )
                         )
                       ]
-                  ),
-                )
-                );
+                  )
+            );
           } else {
-            return CircularProgressIndicator();
+            body = Center(
+              child: CircularProgressIndicator(),
+            );
           }
+
+          return Scaffold(
+              floatingActionButtonLocation: FloatingActionButtonLocation
+                  .centerFloat,
+              floatingActionButton: FloatingActionButton(
+                  child: Container(
+                    child: Icon(Icons.add),
+                  ),
+                  onPressed: () =>
+                      Navigator.of(context).push(
+                          MaterialPageRoute<void>(
+                              builder: (BuildContext context) {
+                                return AddVotePageWrapper(userId: this.userId, dateId: this.dateId);
+                              }
+                          )
+                      )
+              ),
+              body: body
+          );
+
         }
     );
   }

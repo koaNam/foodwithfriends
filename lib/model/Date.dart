@@ -9,6 +9,7 @@ class Date{
 
   int id;
   @JsonKey(name: "user_dates")
+  DateTime datetime;
   List<User> users;
   List<Vote> votes;
 

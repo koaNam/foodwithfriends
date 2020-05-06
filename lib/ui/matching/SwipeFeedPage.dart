@@ -52,7 +52,9 @@ class SwipeFeedPage extends StatelessWidget {
             ),
           );
         }else{
-          body = CircularProgressIndicator();
+          body = Center(
+            child: CircularProgressIndicator(),
+          );
         }
 
         return Scaffold(

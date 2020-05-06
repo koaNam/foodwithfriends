@@ -4,6 +4,7 @@ import 'package:tinder_cards/bloc/ProfileBloc.dart';
 import 'package:tinder_cards/service/social/FacebookService.dart';
 import 'package:tinder_cards/ui/MainPageWrapper.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:tinder_cards/ui/profile/ProfileDetailPage.dart';
 
 import 'model/User.dart';
 

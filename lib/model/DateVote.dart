@@ -1,13 +1,14 @@
 import 'package:json_annotation/json_annotation.dart';
 
 import 'Vote.dart';
+import 'Voter.dart';
 
 part 'DateVote.g.dart';
 
 @JsonSerializable()
 class DateVote extends Vote{
 
-  String datetime;
+  DateTime datetime;
   @JsonKey(name: "vote_kind")
   String voteKind = "DATE";
 

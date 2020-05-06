@@ -24,7 +24,7 @@ class BottomNavigation extends StatelessWidget {
                   index: 0,
                   icon: Icon(
                     Icons.add_circle,
-                    color: Colors.blue,
+                    color: Color(0xFF3a5fb6)
                   ),
                 ),
                 TabIcon(
@@ -32,7 +32,7 @@ class BottomNavigation extends StatelessWidget {
                   index: 1,
                   icon: Icon(
                     Icons.bookmark,
-                    color: Colors.blue,
+                    color: Color(0xFF3a5fb6)
                   ),
                 ),
                 TabIcon(
@@ -40,7 +40,7 @@ class BottomNavigation extends StatelessWidget {
                   index: 2,
                   icon: Icon(
                     Icons.person,
-                    color: Colors.blue,
+                    color: Color(0xFF3a5fb6)
                   ),
                 ),
               ],

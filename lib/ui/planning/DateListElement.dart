@@ -1,6 +1,7 @@
 import 'dart:core';
 
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:tinder_cards/bloc/PlanningBloc.dart';
 import 'package:tinder_cards/model/Date.dart';
 import 'package:tinder_cards/ui/planning/DateWrapper.dart';
@@ -29,7 +30,9 @@ class DateListElement extends StatelessWidget{
            ),
          );
        }else{
-         return CircularProgressIndicator();
+         return Center(
+           child: CircularProgressIndicator(),
+         );
        }
      },
    );
@@ -59,7 +62,8 @@ class DateListElement extends StatelessWidget{
                   ),
                 ),
                 Expanded(
-                  child: Text("Match mit ${date.users.length} Personen am 31.05 um 18 Uhr TODOOOOOOOOOO"),
+                  child: Text("Match mit ${date.users.length} Personen "
+                      "${date.datetime != null ? "am ${new DateFormat("dd.MM.yyyy").format(date.datetime)} um ${new DateFormat("HH:mm").format(date.datetime)} Uhr" : ""}"),
                 )
               ],
             ),

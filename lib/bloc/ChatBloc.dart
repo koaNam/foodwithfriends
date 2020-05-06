@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:io';
+import 'dart:typed_data';
 
 import 'package:mqtt_client/mqtt_client.dart';
 import 'package:mqtt_client/mqtt_server_client.dart';
@@ -19,7 +20,6 @@ class ChatBloc {
   Observable<List<ChatMessage>> get messageStream =>_messageController.stream;
 
   Future<void> connectService(int dateId, int userId, List<User> users) async {
-    //this.dispose();
     if(this.client == null || this.client.connectionStatus.state != MqttConnectionState.connected) {
       client = MqttServerClient('wss://b-9c6d043a-3ff3-4ee4-b8e1-0d2352d3f377-1.mq.eu-central-1.amazonaws.com', '');
       client.useWebSocket = true;
@@ -44,10 +44,13 @@ class ChatBloc {
 
       client.updates.listen((List<MqttReceivedMessage<MqttMessage>> c) async {
         final MqttPublishMessage recMess = c[0].payload;
-        final msg = MqttPublishPayload.bytesToStringAsString(recMess.payload.message);
-        Map<String, dynamic> result = convert.jsonDecode(msg);
-        this._messages.add(ChatMessage.fromJson(result));
+        final String msg = MqttPublishPayload.bytesToStringAsString(recMess.payload.message);
 
+        Map<String, dynamic> result = convert.jsonDecode(msg);
+        ChatMessage chatMessage = ChatMessage.fromJson(result);
+        chatMessage.message = convert.utf8.decode(convert.base64Decode(chatMessage.message));
+
+        this._messages.add(chatMessage);
         this._messageController.add(this._messages);
 
         this._saveMessage(msg);
@@ -61,7 +64,8 @@ class ChatBloc {
 
   Future<void> send(int userId, String message) async{
     final builder = MqttClientPayloadBuilder();
-    builder.addString(convert.jsonEncode(ChatMessage(user: User(userId, null, null, null, null, null), message: message).toJson()));
+    message = convert.base64Encode(convert.utf8.encode(message));
+    builder.addString(convert.jsonEncode(ChatMessage(user: User(userId, null, null, null, null, null), message: message).toJson()));;
     client.publishMessage('chat/${this._chatId}', MqttQos.exactlyOnce, builder.payload);
   }
 
@@ -91,8 +95,11 @@ class ChatBloc {
       List<ChatMessage> messages = new List();
       for (String messageString in messageStrings) {
         if (messageString.isNotEmpty) {
-          ChatMessage message = ChatMessage.fromJson(convert.jsonDecode(messageString));
-          messages.add(message);
+          Map<String, dynamic> result = convert.jsonDecode(messageString);
+          ChatMessage chatMessage = ChatMessage.fromJson(result);
+          chatMessage.message = convert.utf8.decode(convert.base64Decode(chatMessage.message));
+
+          messages.add(chatMessage);
         }
       }
       return messages;

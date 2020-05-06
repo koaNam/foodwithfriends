@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:tinder_cards/bloc/vote/VoteBloc.dart';
-import 'package:tinder_cards/ui/planning/date/AbstractAddVotePage.dart';
+import 'package:tinder_cards/ui/planning/date/vote/AbstractAddVotePage.dart';
 
 class AddVotePage extends StatelessWidget implements AbstractAddVotePage{
 

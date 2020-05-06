@@ -1,14 +1,12 @@
 import 'dart:io';
 
-import 'package:flutter/gestures.dart';
 import 'package:tinder_cards/model/Date.dart';
+import 'package:tinder_cards/model/DateVote.dart';
 import 'package:tinder_cards/model/TextVote.dart';
-import 'package:tinder_cards/model/Vote.dart';
 import 'package:tinder_cards/service/graphql/ConditionElement.dart';
 import 'package:tinder_cards/service/graphql/field.dart';
 import 'package:tinder_cards/service/graphql/graph.dart';
 import 'package:http/http.dart' as http;
-import 'package:tinder_cards/service/graphql/graphql_element.dart';
 import 'dart:convert' as convert;
 
 import 'graphql/condition.dart';
@@ -21,6 +19,7 @@ class PlanningService{
     Graph graph=new Graph("user_date")
       .add(Graph("date")
         .add(Field("id"))
+        .add(Field("datetime"))
         .add(Graph("user_dates")
           .add(Graph("user")
             .add(Field("profile_picture")
@@ -49,6 +48,7 @@ class PlanningService{
 
   Future<Date> getDate(int dateId) async{
     Graph graph=new Graph("date")
+        .add(Field("datetime"))
         .add(Graph("user_dates")
           .add(Graph("user")
             .add(
@@ -74,7 +74,7 @@ class PlanningService{
     return null;
   }
 
-  Future<List<Vote>> getTextVotes(int dateId) async{
+  Future<List<TextVote>> getTextVotes(int dateId) async{
     Graph graph=Graph("vote")
         .add(Field("id"))
         .add(Graph("text_votes")
@@ -89,8 +89,6 @@ class PlanningService{
       ).condition(Condition(Field("date_id"), Condition.EQUALS, dateId)
        .addCondition(ConditionElement<String>(Field("vote_kind"), Condition.EQUALS, "TEXT")));
 
-    print(graph.build());
-
     http.Response result = await http.post(
         GraphQlConstants.URL, body: graph.build(),
         headers: GraphQlConstants.HEADERS);
@@ -100,6 +98,34 @@ class PlanningService{
       List<TextVote> votes = new List();
       for(Map<String, dynamic> data in resultMap["data"]["vote"]){
         votes.add(TextVote.fromJson(data));
+      }
+      return votes;
+    }
+    return null;
+  }
+
+  Future<List<DateVote>> getDateVotes(int dateId) async{
+    Graph graph=Graph("vote")
+        .add(Field("id"))
+        .add(Graph("date_votes")
+          .add(Field("datetime"))
+        ).add(Field("result"))
+        .add(Graph("voters")
+          .add(Graph("user")
+            .add(Field("id"))
+      ).add(Field("vote"))
+    ).condition(Condition(Field("date_id"), Condition.EQUALS, dateId)
+        .addCondition(ConditionElement<String>(Field("vote_kind"), Condition.EQUALS, "DATE")));
+
+    http.Response result = await http.post(
+        GraphQlConstants.URL, body: graph.build(),
+        headers: GraphQlConstants.HEADERS);
+
+    if(result.statusCode == HttpStatus.ok) {
+      Map<String, dynamic> resultMap = convert.json.decode(result.body);
+      List<DateVote> votes = new List();
+      for(Map<String, dynamic> data in resultMap["data"]["vote"]){
+        votes.add(DateVote.fromJson(data));
       }
       return votes;
     }
@@ -193,6 +219,29 @@ class PlanningService{
         .addReturning(Field("id"));
     
    http.Response result = await http.post(
+        GraphQlConstants.URL, body: mutation.build(),
+        headers: GraphQlConstants.HEADERS);
+
+    if(result.statusCode == HttpStatus.ok) {
+      Map<String, dynamic> resultMap = convert.json.decode(result.body);
+      if(resultMap.containsKey("errors")){  //TODO throw exception
+        return null;
+      }
+      return;
+    }
+    return;
+  }
+
+  Future<void> addDateVote(DateVote vote) async{
+    Map<String, dynamic> data=vote.toJson();
+    data.remove("id");
+    data.remove("voters");
+
+    Mutation mutation = Mutation("insert_vote", Mutation.INSERT)
+        .addObjects(convert.json.encode(data))
+        .addReturning(Field("id"));
+
+    http.Response result = await http.post(
         GraphQlConstants.URL, body: mutation.build(),
         headers: GraphQlConstants.HEADERS);
 

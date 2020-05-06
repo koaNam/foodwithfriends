@@ -9,6 +9,7 @@ part of 'Date.dart';
 Date _$DateFromJson(Map<String, dynamic> json) {
   return Date()
     ..id = json['id'] as int
+    ..datetime = json['datetime'] != null ? DateTime.parse(json['datetime'] as String): null
     ..users = (json['user_dates'] as List)
         ?.map(
             (e) => e == null ? null : User.fromJson(e['user'] as Map<String, dynamic>))
@@ -21,6 +22,7 @@ Date _$DateFromJson(Map<String, dynamic> json) {
 
 Map<String, dynamic> _$DateToJson(Date instance) => <String, dynamic>{
       'id': instance.id,
+      'datetime': instance.datetime.toIso8601String(),
       'user_dates': instance.users,
       'votes': instance.votes,
     };

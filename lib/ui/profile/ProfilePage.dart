@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_rating_bar/flutter_rating_bar.dart';
+import 'package:flutter/services.dart';
 import 'package:tinder_cards/bloc/ProfileBloc.dart';
 import 'package:tinder_cards/model/User.dart';
 import 'package:tinder_cards/ui/profile/AddPropertyPage.dart';
 import 'package:tinder_cards/ui/profile/CameraPage.dart';
+import 'package:tinder_cards/ui/profile/ProfileDetailPage.dart';
+import 'package:vibrate/vibrate.dart';
 
 class ProfilePage extends StatefulWidget {
 
@@ -18,14 +20,21 @@ class ProfilePage extends StatefulWidget {
 
 }
 
-class ProfilePageState extends State<ProfilePage> {
+class ProfilePageState extends State<ProfilePage> with TickerProviderStateMixin{
 
   final int userId;
   final ProfileBloc _profileBloc = new ProfileBloc();
+  AnimationController rotationController;
+
 
   bool editMode = false;
 
-  ProfilePageState(this.userId) {
+  ProfilePageState(this.userId);
+
+  @override
+  void initState() {
+    super.initState();
+    rotationController = AnimationController(duration: const Duration(milliseconds: 50), vsync: this);
     this._profileBloc.loadProfile(this.userId);
   }
 
@@ -43,48 +52,50 @@ class ProfilePageState extends State<ProfilePage> {
               child: Column(
                 children: <Widget>[
                   Center(
-                      heightFactor: 1.5,
-                      child: Stack(
-                        alignment: Alignment.bottomRight,
-                        children: <Widget>[
-                          CircleAvatar(
-                            backgroundImage: NetworkImage(user.profilePicture),
-                            radius: MediaQuery
-                                .of(context)
-                                .size
-                                .width / 4,
-                          ),
-                          FloatingActionButton(
-                            heroTag: "Camera",
-                            backgroundColor: Colors.blue,
-                            child: Icon(Icons.edit),
-                            onPressed: () =>
-                                Navigator.of(context).push(
-                                    MaterialPageRoute<void>(
-                                        builder: (BuildContext context) {
-                                          return CameraPage(
-                                              this.userId, this._profileBloc);
-                                        }
-                                    )
-                                ),
-                          )
-                        ],
+                      child: Container(
+                        margin: EdgeInsets.only(
+                          top: MediaQuery.of(context).size.height * 0.05,
+                          bottom: MediaQuery.of(context).size.height * 0.025
+                        ),
+                        child: Stack(
+                          alignment: Alignment.bottomRight,
+                          children: <Widget>[
+                            CircleAvatar(
+                              backgroundImage: NetworkImage(user.profilePicture),
+                              radius: MediaQuery
+                                  .of(context)
+                                  .size
+                                  .width / 4,
+                            ),
+                            FloatingActionButton(
+                              heroTag: "Camera",
+                              backgroundColor: Color(0xFF3a5fb6),
+                              child: Icon(Icons.edit),
+                              onPressed: () =>
+                                  Navigator.of(context).push(
+                                      MaterialPageRoute<void>(
+                                          builder: (BuildContext context) {
+                                            return CameraPage(
+                                                this.userId, this._profileBloc);
+                                          }
+                                      )
+                                  ),
+                            )
+                          ],
+                        ),
                       )
                   ),
-                  RatingBar(
-                    initialRating: 3,
-                    minRating: 0,
-                    direction: Axis.horizontal,
-                    allowHalfRating: true,
-                    itemCount: 5,
-                    itemBuilder: (context, _) =>
-                        Icon(
-                          Icons.star,
-                          color: Colors.amber,
-                        ),
-                    onRatingUpdate: (rating) {
-                      print(rating);
-                    },
+                  Container(
+                    padding: EdgeInsets.only(
+                        bottom: MediaQuery.of(context).size.height * 0.03
+                    ),
+                    child: Text(
+                      user.name,
+                      style: TextStyle(
+                        fontSize: 20,
+                        fontWeight: FontWeight.w300
+                      ),
+                    ),
                   ),
                   GridView.count(
                     shrinkWrap: true,
@@ -92,43 +103,52 @@ class ProfilePageState extends State<ProfilePage> {
                     crossAxisCount: 2,
                     children: user.userProperties.map((e) =>
                         GestureDetector(
-                          child: Container(
-                            margin: EdgeInsets.only(top: 4, bottom: 4, left: 10, right: 10),
-                            decoration: BoxDecoration(
-                              color: Colors.black.withOpacity(0.075),
-                                borderRadius: BorderRadius.all(Radius.circular(15.0)),
-                                boxShadow: [
-                                  BoxShadow(
-                                      color: Colors.white,
-                                      offset: Offset(3, 3),
-                                      blurRadius: 3,
-                                      spreadRadius: -3
-                                  ),
-                                ]
-                            ),
-                            child: Stack(
-                              alignment: Alignment.center,
-                              children: <Widget>[
-                                Center(child: Text(e.name,
-                                    style: TextStyle(color: Colors.grey.shade700))),
-                                this.editMode ? Positioned(
-                                    right: MediaQuery.of(context).size.width * -0.018,
-                                    child: IconButton(
-                                      icon: Icon(
-                                        Icons.close, color:  Colors.grey.shade400),
-                                      onPressed: () =>
-                                          this._profileBloc.deleteProperty(userId, e.id),
-                                    )
-                                ) : SizedBox.shrink()
-                              ],
+                          child: RotationTransition(
+                            turns: Tween(begin: 0.0, end: 0.01).animate(rotationController),
+                            child: Container(
+                              margin: EdgeInsets.only(top: 4, bottom: 4, left: 10, right: 10),
+                              decoration: BoxDecoration(
+                                  color: Colors.black.withOpacity(0.075),
+                                  borderRadius: BorderRadius.all(Radius.circular(15.0)),
+                                  boxShadow: [
+                                    BoxShadow(
+                                        color: Colors.white,
+                                        offset: Offset(3, 3),
+                                        blurRadius: 3,
+                                        spreadRadius: -3
+                                    ),
+                                  ]
+                              ),
+                              child: Stack(
+                                alignment: Alignment.center,
+                                children: <Widget>[
+                                  Center(child: Text(e.name,
+                                      style: TextStyle(color: Colors.grey.shade700))),
+                                  this.editMode ? Positioned(
+                                      right: MediaQuery.of(context).size.width * -0.018,
+                                      child: IconButton(
+                                        icon: Icon(
+                                            Icons.close, color:  Colors.grey.shade400),
+                                        onPressed: () =>
+                                            this._profileBloc.deleteProperty(userId, e.id),
+                                      )
+                                  ) : SizedBox.shrink()
+                                ],
+                              ),
                             ),
                           ),
-                          onLongPress: () =>
-                          {
+                          onLongPress: () {
                             this.setState(() {
                               editMode = true;
-                            })
-                          },
+                            });
+                            Vibrate.feedback(FeedbackType.medium);
+                            TickerFuture tickerFuture = this.rotationController.repeat(reverse: true);
+                            tickerFuture.timeout(Duration(milliseconds: 200), onTimeout:  () {
+                              this.rotationController.forward(from: 0);
+                              this.rotationController.stop(canceled: true);
+                            });
+                          }
+
                         )).toList(),
                   ),
                 ],
@@ -142,7 +162,9 @@ class ProfilePageState extends State<ProfilePage> {
             },
           );
         } else {
-          body = CircularProgressIndicator();
+          body = Center(
+            child: CircularProgressIndicator(),
+          );
         }
 
         return Scaffold(
@@ -153,6 +175,21 @@ class ProfilePageState extends State<ProfilePage> {
             ),
             centerTitle: true,
             backgroundColor: Colors.white,
+            actions: <Widget>[
+              IconButton(
+                onPressed: () => Navigator.of(context).push(
+                  MaterialPageRoute<void>(
+                    builder: (BuildContext context) {
+                      return ProfileDetailPage();
+                    }
+                  )
+                ),
+                icon: Icon(
+                  Icons.settings,
+                  color: Colors.black,
+                )
+              )
+            ],
           ),
           body: body,
           floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,

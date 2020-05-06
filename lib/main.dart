@@ -26,12 +26,18 @@ class MyApp extends StatelessWidget
         (
         title: 'FoodWithFriends',
         home: new Home(),
+        color: Colors.white,
         supportedLocales: [
           const Locale('de', "DE"),
         ],
         localizationsDelegates: [
           GlobalMaterialLocalizations.delegate,
         ],
+        theme: ThemeData(
+          floatingActionButtonTheme: FloatingActionButtonThemeData(
+            backgroundColor: Color(0xFF3a5fb6)
+          ),
+        ),
       )
     );
   }

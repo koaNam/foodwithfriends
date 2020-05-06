@@ -32,9 +32,6 @@ class VoteBloc extends AbstractVoteBloc{
         description = "";
       }
 
-      print(title);
-      print(description);
-
       Vote vote = new TextVote.textVote(title, description, null, userId, dateId);
       this._planningService.addTextVote(vote);
     }

@@ -47,6 +47,7 @@ class ChatPageState extends State<ChatPage>{
     return FutureBuilder(
         future: this._users,
         builder: (_,  AsyncSnapshot<List<User>> data){
+          Widget body;
           if(data.connectionState == ConnectionState.done){
             this._chatBloc.connectService(widget.dateId, widget.userId, data.data);
             Map<int, User> users = Map.fromIterable(data.data, key: (u) => u.id, value: (u) => u);
@@ -79,19 +80,7 @@ class ChatPageState extends State<ChatPage>{
                       children: <Widget>[],
                     );
                   }
-                  return Scaffold(
-                    appBar: AppBar(
-                      backgroundColor: Colors.white,
-                      iconTheme: IconThemeData(
-                        color: Colors.black, //change your color here
-                      ),
-                      title: Text(
-                        "Chat",
-                        style: TextStyle(color: Colors.black),
-                      ),
-                      centerTitle: true,
-                    ),
-                    body: SingleChildScrollView(
+                  return SingleChildScrollView(
                       child: Container(
                         color: Colors.grey.shade100,
                         height: MediaQuery.of(context).size.height - 81,
@@ -136,13 +125,29 @@ class ChatPageState extends State<ChatPage>{
                           ],
                         ),
                       ),
-                    ),
-                  );
+                    );
+
                 }
             );
           } else {
-            return CircularProgressIndicator();
+            return Center(
+              child: CircularProgressIndicator(),
+            );
           }
+          return Scaffold(
+              appBar: AppBar(
+                backgroundColor: Colors.white,
+                iconTheme: IconThemeData(
+                  color: Colors.black, //change your color here
+                ),
+                title: Text(
+                  "Chat",
+                  style: TextStyle(color: Colors.black),
+                ),
+                centerTitle: true,
+              ),
+              body: body
+          );
         }
     );
   }

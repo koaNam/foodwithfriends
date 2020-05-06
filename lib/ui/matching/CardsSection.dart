@@ -1,6 +1,7 @@
 import 'dart:core';
 
 import 'package:flutter/material.dart';
+import 'DefaultCard.dart';
 import 'SuggestionCard.dart';
 import 'dart:math';
 
@@ -65,63 +66,73 @@ class _CardsSectionState extends State<CardsSection>
 
   @override
   Widget build(BuildContext context) {
-    List<Widget> cardList=new List();
+    Widget body;
 
-    if(this.cards.length >= 2){
-      cardList.add(backCard());
-    }
-    if(this.cards.length >= 1){
-      cardList.add(frontCard());
-    }
+    if (this.cards.isNotEmpty) {
+      List<Widget> cardList = new List();
 
-    cardList.add(_controller.status != AnimationStatus.forward
-        ? new SizedBox.expand(
-        child: new GestureDetector(
-          // While dragging the first card
-          onPanUpdate: (DragUpdateDetails details) {
-            // Add what the user swiped in the last frame to the alignment of the card
-            setState(() {
-              // 20 is the "speed" at which moves the card
-              frontCardAlign = new Alignment(
-                  frontCardAlign.x +
-                      20 *
-                          details.delta.dx /
-                          MediaQuery.of(context).size.width,
-                  frontCardAlign.y +
-                      40 *
-                          details.delta.dy /
-                          MediaQuery.of(context).size.height);
-
-              frontCardRot =
-                  frontCardAlign.x; // * rotation speed;
-            });
-          },
-          // When releasing the first card
-          onPanEnd: (_) {
-            // If the front card was swiped far enough to count as swiped
-            if (frontCardAlign.x > 3.0) {
-              animateCards();
-              this.cards.first.onSwipeRight();
-            } else if (frontCardAlign.x < -3.0) {
-              animateCards();
-              this.cards.first.onSwipeLeft();
-            } else {
-              // Return to the initial rotation and alignment
+      if (this.cards.length >= 2) {
+        cardList.add(backCard());
+      }
+      if (this.cards.length >= 1) {
+        cardList.add(frontCard());
+      }
+      cardList.add(_controller.status != AnimationStatus.forward
+          ? new SizedBox.expand(
+          child: new GestureDetector(
+            // While dragging the first card
+            onPanUpdate: (DragUpdateDetails details) {
+              // Add what the user swiped in the last frame to the alignment of the card
               setState(() {
-                frontCardAlign = defaultFrontCardAlign;
-                frontCardRot = 0.0;
+                // 20 is the "speed" at which moves the card
+                frontCardAlign = new Alignment(
+                    frontCardAlign.x + 20 * details.delta.dx / MediaQuery
+                        .of(context)
+                        .size
+                        .width,
+                    frontCardAlign.y + 40 * details.delta.dy / MediaQuery
+                        .of(context)
+                        .size
+                        .height
+                );
+                frontCardRot = frontCardAlign.x; // * rotation speed;
               });
-            }
-          },
-        ))
-        : new Container(),);
+            },
+            // When releasing the first card
+            onPanEnd: (_) {
+              // If the front card was swiped far enough to count as swiped
+              if (frontCardAlign.x > 3.0) {
+                animateCards();
+                this.cards.first.onSwipeRight();
+              } else if (frontCardAlign.x < -3.0) {
+                animateCards();
+                this.cards.first.onSwipeLeft();
+              } else {
+                // Return to the initial rotation and alignment
+                setState(() {
+                  frontCardAlign = defaultFrontCardAlign;
+                  frontCardRot = 0.0;
+                });
+              }
+            },
+          )
+      )
+          : new Container(),);
+      body = Stack(
+        children: cardList,
+      );
+    } else {
+      body = new Align(
+        alignment: cardAlign,
+        child: new SizedBox.fromSize(
+            size: cardSize, child: DefaultCard()),
+      );
+    }
 
     return new Expanded(
         child: Container(
             color: Colors.white,
-            child: new Stack(
-              children: cardList
-            )
+            child: body
         )
     );
   }
