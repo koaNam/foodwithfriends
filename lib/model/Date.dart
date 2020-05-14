@@ -8,8 +8,9 @@ part 'Date.g.dart';
 class Date{
 
   int id;
-  @JsonKey(name: "user_dates")
+  @JsonKey(name: "datetime")
   DateTime datetime;
+  @JsonKey(name: "user_dates")
   List<User> users;
   List<Vote> votes;
 

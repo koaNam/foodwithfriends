@@ -19,19 +19,24 @@ class ProfileCard extends StatelessWidget implements SuggestionCard{
   final Function() decline;
 
   ProfileCard({this.userMatch, this.accept, this.decline, this.matchingBloc, this.myId});
-
+  //new BorderRadius.circular(12.0)
   @override
   Widget build(BuildContext context) {
     return new Card(
+      margin: EdgeInsets.only(bottom: 60, top: 10),
         child: Column(children: <Widget>[
       Expanded(
         child: Stack(
           children: <Widget>[
             new SizedBox.expand(
-              child: new Material(
-                borderRadius: new BorderRadius.circular(12.0),
-                child: new Image.network(this.userMatch.match.profilePicture,
-                    fit: BoxFit.cover),
+              child: Container(
+                decoration: BoxDecoration(borderRadius: BorderRadius.circular(12.0)),
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(6.0),
+                  child: Image.network(
+                      this.userMatch.match.profilePicture,
+                      fit: BoxFit.cover),
+                )
               ),
             ),
             new SizedBox.expand(
@@ -64,16 +69,9 @@ class ProfileCard extends StatelessWidget implements SuggestionCard{
           ],
         ),
       ),
-      GridView.count(
-        shrinkWrap: true,
-        childAspectRatio: 5,
-        physics: NeverScrollableScrollPhysics(),
-        crossAxisCount: 2,
-        children: this.buildProperties(this.userMatch.match.userProperties),
-      ),
       Container(
           child: Padding(
-        padding: EdgeInsets.only(bottom: 50, top: 0),
+        padding: EdgeInsets.only(bottom: 10, top: 10),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[

@@ -24,7 +24,7 @@ class FacebookService extends SocialService{
 
     if(result.statusCode == HttpStatus.ok) {
       Map<String, dynamic> resultMap = convert.json.decode(result.body);
-      this.id = int.parse(resultToken.accessToken.userId);
+      this.id = resultToken.accessToken.userId;
       this.name = resultMap["name"];
     }
     return;

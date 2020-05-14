@@ -2,6 +2,7 @@ import 'dart:developer' as developer;
 
 import 'package:tinder_cards/bloc/vote/AbstractVoteBloc.dart';
 import 'package:tinder_cards/model/TextVote.dart';
+import 'package:tinder_cards/model/User.dart';
 import 'package:tinder_cards/model/Vote.dart';
 import 'package:tinder_cards/service/PlanningService.dart';
 
@@ -20,19 +21,9 @@ class VoteBloc extends AbstractVoteBloc{
   Future<void> addVote(int dateId, int userId) async{
     if(this.text!= null) {
       developer.log("adding text vote", name: LOG);
-      int titleEnd = text.indexOf("\n");
-      String title;
       String description;
-      if (titleEnd >= 0) {
-        title = text.substring(0, titleEnd);
-        description = text.substring(
-            titleEnd + 1, text.length); // +1 um "/n" zu überspringen
-      } else {
-        title = text;
-        description = "";
-      }
 
-      Vote vote = new TextVote.textVote(title, description, null, userId, dateId);
+      Vote vote = new TextVote.textVote("dummy", this.text, null, User(userId, null, null, null, null, null), dateId);
       this._planningService.addTextVote(vote);
     }
   }

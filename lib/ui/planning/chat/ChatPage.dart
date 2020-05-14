@@ -74,14 +74,12 @@ class ChatPageState extends State<ChatPage>{
                           ),
                       ).toList(),
                     );
-
                   } else {
                     chat = ListView(
                       children: <Widget>[],
                     );
                   }
-                  return SingleChildScrollView(
-                      child: Container(
+                  return Container(
                         color: Colors.grey.shade100,
                         height: MediaQuery.of(context).size.height - 81,
                         child: Flex(
@@ -89,42 +87,42 @@ class ChatPageState extends State<ChatPage>{
                           children: <Widget>[
                             Expanded(
                                 flex: 15,
-                                child:
-                                chat
+                                child: chat
                             ),
-                            Expanded(
-                                child: Flex(
-                                  direction: Axis.horizontal,
-                                  children: <Widget>[
-                                    Expanded(
-                                        flex: 11,
-                                        child: Container(
-                                          padding: EdgeInsets.only(left: 5),
-                                          child: TextField(
-                                              decoration: InputDecoration(border: OutlineInputBorder(borderSide: BorderSide(color: Colors.blue), borderRadius: BorderRadius.circular(15.0))),
-                                              onSubmitted: (String value){
-                                                this._chatBloc.send(widget.userId, value);
-                                              },
-                                              onChanged: (String value){
-                                                this.setState(() {
-                                                  textMessage = value;
-                                                });
-                                              },
-                                          ),
-                                        )
-                                    ),
-                                    Expanded(
-                                        child: IconButton(
-                                          icon: Icon(Icons.arrow_forward),
-                                          onPressed: () => this._chatBloc.send(widget.userId, textMessage),
-                                        )
-                                    )
-                                  ],
-                                )
+                            Container(
+                              height: 35,
+                              margin: EdgeInsets.only(bottom: 5),
+                              child: Flex(
+                                direction: Axis.horizontal,
+                                children: <Widget>[
+                                  Expanded(
+                                      flex: 11,
+                                      child: Container(
+                                        padding: EdgeInsets.only(left: 5),
+                                        child: TextField(
+                                          decoration: InputDecoration(border: OutlineInputBorder(borderSide: BorderSide(color: Colors.blue), borderRadius: BorderRadius.circular(15.0))),
+                                          onSubmitted: (String value){
+                                            this._chatBloc.send(widget.userId, value);
+                                          },
+                                          onChanged: (String value){
+                                            this.setState(() {
+                                              textMessage = value;
+                                            });
+                                          },
+                                        ),
+                                      )
+                                  ),
+                                  Expanded(
+                                      child: IconButton(
+                                        icon: Icon(Icons.arrow_forward),
+                                        onPressed: () => this._chatBloc.send(widget.userId, textMessage),
+                                      )
+                                  )
+                                ],
+                              ),
                             )
                           ],
                         ),
-                      ),
                     );
 
                 }
@@ -134,20 +132,6 @@ class ChatPageState extends State<ChatPage>{
               child: CircularProgressIndicator(),
             );
           }
-          return Scaffold(
-              appBar: AppBar(
-                backgroundColor: Colors.white,
-                iconTheme: IconThemeData(
-                  color: Colors.black, //change your color here
-                ),
-                title: Text(
-                  "Chat",
-                  style: TextStyle(color: Colors.black),
-                ),
-                centerTitle: true,
-              ),
-              body: body
-          );
         }
     );
   }

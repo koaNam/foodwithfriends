@@ -39,6 +39,30 @@ class ProfileService{
     return null;
   }
 
+  Future<User> findUserSettingsById(int id) async{
+    Graph graph=Graph("user")
+        .add(Field("id"))
+        .add(Field("name"))
+        .add(Field("birthDate"))
+        .add(Field("ageMinOffset"))
+        .add(Field("ageMaxOffset"))
+        .add(Field("cookingSkill"))
+        .add(Field("skillMinOffset"))
+        .add(Field("skillMaxOffset"))
+        .add(Field("hasKitchen"))
+        .add(Field("maxUsers"))
+        .condition(Condition(Field("id"), Condition.EQUALS, id));
+
+    http.Response result = await http.post(
+        GraphQlConstants.URL, body: graph.build(),
+        headers: GraphQlConstants.HEADERS);
+    if(result.statusCode == HttpStatus.ok) {
+      Map<String, dynamic> resultMap = convert.json.decode(result.body);
+      return _buildUserFromJson(resultMap);
+    }
+    return null;
+  }
+
   Future<User> findUserByName(String name) async{
     Graph graph=Graph("user")
         .add(Field("id"))
@@ -62,7 +86,7 @@ class ProfileService{
     return null;
   }
 
-  Future<User> findUserByOauth(int id, String service) async{
+  Future<User> findUserByOauth(String id, String service) async{
     Graph graph=Graph("user")
         .add(Field("id"))
         .add(Field("name"))
@@ -72,7 +96,7 @@ class ProfileService{
         .add(Field("id"))
         .add(Field("name"))
         .add(Field("colour"))))
-        .condition(Condition.element(ConditionElement<String>(Field("oauth_service"), Condition.EQUALS, service)).addCondition(ConditionElement<int>(Field("oauth_id"), Condition.EQUALS, id)));
+        .condition(Condition.element(ConditionElement<String>(Field("oauth_service"), Condition.EQUALS, service)).addCondition(ConditionElement<String>(Field("oauth_id"), Condition.EQUALS, id)));
 
     http.Response result = await http.post(
         GraphQlConstants.URL, body: graph.build(),
@@ -87,9 +111,19 @@ class ProfileService{
   Future<User> insertUser(User user) async{
     Map<String, dynamic> value=user.toJson();
     value.remove("id");
+    value.remove("ageMinOffset");
+    value.remove("ageMaxOffset");
+    value.remove("hasKitchen");
+    value.remove("cookingSkill");
+    value.remove("skillMinOffset");
+    value.remove("skillMaxOffset");
+    value.remove("maxUsers");
+
     Mutation mutation=new Mutation("insert_user", Mutation.INSERT)
         .addObjects(convert.json.encode(value))
         .addReturning(Field("id"));
+
+    print(mutation.build());
 
     http.Response result = await http.post(
         GraphQlConstants.URL, body: mutation.build(),
@@ -142,6 +176,39 @@ class ProfileService{
 
     Map<String, dynamic> id=new Map();
     id["_eq"]=userId;
+
+    Map<String, dynamic> where=new Map();
+    where["id"]=id;
+
+    Mutation mutation = new Mutation("update_user", Mutation.UPDATE)
+        .addObjects(convert.jsonEncode(set))
+        .addObjects("where: ${convert.json.encode(where)}")
+        .addReturning(Field("id"));
+
+    http.Response result = await http.post(
+        GraphQlConstants.URL, body: mutation.build(),
+        headers: GraphQlConstants.HEADERS);
+
+    if(result.statusCode == HttpStatus.ok) {
+      Map<String, dynamic> resultMap = convert.json.decode(result.body);
+      if(resultMap.containsKey("errors")){  //TODO throw exception
+        return null;
+      }
+      return;
+    }
+    return;
+  }
+
+  Future<void> updateProfileSettings(User user) async{
+    Map<String, dynamic> set = user.toJson();
+    set.remove("id");
+    set.remove("profile_picture");
+    set.remove("user_properties");
+    set.remove("oauth_id");
+    set.remove("oauth_service");
+
+    Map<String, dynamic> id=new Map();
+    id["_eq"]=user.id;
 
     Map<String, dynamic> where=new Map();
     where["id"]=id;

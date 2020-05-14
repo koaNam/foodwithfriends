@@ -46,13 +46,15 @@ class DatePage extends StatelessWidget{
                                 children: date.votes.whereType<TextVote>().map((v) =>
                                     VoteWidget(
                                       child: Container(
-                                        child: Column(
-                                          crossAxisAlignment: CrossAxisAlignment.start,
-                                          children: <Widget>[
-                                            Text(v.title, style: TextStyle(fontWeight:  v.result == "accepted" ? FontWeight.bold: FontWeight.normal, fontSize: 22, color: v.result == "declined" ? Color.fromRGBO(170, 175, 180, 100): Colors.black)),
-                                            Text(v.description, style: TextStyle(fontWeight:  v.result == "accepted" ? FontWeight.bold: FontWeight.normal, color: v.result == "declined" ? Color.fromRGBO(170, 175, 180, 100): Colors.black)),
-                                          ],
-                                        ),
+                                        child: Container(
+                                          width: MediaQuery.of(context).size.width  / 1.2,
+                                          child: Text(v.description,
+                                              style: TextStyle(
+                                                  fontWeight:  v.result == "accepted" ? FontWeight.bold: FontWeight.normal, color: v.result == "declined" ? Color.fromRGBO(170, 175, 180, 100): Colors.black,
+                                                  fontSize: 16
+                                              )
+                                          ),
+                                        )
                                       ),
                                       userId: this.userId,
                                       vote: v,
@@ -65,12 +67,14 @@ class DatePage extends StatelessWidget{
                                         VoteWidget(
                                           userId: this.userId,
                                           vote: v,
-                                          child: Column(
-                                            crossAxisAlignment: CrossAxisAlignment.start,
-                                            children: <Widget>[
-                                              Text("Termin", style: TextStyle(fontWeight:  v.result == "accepted" ? FontWeight.bold: FontWeight.normal, fontSize: 22, color: v.result == "declined" ? Color.fromRGBO(170, 175, 180, 100): Colors.black)),
-                                              Text("Am ${new DateFormat("dd.MM.yyyy").format(v.datetime)} um ${new DateFormat("HH:mm").format(v.datetime)} Uhr", style: TextStyle(fontWeight:  v.result == "accepted" ? FontWeight.bold: FontWeight.normal, color: v.result == "declined" ? Color.fromRGBO(170, 175, 180, 100): Colors.black)),
-                                            ],
+                                          child: Container(
+                                            width: MediaQuery.of(context).size.width  / 1.2,
+                                            child:  Text("Hi Leute, was halted ihr von diesem Termin: ${DateFormat("dd.MM.yyyy HH:mm").format(v.datetime)}",
+                                                style: TextStyle(
+                                                    fontWeight:  v.result == "accepted" ? FontWeight.bold: FontWeight.normal, color: v.result == "declined" ? Color.fromRGBO(170, 175, 180, 100): Colors.black,
+                                                    fontSize: 16
+                                                )
+                                            ),
                                           ),
                                           onVoteUp: () => this._dateBloc.vote(this.dateId, v.id, this.userId, "yes", v.voters.where((vo) => (vo.user.id == this.userId && vo.vote == "yes")).isEmpty),
                                           onVoteDown: () => this._dateBloc.vote(this.dateId, v.id, this.userId, "no", v.voters.where((vo) => (vo.user.id == this.userId && vo.vote == "no")).isEmpty),

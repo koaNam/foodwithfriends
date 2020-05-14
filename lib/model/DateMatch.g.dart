@@ -16,5 +16,6 @@ DateMatch _$DateMatchFromJson(Map<String, dynamic> json) {
 }
 
 Map<String, dynamic> _$DateMatchToJson(DateMatch instance) => <String, dynamic>{
+      'id': instance.id,
       'userDateMatches': instance.users,
     };

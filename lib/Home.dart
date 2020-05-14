@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_auth_buttons/flutter_auth_buttons.dart';
 import 'package:tinder_cards/bloc/ProfileBloc.dart';
 import 'package:tinder_cards/service/social/FacebookService.dart';
+import 'package:tinder_cards/service/social/GoogleService.dart';
 import 'package:tinder_cards/ui/MainPageWrapper.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:tinder_cards/ui/profile/ProfileDetailPage.dart';
@@ -56,9 +57,6 @@ class Home extends StatelessWidget {
   }
 
   Future googleLogin() async {
-    print("hier");
-    GoogleSignIn googleSignIn = GoogleSignIn();
-    GoogleSignInAccount result = await googleSignIn.signIn();
-    print(result);
+    this.profileBloc.loginSocial(GoogleService());
   }
 }

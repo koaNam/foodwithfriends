@@ -14,9 +14,18 @@ class User{
   @JsonKey(name: "user_properties")
   List<Property> userProperties;
   @JsonKey(name: "oauth_id")
-  int oauthId;
+  String oauthId;
   @JsonKey(name: "oauth_service")
   String oauthService;
+
+  DateTime birthDate;
+  int ageMinOffset;
+  int ageMaxOffset;
+  bool hasKitchen;
+  double cookingSkill;
+  double skillMinOffset;
+  double skillMaxOffset;
+  int maxUsers;
 
   User(this.id, this.name, this.profilePicture, this.oauthId, this.oauthService, this.userProperties);
 

@@ -50,7 +50,8 @@ class MainPageWrapperState extends State<MainPageWrapper> {
           child: SizedBox(),
         ),
         BottomNavigation(
-          onWidgetChange: this.onWidgetChange
+          onWidgetChange: this.onWidgetChange,
+          activePage: this.currentIndex,
         ),
       ],
     );

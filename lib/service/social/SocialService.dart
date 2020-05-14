@@ -1,6 +1,6 @@
 abstract class SocialService{
 
-  int id;
+  String id;
   String name;
 
   String getIdentifier();

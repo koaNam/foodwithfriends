@@ -1,10 +1,14 @@
 import 'package:flutter/material.dart';
 import 'dart:math' as math;
 
-class BottomNavigation extends StatelessWidget {
-  final Function(int) onWidgetChange;
+import 'package:tinder_cards/AppTheme.dart';
 
-  BottomNavigation({this.onWidgetChange});
+class BottomNavigation extends StatelessWidget {
+
+  final Function(int) onWidgetChange;
+  final int activePage;
+
+  BottomNavigation({this.onWidgetChange, this.activePage});
 
   @override
   Widget build(BuildContext context) {
@@ -24,7 +28,7 @@ class BottomNavigation extends StatelessWidget {
                   index: 0,
                   icon: Icon(
                     Icons.add_circle,
-                    color: Color(0xFF3a5fb6)
+                    color: 0 == this.activePage ?  AppTheme.MAIN_COLOR : AppTheme.DISABLED_COLOR,
                   ),
                 ),
                 TabIcon(
@@ -32,7 +36,7 @@ class BottomNavigation extends StatelessWidget {
                   index: 1,
                   icon: Icon(
                     Icons.bookmark,
-                    color: Color(0xFF3a5fb6)
+                    color: 1 == this.activePage ?  AppTheme.MAIN_COLOR : AppTheme.DISABLED_COLOR,
                   ),
                 ),
                 TabIcon(
@@ -40,7 +44,7 @@ class BottomNavigation extends StatelessWidget {
                   index: 2,
                   icon: Icon(
                     Icons.person,
-                    color: Color(0xFF3a5fb6)
+                    color: 2 == this.activePage ?  AppTheme.MAIN_COLOR : AppTheme.DISABLED_COLOR,
                   ),
                 ),
               ],
@@ -84,7 +88,6 @@ class TabClipper extends CustomClipper<Path> {
   Path getClip(Size size) {
     final path = Path();
 
-    final v = radius * 2;
     path.lineTo(0, 0);
     path.arcTo(Rect.fromLTWH(0, 0, radius, radius), degreeToRadians(180),
         degreeToRadians(90), false);
@@ -103,7 +106,7 @@ class TabClipper extends CustomClipper<Path> {
   bool shouldReclip(TabClipper oldClipper) => true;
 
   double degreeToRadians(double degree) {
-    var redian = (math.pi / 180) * degree;
-    return redian;
+    var radian = (math.pi / 180) * degree;
+    return radian;
   }
 }

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:tinder_cards/bloc/vote/AbstractVoteBloc.dart';
 import 'package:tinder_cards/model/DateVote.dart';
+import 'package:tinder_cards/model/User.dart';
 import 'package:tinder_cards/service/PlanningService.dart';
 
 class DateVoteBloc extends AbstractVoteBloc{
@@ -24,7 +25,7 @@ class DateVoteBloc extends AbstractVoteBloc{
       time.minute
     );
     
-    DateVote vote = new DateVote.dateVote(dateTime, null, userId, dateId);
+    DateVote vote = new DateVote.dateVote(dateTime, null, User(userId, null, null, null, null, null), dateId);
     this._planningService.addDateVote(vote);
   }
 

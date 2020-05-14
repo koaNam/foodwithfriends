@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
+import 'package:tinder_cards/AppTheme.dart';
 import 'package:tinder_cards/bloc/ProfileBloc.dart';
 import 'package:tinder_cards/model/User.dart';
 import 'package:tinder_cards/ui/profile/AddPropertyPage.dart';
 import 'package:tinder_cards/ui/profile/CameraPage.dart';
 import 'package:tinder_cards/ui/profile/ProfileDetailPage.dart';
-import 'package:vibrate/vibrate.dart';
+import 'package:vibration/vibration.dart';
+import 'dart:math' as math;
+
 
 class ProfilePage extends StatefulWidget {
 
@@ -51,43 +53,48 @@ class ProfilePageState extends State<ProfilePage> with TickerProviderStateMixin{
               color: Colors.grey.shade100,
               child: Column(
                 children: <Widget>[
-                  Center(
-                      child: Container(
-                        margin: EdgeInsets.only(
-                          top: MediaQuery.of(context).size.height * 0.05,
-                          bottom: MediaQuery.of(context).size.height * 0.025
-                        ),
-                        child: Stack(
-                          alignment: Alignment.bottomRight,
-                          children: <Widget>[
-                            CircleAvatar(
-                              backgroundImage: NetworkImage(user.profilePicture),
-                              radius: MediaQuery
-                                  .of(context)
-                                  .size
-                                  .width / 4,
-                            ),
-                            FloatingActionButton(
-                              heroTag: "Camera",
-                              backgroundColor: Color(0xFF3a5fb6),
-                              child: Icon(Icons.edit),
-                              onPressed: () =>
-                                  Navigator.of(context).push(
-                                      MaterialPageRoute<void>(
-                                          builder: (BuildContext context) {
-                                            return CameraPage(
-                                                this.userId, this._profileBloc);
-                                          }
-                                      )
-                                  ),
-                            )
-                          ],
-                        ),
-                      )
+                  PhysicalShape(
+                    color: Colors.white,
+                    elevation: 7.0,
+                    clipper: TabClipper(),
+                    child: Center(
+                        child: Container(
+                          margin: EdgeInsets.only(
+                              top: MediaQuery.of(context).size.height * 0.05,
+                              bottom: MediaQuery.of(context).size.height * 0.025
+                          ),
+                          child: Stack(
+                            alignment: Alignment.bottomRight,
+                            children: <Widget>[
+                              CircleAvatar(
+                                backgroundImage: NetworkImage(user.profilePicture),
+                                radius: MediaQuery
+                                    .of(context)
+                                    .size
+                                    .width / 4,
+                              ),
+                              FloatingActionButton(
+                                heroTag: "Camera",
+                                backgroundColor: AppTheme.MAIN_COLOR,
+                                child: Icon(Icons.edit),
+                                onPressed: () =>
+                                    Navigator.of(context).push(
+                                        MaterialPageRoute<void>(
+                                            builder: (BuildContext context) {
+                                              return CameraPage(
+                                                  this.userId, this._profileBloc);
+                                            }
+                                        )
+                                    ),
+                              )
+                            ],
+                          ),
+                        )
+                    ),
                   ),
                   Container(
                     padding: EdgeInsets.only(
-                        bottom: MediaQuery.of(context).size.height * 0.03
+                        bottom: MediaQuery.of(context).size.height * 0.1
                     ),
                     child: Text(
                       user.name,
@@ -141,7 +148,8 @@ class ProfilePageState extends State<ProfilePage> with TickerProviderStateMixin{
                             this.setState(() {
                               editMode = true;
                             });
-                            Vibrate.feedback(FeedbackType.medium);
+                            Vibration.vibrate(duration: 50, amplitude: 32);
+
                             TickerFuture tickerFuture = this.rotationController.repeat(reverse: true);
                             tickerFuture.timeout(Duration(milliseconds: 200), onTimeout:  () {
                               this.rotationController.forward(from: 0);
@@ -180,7 +188,7 @@ class ProfilePageState extends State<ProfilePage> with TickerProviderStateMixin{
                 onPressed: () => Navigator.of(context).push(
                   MaterialPageRoute<void>(
                     builder: (BuildContext context) {
-                      return ProfileDetailPage();
+                      return ProfileDetailPage(this.userId);
                     }
                   )
                 ),
@@ -215,5 +223,24 @@ class ProfilePageState extends State<ProfilePage> with TickerProviderStateMixin{
       },
     );
   }
+}
 
+class TabClipper extends CustomClipper<Path> {
+  @override
+  Path getClip(Size size) {
+    final path = Path();
+    path.lineTo(-size.width, -size.height * 3.5);
+    path.arcToPoint(Offset(size.width * 2, 0), radius: Radius.circular(10), clockwise: false);
+
+    path.close();
+    return path;
+  }
+
+  @override
+  bool shouldReclip(TabClipper oldClipper) => true;
+
+  double degreeToRadians(double degree) {
+    var radian = (math.pi / 180) * degree;
+    return radian;
+  }
 }

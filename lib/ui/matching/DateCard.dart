@@ -20,24 +20,18 @@ class DateCard extends StatelessWidget implements SuggestionCard{
   @override
   Widget build(BuildContext context) {
     return new Card(
+        margin: EdgeInsets.only(bottom: 60, top: 10),
         child: Column(children: <Widget>[
           Expanded(
-            child: Stack(
-              children: <Widget>[
-                new GridView.count(
+            child: ClipRRect(
+              child: GridView.count(
                   crossAxisCount: 2,
                   children: this._buildPictures(this.dateMatch.users)
-                ),
-                new SizedBox.expand(
-                  child: new Container(
-                    decoration: new BoxDecoration(
-                        gradient: new LinearGradient(
-                            colors: [Colors.transparent, Colors.black54],
-                            begin: Alignment.center,
-                            end: Alignment.bottomCenter)),
-                  ),
-                ),
-              ],
+              ),
+              borderRadius: BorderRadius.only(
+                topLeft: Radius.circular(6.0),
+                topRight: Radius.circular(6.0),
+              )
             ),
           ),
           Container(
@@ -63,7 +57,9 @@ class DateCard extends StatelessWidget implements SuggestionCard{
                   ],
                 ),
               )),
-        ]));
+        ]
+      )
+    );
   }
 
 
@@ -81,7 +77,7 @@ class DateCard extends StatelessWidget implements SuggestionCard{
   List<Widget> _buildPictures(List<User> users) {
     List<Widget> widgets = new List();
     for (User user in users) {
-      widgets.add(new Image.network(user.profilePicture, fit: BoxFit.cover),);
+      widgets.add(Image.network(user.profilePicture, fit: BoxFit.cover),);
     }
     return widgets;
   }

@@ -1,4 +1,5 @@
 import 'package:json_annotation/json_annotation.dart';
+import 'package:tinder_cards/model/User.dart';
 import 'package:tinder_cards/model/Vote.dart';
 import 'Voter.dart';
 
@@ -15,7 +16,7 @@ class TextVote extends Vote{
   TextVote();
 
 
-  TextVote.textVote(this.title, this.description, String result, int sourceUserId, int dateId): super.vote(result, sourceUserId, dateId);
+  TextVote.textVote(this.title, this.description, String result, User sourceUser, int dateId): super.vote(result, sourceUser, dateId);
 
   factory TextVote.fromJson(Map<String, dynamic> json) => _$TextVoteFromJson(json);
 

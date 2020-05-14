@@ -1,5 +1,6 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:tinder_cards/AppTheme.dart';
 import 'package:tinder_cards/bloc/vote/DateVoteBloc.dart';
 import 'package:tinder_cards/bloc/vote/VoteBloc.dart';
 import 'package:tinder_cards/ui/planning/date/vote/AbstractAddVotePage.dart';
@@ -41,7 +42,7 @@ class AddVotePageWrapperState extends State<AddVotePageWrapper> with SingleTicke
             color: Colors.black, //change your color here
           ),
           bottom: TabBar(
-            indicatorColor: Color(0xFF3a5fb6),
+            indicatorColor: AppTheme.MAIN_COLOR,
             labelStyle: TextStyle(fontSize: 20),
             labelColor: Colors.black,
             controller: _tabController,

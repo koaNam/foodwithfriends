@@ -1,4 +1,5 @@
 import 'package:json_annotation/json_annotation.dart';
+import 'package:tinder_cards/model/User.dart';
 
 import 'Vote.dart';
 import 'Voter.dart';
@@ -14,7 +15,7 @@ class DateVote extends Vote{
 
   DateVote();
 
-  DateVote.dateVote(this.datetime, String result, int sourceUserId, int dateId): super.vote(result, sourceUserId, dateId);
+  DateVote.dateVote(this.datetime, String result, User sourceUser, int dateId): super.vote(result, sourceUser, dateId);
 
   factory DateVote.fromJson(Map<String, dynamic> json) => _$DateVoteFromJson(json);
 

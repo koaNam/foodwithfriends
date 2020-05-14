@@ -1,8 +1,8 @@
-import 'dart:ffi';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:provider/provider.dart';
+import 'package:tinder_cards/AppTheme.dart';
 import 'package:tinder_cards/bloc/ChatBloc.dart';
 
 import 'Home.dart';
@@ -35,7 +35,7 @@ class MyApp extends StatelessWidget
         ],
         theme: ThemeData(
           floatingActionButtonTheme: FloatingActionButtonThemeData(
-            backgroundColor: Color(0xFF3a5fb6)
+            backgroundColor: AppTheme.MAIN_COLOR
           ),
         ),
       )

@@ -131,7 +131,7 @@ class _CardsSectionState extends State<CardsSection>
 
     return new Expanded(
         child: Container(
-            color: Colors.white,
+            color: Colors.grey.shade100,
             child: body
         )
     );
@@ -156,7 +156,8 @@ class _CardsSectionState extends State<CardsSection>
           angle: (pi / 180.0) * frontCardRot,
           child: new SizedBox.fromSize(
               size: cardSize, child: this.cards[0] as StatelessWidget),
-        ));
+        )
+    );
   }
 
   void changeCardsOrder() {

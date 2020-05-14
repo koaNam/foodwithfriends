@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:tinder_cards/AppTheme.dart';
 import 'package:tinder_cards/bloc/vote/VoteBloc.dart';
 import 'package:tinder_cards/ui/planning/date/vote/AbstractAddVotePage.dart';
 
@@ -19,8 +20,13 @@ class AddVotePage extends StatelessWidget implements AbstractAddVotePage{
         autofocus: true,
         maxLines: 99,
         decoration: InputDecoration(
-          hintText: "Titel\nBeschreibung",
-          border: OutlineInputBorder(),
+          focusedBorder: OutlineInputBorder(
+            borderSide: const BorderSide(
+              color: AppTheme.MAIN_COLOR,
+              width: 2
+            ),
+          ),
+          hintText: "Gib hier deinen Vorschlag für das Treffen ein und lasse die anderen darüber abstimmen",
         ),
         onChanged: (text) => {
           _voteBloc.text = text

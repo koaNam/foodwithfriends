@@ -58,10 +58,6 @@ class SwipeFeedPage extends StatelessWidget {
         }
 
         return Scaffold(
-            appBar: AppBar(
-              centerTitle: true,
-              backgroundColor: Colors.white,
-            ),
             body: body
         );
       }

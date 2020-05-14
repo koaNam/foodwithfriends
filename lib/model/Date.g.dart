@@ -22,7 +22,7 @@ Date _$DateFromJson(Map<String, dynamic> json) {
 
 Map<String, dynamic> _$DateToJson(Date instance) => <String, dynamic>{
       'id': instance.id,
-      'datetime': instance.datetime.toIso8601String(),
+      'datetime': instance.datetime?.toIso8601String(),
       'user_dates': instance.users,
       'votes': instance.votes,
     };

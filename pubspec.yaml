@@ -27,7 +27,7 @@ dependencies:
   mqtt_client: 6.2.1
   intl: ^0.16.0
   flutter_time_picker_spinner: 1.0.6
-  vibrate: 0.0.4
+  vibration: ^1.2.4
 
 
 

@@ -42,7 +42,6 @@ class ProfileBloc{
       this._profileService.updateLocation(user, currentLocation);
     }
     this._profileController.add(user);
-
   }
 
   Future<void> login(String username) async{
@@ -81,7 +80,7 @@ class ProfileBloc{
   }
 
   Future<void> changeProfilePicture(int userId, String name, String base64String) async{
-    developer.log("changing profile  picture", name: LOG);
+    developer.log("changing profile picture", name: LOG);
 
     this._profileService.updateProfilePicture(userId, name);
     await this._cameraService.addProfilePicture(name, base64String);

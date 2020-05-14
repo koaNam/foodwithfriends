@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:tinder_cards/AppTheme.dart';
 import 'package:tinder_cards/ui/planning/chat/ChatPage.dart';
 import 'package:tinder_cards/ui/planning/date/DatePage.dart';
 
@@ -36,7 +37,7 @@ class DateWrapperState extends State<DateWrapper> with SingleTickerProviderState
           color: Colors.black,
         ),
         title: TabBar(
-          indicatorColor: Color(0xFF3a5fb6),
+          indicatorColor: AppTheme.MAIN_COLOR,
           labelPadding: EdgeInsets.only(top: 12),
           indicatorWeight: 6,
           labelStyle: TextStyle(fontSize: 20),

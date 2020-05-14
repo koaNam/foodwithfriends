@@ -64,7 +64,7 @@ class CameraPageState extends State<CameraPage> {
         body: FutureBuilder<void>(
           future: _initializeControllerFuture,
           builder: (context, snapshot) {
-            if (snapshot.connectionState == ConnectionState.done) {
+            if (snapshot.connectionState == ConnectionState.done && _controller.value.isInitialized) {
               return Stack(
                 children: <Widget>[
                   Center(

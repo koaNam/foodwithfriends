@@ -10,28 +10,30 @@ TextVote _$TextVoteFromJson(Map<String, dynamic> json) {
   return TextVote()
     ..id = json['id'] as int
     ..result = json['result'] as String
-    ..sourceUserId = json['source_user_id'] as int
+    ..sourceUser = json['source_user'] == null
+        ? null
+        : User.fromJson(json['source_user'] as Map<String, dynamic>)
     ..dateId = json['date_id'] as int
-    ..voteKind = json['vote_kind'] as String
     ..voters = (json['voters'] as List)
         ?.map(
             (e) => e == null ? null : Voter.fromJson(e as Map<String, dynamic>))
         ?.toList()
     ..title = json['text_votes'][0]['title'] as String
-    ..description = json['text_votes'][0]['description'] as String;
+    ..description = json['text_votes'][0]['description'] as String
+    ..voteKind = json['vote_kind'] as String;
 }
 
 Map<String, dynamic> _$TextVoteToJson(TextVote instance) => <String, dynamic>{
       'id': instance.id,
       'result': instance.result,
-      'source_user_id': instance.sourceUserId,
-      'vote_kind': instance.voteKind,
+      'source_user': instance.sourceUser,
+      'date_id': instance.dateId,
+      'voters': instance.voters,
       'text_votes': {
         'data': {
           'title': instance.title,
           'description': instance.description
         }
       },
-      'date_id': instance.dateId,
-      'voters': instance.voters,
+      'vote_kind': instance.voteKind,
     };

@@ -86,7 +86,10 @@ class PlanningService{
           .add(Graph("user")
             .add(Field("id"))
         ).add(Field("vote"))
-      ).condition(Condition(Field("date_id"), Condition.EQUALS, dateId)
+        ).add(Graph("source_user")
+          .add(Field("name"))
+          .add(Field("profile_picture"))
+    ).condition(Condition(Field("date_id"), Condition.EQUALS, dateId)
        .addCondition(ConditionElement<String>(Field("vote_kind"), Condition.EQUALS, "TEXT")));
 
     http.Response result = await http.post(
@@ -114,6 +117,9 @@ class PlanningService{
           .add(Graph("user")
             .add(Field("id"))
       ).add(Field("vote"))
+      ).add(Graph("source_user")
+          .add(Field("name"))
+          .add(Field("profile_picture"))
     ).condition(Condition(Field("date_id"), Condition.EQUALS, dateId)
         .addCondition(ConditionElement<String>(Field("vote_kind"), Condition.EQUALS, "DATE")));
 
@@ -213,6 +219,8 @@ class PlanningService{
     Map<String, dynamic> data=vote.toJson();
     data.remove("id");
     data.remove("voters");
+    data.remove("source_user");
+    data["source_user_id"] = vote.sourceUser.id;
 
     Mutation mutation = Mutation("insert_vote", Mutation.INSERT)
         .addObjects(convert.json.encode(data))
@@ -236,6 +244,8 @@ class PlanningService{
     Map<String, dynamic> data=vote.toJson();
     data.remove("id");
     data.remove("voters");
+    data.remove("source_user");
+    data["source_user_id"] = vote.sourceUser.id;
 
     Mutation mutation = Mutation("insert_vote", Mutation.INSERT)
         .addObjects(convert.json.encode(data))
