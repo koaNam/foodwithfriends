@@ -43,7 +43,7 @@ class ProfileBloc{
 
     if(user == null){
       developer.log("user not found, creating it", name: LOG);
-      user=await this._profileService.insertUser(User(0, service.name, "https://moonvillageassociation.org/wp-content/uploads/2018/06/default-profile-picture1.jpg", service.id, service.getIdentifier(), null));
+      user=await this._profileService.insertUser(User(0, service.name, "https://foodwithfriends.s3.eu-central-1.amazonaws.com/default.jpg", service.id, service.getIdentifier(), null));
     }
     if(currentLocation != null) {
       this._profileService.updateLocation(user, currentLocation);
