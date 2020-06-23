@@ -1,4 +1,4 @@
-package de.koanam.tindercards;
+package de.koanam.foodwithfriends;
 
 import android.os.Bundle;
 

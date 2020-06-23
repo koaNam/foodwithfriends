@@ -108,12 +108,12 @@ class ProfileCard extends StatelessWidget implements SuggestionCard{
 
   @override
   void onSwipeLeft() {
-    this.matchingBloc.setMatchStatus(this.userMatch.id, true);
+    this.matchingBloc.setMatchStatus(this.userMatch.id, false);
   }
 
   @override
   void onSwipeRight() {
-    this.matchingBloc.setMatchStatus(this.userMatch.id, false);
+    this.matchingBloc.setMatchStatus(this.userMatch.id, true);
   }
 
 }

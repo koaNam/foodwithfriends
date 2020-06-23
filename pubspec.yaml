@@ -1,7 +1,7 @@
 name: foodwithfriends
-description: A new Flutter project.
+description: FoodWithFriends App
 
-version: 1.12.13+hotfix.5
+version: 0.1.0
 
 environment:
   sdk: ">=2.5.0 <3.0.0"

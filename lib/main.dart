@@ -4,7 +4,6 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:provider/provider.dart';
 import 'package:foodwithfriends/AppTheme.dart';
 import 'package:foodwithfriends/bloc/ChatBloc.dart';
-import 'package:foodwithfriends/service/graphql/graphql_constants.dart';
 
 import 'Home.dart';
 
