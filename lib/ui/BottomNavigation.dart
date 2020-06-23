@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'dart:math' as math;
 
-import 'package:tinder_cards/AppTheme.dart';
+import 'package:foodwithfriends/AppTheme.dart';
 
 class BottomNavigation extends StatelessWidget {
 

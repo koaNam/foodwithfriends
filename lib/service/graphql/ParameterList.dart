@@ -1,4 +1,4 @@
-import 'package:tinder_cards/service/graphql/condition.dart';
+import 'package:foodwithfriends/service/graphql/condition.dart';
 
 class ParameterList<T> extends Condition<T>{
 

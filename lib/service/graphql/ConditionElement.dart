@@ -2,6 +2,7 @@ import 'graphql_element.dart';
 
 class ConditionElement<T>{
 
+  ConditionElement.empty();
   ConditionElement(this.field, this.operator, this.value);
 
   GraphQlElement field;
@@ -10,7 +11,7 @@ class ConditionElement<T>{
 
   @override
   String toString(){
-    StringBuffer condition=StringBuffer();
+ StringBuffer condition=StringBuffer();
     condition.write(field.name);
     condition.write(":{");
     condition.write(this.operator);

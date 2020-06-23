@@ -1,11 +1,11 @@
 import 'package:bubble/bubble.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:tinder_cards/bloc/ChatBloc.dart';
-import 'package:tinder_cards/bloc/DateBloc.dart';
-import 'package:tinder_cards/model/User.dart';
+import 'package:foodwithfriends/bloc/ChatBloc.dart';
+import 'package:foodwithfriends/bloc/DateBloc.dart';
+import 'package:foodwithfriends/model/User.dart';
 
-import 'package:tinder_cards/model/ChatMessage.dart' as message;
+import 'package:foodwithfriends/model/ChatMessage.dart' as message;
 
 
 class ChatPage extends StatefulWidget{
@@ -30,6 +30,8 @@ class ChatPageState extends State<ChatPage>{
 
   String textMessage;
 
+  TextEditingController _controller = TextEditingController();
+
   @override
   initState() {
     super.initState();
@@ -47,7 +49,6 @@ class ChatPageState extends State<ChatPage>{
     return FutureBuilder(
         future: this._users,
         builder: (_,  AsyncSnapshot<List<User>> data){
-          Widget body;
           if(data.connectionState == ConnectionState.done){
             this._chatBloc.connectService(widget.dateId, widget.userId, data.data);
             Map<int, User> users = Map.fromIterable(data.data, key: (u) => u.id, value: (u) => u);
@@ -100,6 +101,7 @@ class ChatPageState extends State<ChatPage>{
                                       child: Container(
                                         padding: EdgeInsets.only(left: 5),
                                         child: TextField(
+                                          controller: _controller,
                                           decoration: InputDecoration(border: OutlineInputBorder(borderSide: BorderSide(color: Colors.blue), borderRadius: BorderRadius.circular(15.0))),
                                           onSubmitted: (String value){
                                             this._chatBloc.send(widget.userId, value);
@@ -115,7 +117,10 @@ class ChatPageState extends State<ChatPage>{
                                   Expanded(
                                       child: IconButton(
                                         icon: Icon(Icons.arrow_forward),
-                                        onPressed: () => this._chatBloc.send(widget.userId, textMessage),
+                                        onPressed: () => {
+                                          this._chatBloc.send(widget.userId, textMessage),
+                                          this._controller.clear()
+                                        }
                                       )
                                   )
                                 ],

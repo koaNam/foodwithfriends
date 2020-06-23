@@ -3,7 +3,7 @@ import 'dart:io';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:path/path.dart';
-import 'package:tinder_cards/bloc/ProfileBloc.dart';
+import 'package:foodwithfriends/bloc/ProfileBloc.dart';
 
 import 'dart:convert';
 

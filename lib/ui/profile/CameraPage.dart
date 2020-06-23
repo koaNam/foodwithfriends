@@ -5,8 +5,8 @@ import 'package:path/path.dart';
 import 'dart:developer' as developer;
 
 import 'package:path_provider/path_provider.dart';
-import 'package:tinder_cards/bloc/ProfileBloc.dart';
-import 'package:tinder_cards/ui/profile/DisplayPicturePage.dart';
+import 'package:foodwithfriends/bloc/ProfileBloc.dart';
+import 'package:foodwithfriends/ui/profile/DisplayPicturePage.dart';
 
 class CameraPage extends StatefulWidget {
   static const String LOG = "ui.profile.CameraPage";

@@ -1,11 +1,11 @@
 import 'dart:io';
 
-import 'package:tinder_cards/model/User.dart';
-import 'package:tinder_cards/service/graphql/ConditionElement.dart';
-import 'package:tinder_cards/service/graphql/condition.dart';
-import 'package:tinder_cards/service/graphql/field.dart';
-import 'package:tinder_cards/service/graphql/graph.dart';
-import 'package:tinder_cards/service/graphql/mutation.dart';
+import 'package:foodwithfriends/model/User.dart';
+import 'package:foodwithfriends/service/graphql/ConditionElement.dart';
+import 'package:foodwithfriends/service/graphql/condition.dart';
+import 'package:foodwithfriends/service/graphql/field.dart';
+import 'package:foodwithfriends/service/graphql/graph.dart';
+import 'package:foodwithfriends/service/graphql/mutation.dart';
 import 'package:location/location.dart';
 
 

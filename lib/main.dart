@@ -2,8 +2,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:provider/provider.dart';
-import 'package:tinder_cards/AppTheme.dart';
-import 'package:tinder_cards/bloc/ChatBloc.dart';
+import 'package:foodwithfriends/AppTheme.dart';
+import 'package:foodwithfriends/bloc/ChatBloc.dart';
+import 'package:foodwithfriends/service/graphql/graphql_constants.dart';
 
 import 'Home.dart';
 
@@ -15,6 +16,7 @@ class MyApp extends StatelessWidget
   Widget build(BuildContext context)
   {
     precacheImage(AssetImage('assets/start_screen.png'), context);
+    precacheImage(AssetImage('assets/herbs.png'), context);
     return MultiProvider(
       providers: [
         Provider<ChatBloc>(

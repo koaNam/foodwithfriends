@@ -1,13 +1,15 @@
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:rxdart/rxdart.dart';
-import 'package:tinder_cards/model/User.dart';
-import 'package:tinder_cards/service/CameraService.dart';
-import 'package:tinder_cards/service/ProfileService.dart';
-import 'package:location/location.dart';
+import 'package:foodwithfriends/model/User.dart';
+import 'package:foodwithfriends/service/CameraService.dart';
+import 'package:foodwithfriends/service/ProfileService.dart';
+import 'package:foodwithfriends/service/PropertyService.dart';
+import 'package:foodwithfriends/service/social/SocialService.dart';
 
+import 'package:location/location.dart';
 import 'dart:developer' as developer;
 
-import 'package:tinder_cards/service/PropertyService.dart';
-import 'package:tinder_cards/service/social/SocialService.dart';
+
 
 class ProfileBloc{
 
@@ -28,10 +30,15 @@ class ProfileBloc{
 
   Future<void> loginSocial(SocialService service) async{
     LocationData currentLocation = await this._getLocation();
+    FlutterSecureStorage storage = new FlutterSecureStorage();
 
     developer.log("trying to log in user", name: LOG);
 
     await service.loadData();
+
+    storage.write(key: "id", value: service.id);
+    storage.write(key: "serviceIdentifier", value: service.getIdentifier());
+
     User user = await this._profileService.findUserByOauth(service.id, service.getIdentifier());
 
     if(user == null){
@@ -44,19 +51,24 @@ class ProfileBloc{
     this._profileController.add(user);
   }
 
-  Future<void> login(String username) async{
-    LocationData currentLocation = await this._getLocation();
+  Future<void> loginFromFile() async{
+    FlutterSecureStorage storage = new FlutterSecureStorage();
 
-    developer.log("trying to log in user", name: LOG);
-    User user=await this._profileService.findUserByName(username);
-    if(user == null){
-      developer.log("user not found, creating it", name: LOG);
-      user=await this._profileService.insertUser(User(0, username, "https://moonvillageassociation.org/wp-content/uploads/2018/06/default-profile-picture1.jpg", null, null, null));
+    developer.log("trying to read login data from file", name: LOG);
+
+    String id = await storage.read(key: "id");
+    String serviceName = await storage.read(key: "serviceIdentifier");
+
+    if(id != null && serviceName != null) {
+      developer.log("found credentials in file", name: LOG);
+
+      LocationData currentLocation = await this._getLocation();
+      User user = await this._profileService.findUserByOauth(id, serviceName);
+      if(currentLocation != null) {
+        this._profileService.updateLocation(user, currentLocation);
+      }
+      this._profileController.add(user);
     }
-    if(currentLocation != null) {
-      this._profileService.updateLocation(user, currentLocation);
-    }
-    this._profileController.add(user);
   }
 
   Future<void> loadProfile(int id) async {

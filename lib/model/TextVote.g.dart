@@ -18,7 +18,6 @@ TextVote _$TextVoteFromJson(Map<String, dynamic> json) {
         ?.map(
             (e) => e == null ? null : Voter.fromJson(e as Map<String, dynamic>))
         ?.toList()
-    ..title = json['text_votes'][0]['title'] as String
     ..description = json['text_votes'][0]['description'] as String
     ..voteKind = json['vote_kind'] as String;
 }
@@ -31,7 +30,6 @@ Map<String, dynamic> _$TextVoteToJson(TextVote instance) => <String, dynamic>{
       'voters': instance.voters,
       'text_votes': {
         'data': {
-          'title': instance.title,
           'description': instance.description
         }
       },

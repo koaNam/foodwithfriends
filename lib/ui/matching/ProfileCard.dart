@@ -1,11 +1,10 @@
 import 'dart:core';
 
-import 'package:tinder_cards/bloc/MatchingBloc.dart';
+import 'package:foodwithfriends/bloc/MatchingBloc.dart';
 
 import 'package:flutter/material.dart';
-import 'package:tinder_cards/model/Property.dart';
-import 'package:tinder_cards/model/User.dart';
-import 'package:tinder_cards/model/UserMatch.dart';
+import 'package:foodwithfriends/model/Property.dart';
+import 'package:foodwithfriends/model/UserMatch.dart';
 
 import 'SuggestionCard.dart';
 

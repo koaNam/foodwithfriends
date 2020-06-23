@@ -1,4 +1,4 @@
-import 'package:tinder_cards/model/User.dart';
+import 'package:foodwithfriends/model/User.dart';
 
 class Match{
   User user;

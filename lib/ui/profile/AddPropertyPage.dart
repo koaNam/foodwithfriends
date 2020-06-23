@@ -1,17 +1,19 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:tinder_cards/bloc/ProfileBloc.dart';
-import 'package:tinder_cards/bloc/PropertyBloc.dart';
-import 'package:tinder_cards/model/Property.dart';
-import 'package:tinder_cards/model/User.dart';
+import 'package:foodwithfriends/bloc/ProfileBloc.dart';
+import 'package:foodwithfriends/bloc/PropertyBloc.dart';
+import 'package:foodwithfriends/model/Property.dart';
+import 'package:foodwithfriends/ui/profile/PropertyElement.dart';
 
 class AddPropertyPage extends StatelessWidget {
 
   final int userId;
-  final PropertyBloc propertyBloc = new PropertyBloc();
+  final PropertyBloc _propertyBloc = new PropertyBloc();
   final ProfileBloc profileBloc;
 
-  AddPropertyPage({this.userId, this.profileBloc});
+  AddPropertyPage({this.userId, this.profileBloc}){
+    this._propertyBloc.findRandomProperties();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -20,39 +22,46 @@ class AddPropertyPage extends StatelessWidget {
           iconTheme: IconThemeData(
             color: Colors.black, //change your color here
           ),
+          title: Text(
+            "Das könnte zu dir passen",
+            style: TextStyle(color: Colors.black),
+          ),
+          centerTitle: true,
           backgroundColor: Colors.white,
           actions: <Widget>[
             IconButton(
               icon: Icon(Icons.search),
               onPressed: () {
                 showSearch(context: context,
-                    delegate: SearchPropertyDelegate(this.propertyBloc, this.profileBloc, this.userId));
+                    delegate: SearchPropertyDelegate(this._propertyBloc, this.profileBloc, this.userId));
               },
             )
           ],
         ),
         body: StreamBuilder(
-            stream: this.profileBloc.profileStream,
-            builder: (_, AsyncSnapshot<User> data) {
-              if (data.connectionState == ConnectionState.active) {
-                List<Property> properties=data.data.userProperties;
-                return Center(
-                    child: ListView.builder(
-                        itemCount: properties.length,
-                        itemBuilder: (BuildContext context, int index) {
-                          return PropertyBox(
-                            property: properties[index],
-                            heightMulti: 13,
-                          );
-                        }
-                    )
-                );
-              } else {
-                return Center(
-                    child: CircularProgressIndicator()
-                );
-              }
+          stream: this._propertyBloc.propertyStream,
+          builder: (_, AsyncSnapshot<List<Property>> data) {
+            List<Property> props = new List();
+            if (data.connectionState == ConnectionState.active) {
+              props = data.data;
             }
+            return Container(
+              color: Colors.grey.shade100,
+              child: Column(
+                children: props.map((e) =>
+                    InkWell(
+                      child: PropertyElement(
+                        property: e,
+                      ),
+                      onTap: () {
+                        this.profileBloc.addProperty(this.userId, e.id);
+                        Navigator.of(context).pop();
+                      },
+                    )
+                ).toList(),
+              ),
+            );
+          },
         )
     );
   }
@@ -110,9 +119,8 @@ class SearchPropertyDelegate extends SearchDelegate {
         return Column(
           children: props.map((e) =>
               InkWell(
-                child: PropertyBox(
+                child: PropertyElement(
                   property: e,
-                  heightMulti: 15,
                 ),
                 onTap: () {
                   this._profileBloc.addProperty(this.userId, e.id);
@@ -124,29 +132,4 @@ class SearchPropertyDelegate extends SearchDelegate {
       },
     );
   }
-}
-
-class PropertyBox extends StatelessWidget{
-
-  final Property property;
-  final int heightMulti;
-
-  PropertyBox({this.property, this.heightMulti});
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      alignment: Alignment.centerLeft,
-      padding: EdgeInsets.only(left: MediaQuery.of(context).size.width / 25),
-      width: MediaQuery.of(context).size.width,
-      height: MediaQuery.of(context).size.height / this.heightMulti,
-      decoration: BoxDecoration(
-          border: Border(
-              bottom: BorderSide(color: Colors.grey, width: 1)
-          )
-      ),
-      child: Text(this.property.name),
-    );
-  }
-
 }

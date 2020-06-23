@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:tinder_cards/ui/planning/PlanningPage.dart';
-import 'package:tinder_cards/ui/profile/ProfilePage.dart';
-import 'package:tinder_cards/ui/matching//SwipeFeedPage.dart';
+import 'package:foodwithfriends/ui/planning/PlanningPage.dart';
+import 'package:foodwithfriends/ui/profile/ProfilePage.dart';
+import 'package:foodwithfriends/ui/matching//SwipeFeedPage.dart';
 import 'BottomNavigation.dart';
 
 class MainPageWrapper extends StatefulWidget{

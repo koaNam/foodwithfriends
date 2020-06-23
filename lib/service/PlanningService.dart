@@ -1,11 +1,11 @@
 import 'dart:io';
 
-import 'package:tinder_cards/model/Date.dart';
-import 'package:tinder_cards/model/DateVote.dart';
-import 'package:tinder_cards/model/TextVote.dart';
-import 'package:tinder_cards/service/graphql/ConditionElement.dart';
-import 'package:tinder_cards/service/graphql/field.dart';
-import 'package:tinder_cards/service/graphql/graph.dart';
+import 'package:foodwithfriends/model/Date.dart';
+import 'package:foodwithfriends/model/DateVote.dart';
+import 'package:foodwithfriends/model/TextVote.dart';
+import 'package:foodwithfriends/service/graphql/ConditionElement.dart';
+import 'package:foodwithfriends/service/graphql/field.dart';
+import 'package:foodwithfriends/service/graphql/graph.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert' as convert;
 
@@ -55,11 +55,6 @@ class PlanningService{
               Field("profile_picture")
             )
           )
-        ).add(Graph("votes")
-          .add(Field("id"))
-          .add(Field("title"))
-          .add(Field("description"))
-          .add(Field("result"))
         ).condition(Condition(Field("id"), Condition.EQUALS, dateId));
 
     http.Response result = await http.post(

@@ -8,9 +8,9 @@ class Property{
 
   int id;
   String name;
-  String color;
+  String colour;
 
-  Property(this.id, this.name, this.color);
+  Property(this.id, this.name, this.colour);
 
   factory Property.fromJson(Map<String, dynamic> json) => _$PropertyFromJson(json);
 

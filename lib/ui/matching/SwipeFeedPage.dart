@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:tinder_cards/bloc/MatchingBloc.dart';
-import 'package:tinder_cards/model/DrawableCard.dart';
-import 'package:tinder_cards/model/User.dart';
-import 'package:tinder_cards/model/UserMatch.dart';
+import 'package:foodwithfriends/bloc/MatchingBloc.dart';
+import 'package:foodwithfriends/model/DrawableCard.dart';
+import 'package:foodwithfriends/model/User.dart';
+import 'package:foodwithfriends/model/UserMatch.dart';
 import 'DateCard.dart';
 import 'CardsSection.dart';
 import 'ProfileCard.dart';

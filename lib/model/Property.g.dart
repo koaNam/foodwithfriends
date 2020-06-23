@@ -10,12 +10,12 @@ Property _$PropertyFromJson(Map<String, dynamic> json) {
   return Property(
     json['id'] as int,
     json['name'] as String,
-    json['color'] as String,
+    json['colour'] as String,
   );
 }
 
 Map<String, dynamic> _$PropertyToJson(Property instance) => <String, dynamic>{
       'id': instance.id,
       'name': instance.name,
-      'color': instance.color,
+      'colour': instance.colour,
     };

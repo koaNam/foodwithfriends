@@ -1,10 +1,8 @@
-import 'dart:math';
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:tinder_cards/bloc/vote/DateVoteBloc.dart';
-import 'package:tinder_cards/ui/planning/date/vote/AbstractAddVotePage.dart';
+import 'package:foodwithfriends/bloc/vote/DateVoteBloc.dart';
+import 'package:foodwithfriends/ui/planning/date/vote/AbstractAddVotePage.dart';
 
 import 'TimePicker.dart';
 

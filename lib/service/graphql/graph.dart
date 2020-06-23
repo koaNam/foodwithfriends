@@ -1,4 +1,3 @@
-
 import 'dart:convert' as convert;
 
 import 'condition.dart';

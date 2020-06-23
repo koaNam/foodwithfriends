@@ -1,8 +1,8 @@
 import 'package:rxdart/rxdart.dart';
-import 'package:tinder_cards/model/DateMatch.dart';
-import 'package:tinder_cards/model/DrawableCard.dart';
-import 'package:tinder_cards/model/UserMatch.dart';
-import 'package:tinder_cards/service/MatchingService.dart';
+import 'package:foodwithfriends/model/DateMatch.dart';
+import 'package:foodwithfriends/model/DrawableCard.dart';
+import 'package:foodwithfriends/model/UserMatch.dart';
+import 'package:foodwithfriends/service/MatchingService.dart';
 
 import 'dart:developer' as developer;
 

@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:tinder_cards/AppTheme.dart';
-import 'package:tinder_cards/bloc/ProfileBloc.dart';
-import 'package:tinder_cards/model/User.dart';
-import 'package:tinder_cards/ui/profile/AddPropertyPage.dart';
-import 'package:tinder_cards/ui/profile/CameraPage.dart';
-import 'package:tinder_cards/ui/profile/ProfileDetailPage.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:foodwithfriends/AppTheme.dart';
+import 'package:foodwithfriends/bloc/ProfileBloc.dart';
+import 'package:foodwithfriends/model/User.dart';
+import 'package:foodwithfriends/ui/profile/AddPropertyPage.dart';
+import 'package:foodwithfriends/ui/profile/CameraPage.dart';
+import 'package:foodwithfriends/ui/profile/ProfileDetailPage.dart';
 import 'package:vibration/vibration.dart';
 import 'dart:math' as math;
 
@@ -129,8 +130,19 @@ class ProfilePageState extends State<ProfilePage> with TickerProviderStateMixin{
                               child: Stack(
                                 alignment: Alignment.center,
                                 children: <Widget>[
-                                  Center(child: Text(e.name,
-                                      style: TextStyle(color: Colors.grey.shade700))),
+                                  Row(
+                                    children: <Widget>[
+                                      Padding(
+                                        padding: EdgeInsets.only(left: 10, right: 10),
+                                        child: FaIcon(
+                                          AppTheme.ICONS[e.colour],
+                                          color: AppTheme.MAIN_COLOR,
+                                          size: 18,
+                                        ),
+                                      ),
+                                      Text(e.name, style: TextStyle(color: Colors.grey.shade700)),
+                                    ],
+                                  ),
                                   this.editMode ? Positioned(
                                       right: MediaQuery.of(context).size.width * -0.018,
                                       child: IconButton(

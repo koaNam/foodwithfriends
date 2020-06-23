@@ -2,12 +2,11 @@ import 'dart:io';
 import 'dart:async';
 import 'dart:core';
 
-import 'package:tinder_cards/model/DateMatch.dart';
-import 'package:tinder_cards/model/User.dart';
-import 'package:tinder_cards/model/UserMatch.dart';
-import 'package:tinder_cards/service/graphql/ParameterList.dart';
-import 'package:tinder_cards/service/graphql/field.dart';
-import 'package:tinder_cards/service/graphql/graph.dart';
+import 'package:foodwithfriends/model/DateMatch.dart';
+import 'package:foodwithfriends/model/UserMatch.dart';
+import 'package:foodwithfriends/service/graphql/ParameterList.dart';
+import 'package:foodwithfriends/service/graphql/field.dart';
+import 'package:foodwithfriends/service/graphql/graph.dart';
 
 import 'package:http/http.dart' as http;
 import 'graphql/mutation.dart';

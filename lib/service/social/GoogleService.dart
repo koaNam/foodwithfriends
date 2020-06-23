@@ -1,5 +1,5 @@
 import 'package:google_sign_in/google_sign_in.dart';
-import 'package:tinder_cards/service/social/SocialService.dart';
+import 'package:foodwithfriends/service/social/SocialService.dart';
 
 class GoogleService extends SocialService{
 

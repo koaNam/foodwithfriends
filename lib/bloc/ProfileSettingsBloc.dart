@@ -1,7 +1,7 @@
 import 'package:intl/intl.dart';
 import 'package:rxdart/rxdart.dart';
-import 'package:tinder_cards/model/User.dart';
-import 'package:tinder_cards/service/ProfileService.dart';
+import 'package:foodwithfriends/model/User.dart';
+import 'package:foodwithfriends/service/ProfileService.dart';
 
 import 'dart:developer' as developer;
 

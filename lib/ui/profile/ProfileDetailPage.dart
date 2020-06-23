@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:intl/intl.dart';
-import 'package:tinder_cards/bloc/ProfileBloc.dart';
-import 'package:tinder_cards/bloc/ProfileSettingsBloc.dart';
-import 'package:tinder_cards/model/User.dart';
+import 'package:foodwithfriends/AppTheme.dart';
+import 'package:foodwithfriends/bloc/ProfileSettingsBloc.dart';
+import 'package:foodwithfriends/model/User.dart';
 
 class ProfileDetailPage extends StatelessWidget {
 
@@ -91,6 +90,8 @@ class ProfileDetailPage extends StatelessWidget {
                             )
                           ),
                           RangeSlider(
+                            activeColor: AppTheme.MAIN_COLOR,
+                            inactiveColor: AppTheme.MAIN_COLOR.withOpacity(0.2),
                             values: RangeValues(
                               user.birthDate != null ? (DateTime.now().difference(user.birthDate).inDays ~/ 365 - user.ageMinOffset).toDouble() < getMinAge(user.birthDate) ? getMinAge(user.birthDate) : (DateTime.now().difference(user.birthDate).inDays ~/ 365 - user.ageMinOffset).toDouble() : 0,
                               user.birthDate != null ? (DateTime.now().difference(user.birthDate).inDays ~/ 365 + user.ageMaxOffset).toDouble() > getMaxAge(user.birthDate) ? getMaxAge(user.birthDate) : (DateTime.now().difference(user.birthDate).inDays ~/ 365 + user.ageMaxOffset).toDouble() : 0,
@@ -197,6 +198,8 @@ class ProfileDetailPage extends StatelessWidget {
                             )
                           ),
                           RangeSlider(
+                            activeColor: AppTheme.MAIN_COLOR,
+                            inactiveColor: AppTheme.MAIN_COLOR.withOpacity(0.2),
                             values: RangeValues(
                                 user.cookingSkill - user.skillMinOffset < 0 ? 0: user.cookingSkill - user.skillMinOffset,
                                 user.cookingSkill + user.skillMaxOffset > 5 ? 5: user.cookingSkill + user.skillMaxOffset
@@ -239,6 +242,8 @@ class ProfileDetailPage extends StatelessWidget {
                             )
                           ),
                           Slider.adaptive(
+                            activeColor: AppTheme.MAIN_COLOR,
+                            inactiveColor: AppTheme.MAIN_COLOR.withOpacity(0.2),
                             value: user.maxUsers.toDouble(),
                             onChanged: (v) => this.profileSettingsBloc.maxUsers = v,
                             min: 3,

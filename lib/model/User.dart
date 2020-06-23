@@ -1,6 +1,6 @@
 import 'package:json_annotation/json_annotation.dart';
-import 'package:tinder_cards/model/DrawableCard.dart';
-import 'package:tinder_cards/model/Property.dart';
+import 'package:foodwithfriends/model/DrawableCard.dart';
+import 'package:foodwithfriends/model/Property.dart';
 
 
 part 'User.g.dart';

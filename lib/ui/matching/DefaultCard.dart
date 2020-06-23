@@ -1,10 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:tinder_cards/bloc/MatchingBloc.dart';
-import 'package:tinder_cards/model/DateMatch.dart';
-import 'package:tinder_cards/model/User.dart';
-
-import 'SuggestionCard.dart';
-
 
 class DefaultCard extends StatelessWidget{
 

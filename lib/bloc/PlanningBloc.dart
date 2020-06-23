@@ -1,9 +1,9 @@
 import 'package:rxdart/rxdart.dart';
-import 'package:tinder_cards/model/Date.dart';
+import 'package:foodwithfriends/model/Date.dart';
 
 import 'dart:developer' as developer;
 
-import 'package:tinder_cards/service/PlanningService.dart';
+import 'package:foodwithfriends/service/PlanningService.dart';
 
 class PlanningBloc{
 

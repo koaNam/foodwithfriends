@@ -1,12 +1,11 @@
 import 'dart:async';
 import 'dart:io';
-import 'dart:typed_data';
 
 import 'package:mqtt_client/mqtt_client.dart';
 import 'package:mqtt_client/mqtt_server_client.dart';
 import 'package:rxdart/rxdart.dart';
-import 'package:tinder_cards/model/ChatMessage.dart';
-import 'package:tinder_cards/model/User.dart';
+import 'package:foodwithfriends/model/ChatMessage.dart';
+import 'package:foodwithfriends/model/User.dart';
 import 'dart:convert' as convert;
 import 'package:path_provider/path_provider.dart';
 
@@ -24,7 +23,7 @@ class ChatBloc {
       client = MqttServerClient('wss://b-9c6d043a-3ff3-4ee4-b8e1-0d2352d3f377-1.mq.eu-central-1.amazonaws.com', '');
       client.useWebSocket = true;
       client.port = 61619;
-      client.keepAlivePeriod = 30;
+      client.keepAlivePeriod = 300;
 
       final connMess = MqttConnectMessage()
           .withClientIdentifier(userId.toString())

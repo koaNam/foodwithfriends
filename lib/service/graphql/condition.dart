@@ -1,14 +1,14 @@
+import 'package:foodwithfriends/service/graphql/ConditionElement.dart';
 
-
-import 'package:tinder_cards/service/graphql/ConditionElement.dart';
-
-import 'graph.dart';
 import 'graphql_element.dart';
 
 class Condition<T>{
+
   static const String EQUALS="_eq";
   static const String LIKE="_like";
   static const String ILIKE="_ilike";
+  static const String GREATER = "_gt";
+  static const String LOWER = "_lt";
 
   GraphQlElement field;
   String operator;

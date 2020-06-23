@@ -1,5 +1,3 @@
-
-
 import 'graphql_element.dart';
 
 class Field extends GraphQlElement{

@@ -1,6 +1,6 @@
 import 'package:json_annotation/json_annotation.dart';
-import 'package:tinder_cards/model/User.dart';
-import 'package:tinder_cards/model/Vote.dart';
+import 'package:foodwithfriends/model/User.dart';
+import 'package:foodwithfriends/model/Vote.dart';
 
 part 'Date.g.dart';
 

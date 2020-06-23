@@ -1,17 +1,19 @@
-import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-import 'package:tinder_cards/AppTheme.dart';
-import 'package:tinder_cards/bloc/vote/DateVoteBloc.dart';
-import 'package:tinder_cards/bloc/vote/VoteBloc.dart';
-import 'package:tinder_cards/ui/planning/date/vote/AbstractAddVotePage.dart';
-import 'package:tinder_cards/ui/planning/date/vote/AddDateVotePage.dart';
-import 'package:tinder_cards/ui/planning/date/vote/AddVotePage.dart';
+import 'package:foodwithfriends/AppTheme.dart';
+import 'package:foodwithfriends/bloc/DateBloc.dart';
+import 'package:foodwithfriends/bloc/vote/DateVoteBloc.dart';
+import 'package:foodwithfriends/bloc/vote/VoteBloc.dart';
+import 'package:foodwithfriends/ui/planning/date/vote/AbstractAddVotePage.dart';
+import 'package:foodwithfriends/ui/planning/date/vote/AddDateVotePage.dart';
+import 'package:foodwithfriends/ui/planning/date/vote/AddVotePage.dart';
 
 class AddVotePageWrapper extends StatefulWidget {
   final int dateId;
   final int userId;
 
-  AddVotePageWrapper({this.dateId, this.userId});
+  final DateBloc dateBloc;
+
+  AddVotePageWrapper({this.dateId, this.userId, this.dateBloc});
 
   @override
   State<StatefulWidget> createState() {
@@ -22,8 +24,9 @@ class AddVotePageWrapper extends StatefulWidget {
 class AddVotePageWrapperState extends State<AddVotePageWrapper> with SingleTickerProviderStateMixin{
 
   final List<AbstractAddVotePage> addVotePages = new List();
-  int index = 0;
   TabController _tabController;
+
+
 
   @override
   void initState() {
@@ -54,7 +57,8 @@ class AddVotePageWrapperState extends State<AddVotePageWrapper> with SingleTicke
           actions: <Widget>[
             FlatButton(
               onPressed: () {
-                this.addVotePages[this.index].onSubmit();
+                this.addVotePages[this._tabController.index].onSubmit();
+                widget.dateBloc.loadDate(widget.dateId);
                 Navigator.of(context).pop();
               },
               child: Text("weiter", style: TextStyle(color: Colors.black, fontSize: 18),),

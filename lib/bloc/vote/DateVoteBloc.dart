@@ -1,8 +1,7 @@
-import 'package:flutter/material.dart';
-import 'package:tinder_cards/bloc/vote/AbstractVoteBloc.dart';
-import 'package:tinder_cards/model/DateVote.dart';
-import 'package:tinder_cards/model/User.dart';
-import 'package:tinder_cards/service/PlanningService.dart';
+import 'package:foodwithfriends/bloc/vote/AbstractVoteBloc.dart';
+import 'package:foodwithfriends/model/DateVote.dart';
+import 'package:foodwithfriends/model/User.dart';
+import 'package:foodwithfriends/service/PlanningService.dart';
 
 class DateVoteBloc extends AbstractVoteBloc{
 

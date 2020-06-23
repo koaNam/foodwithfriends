@@ -1,7 +1,7 @@
 import 'dart:io';
 
 import 'package:flutter_facebook_login/flutter_facebook_login.dart';
-import 'package:tinder_cards/service/social/SocialService.dart';
+import 'package:foodwithfriends/service/social/SocialService.dart';
 
 import 'package:http/http.dart' as http;
 import 'dart:convert' as convert;
