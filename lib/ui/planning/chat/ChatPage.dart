@@ -45,7 +45,6 @@ class ChatPageState extends State<ChatPage>{
   @override
   Widget build(BuildContext context) {
     this._chatBloc = Provider.of<ChatBloc>(context);
-    this._chatBloc.dispose();
     return FutureBuilder(
         future: this._users,
         builder: (_,  AsyncSnapshot<List<User>> data){

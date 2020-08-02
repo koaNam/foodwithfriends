@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:foodwithfriends/bloc/ProfileBloc.dart';
 import 'package:foodwithfriends/ui/planning/PlanningPage.dart';
 import 'package:foodwithfriends/ui/profile/ProfilePage.dart';
 import 'package:foodwithfriends/ui/matching//SwipeFeedPage.dart';
@@ -7,8 +8,9 @@ import 'BottomNavigation.dart';
 class MainPageWrapper extends StatefulWidget{
 
   final int userId;
+  final ProfileBloc _profileBloc;
 
-  MainPageWrapper(this.userId);
+  MainPageWrapper(this.userId, this._profileBloc);
 
   @override
   State<StatefulWidget> createState() {
@@ -33,7 +35,7 @@ class MainPageWrapperState extends State<MainPageWrapper> {
   Widget build(BuildContext context) {
     widgets[0]=SwipeFeedPage(userId: widget.userId);
     widgets[1]=PlanningPage(userId: widget.userId,);
-    widgets[2]=ProfilePage(userId: widget.userId);
+    widgets[2]=ProfilePage(userId: widget.userId, profileBloc: widget._profileBloc);
 
     return Stack(
         children: <Widget>[

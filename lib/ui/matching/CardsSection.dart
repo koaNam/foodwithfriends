@@ -67,16 +67,50 @@ class _CardsSectionState extends State<CardsSection>
   @override
   Widget build(BuildContext context) {
     Widget body;
-
     if (this.cards.isNotEmpty) {
       List<Widget> cardList = new List();
 
       if (this.cards.length >= 2) {
         cardList.add(backCard());
       }
+
       if (this.cards.length >= 1) {
         cardList.add(frontCard());
+        cardList.add(
+            SizedBox.expand(
+              child: Opacity(
+                opacity: max(this.frontCardAlign.x / (MediaQuery.of(context).size.width / 20), 0),
+                child: Container(
+                  decoration: BoxDecoration(
+                      gradient: LinearGradient(
+                        colors: [Colors.transparent, Colors.greenAccent],
+                        begin: Alignment.topLeft,
+                        end: Alignment.centerRight,
+                      )
+                  ),
+                ),
+              )
+            )
+        );
+        cardList.add(
+            SizedBox.expand(
+                child: Opacity(
+                  opacity: min(this.frontCardAlign.x / (MediaQuery.of(context).size.width / 20), 0).abs().toDouble(),
+                  child: Container(
+                    decoration: BoxDecoration(
+                        gradient: LinearGradient(
+                          colors: [Colors.transparent, Colors.redAccent.shade100],
+                          begin: Alignment.topRight,
+                          end: Alignment.centerLeft,
+                        )
+                    ),
+                  ),
+                )
+            )
+        );
       }
+
+
       cardList.add(_controller.status != AnimationStatus.forward
           ? new SizedBox.expand(
           child: new GestureDetector(

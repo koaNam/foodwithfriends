@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
+import 'package:foodwithfriends/bloc/ProfileBloc.dart';
 import 'package:intl/intl.dart';
 import 'package:foodwithfriends/AppTheme.dart';
 import 'package:foodwithfriends/bloc/ProfileSettingsBloc.dart';
@@ -10,10 +11,12 @@ class ProfileDetailPage extends StatelessWidget {
   final int userId;
   final ProfileSettingsBloc profileSettingsBloc = new ProfileSettingsBloc();
 
+  final ProfileBloc _profileBloc;
+
   final TextEditingController _nameController = TextEditingController();
   final TextEditingController _dateController = TextEditingController();
 
-  ProfileDetailPage(this.userId){
+  ProfileDetailPage(this.userId, this._profileBloc){  //TODO ProfileBloc evtl. noch über Provider erstellen
     this.profileSettingsBloc.loadProfileSettings(this.userId);
   }
 
@@ -51,6 +54,9 @@ class ProfileDetailPage extends StatelessWidget {
                         child: TextField(
                           minLines: 1,
                           maxLines: 1,
+                          decoration: InputDecoration(
+                            hintText: "Geburtsdatum",
+                          ),
                           style: TextStyle(
                               fontSize: 18
                           ),
@@ -126,6 +132,7 @@ class ProfileDetailPage extends StatelessWidget {
                               ),
                             ),
                             Switch(
+                              activeColor: AppTheme.MAIN_COLOR,
                               value: user.hasKitchen,
                               onChanged: (v) => this.profileSettingsBloc.hasKitchen = v,
                             )
@@ -252,6 +259,29 @@ class ProfileDetailPage extends StatelessWidget {
                         ],
                       )
                   ),
+                  Card(
+                    margin: EdgeInsets.only(left: 10, right: 10, top: 20, bottom: 10),
+                    child: RaisedButton(
+                      onPressed: () =>{
+                        this._profileBloc.logout(),
+                        Navigator.of(context).popUntil((route) => route.isFirst)
+                      },
+                      color: Colors.white,
+                      child: Padding(
+                          padding: EdgeInsets.only(left: 15, right: 15, top: 15, bottom: 15),
+                          child: Center(
+                            child: Text(
+                              "Abmelden",
+                              style: TextStyle(
+                                fontWeight: FontWeight.normal,
+                                fontSize: 18,
+                                color: AppTheme.MAIN_COLOR
+                              ),
+                            ),
+                          )
+                      ),
+                    )
+                  )
                 ],
               )
           );
@@ -276,7 +306,7 @@ class ProfileDetailPage extends StatelessWidget {
                 },
               ),
               iconTheme: IconThemeData(
-                color: Colors.black, //change your color here
+                color: Colors.black,
               ),
             ),
             body: body

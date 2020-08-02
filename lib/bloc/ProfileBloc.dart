@@ -9,8 +9,6 @@ import 'package:foodwithfriends/service/social/SocialService.dart';
 import 'package:location/location.dart';
 import 'dart:developer' as developer;
 
-
-
 class ProfileBloc{
 
   static const String LOG="bloc.ProfileBloc";
@@ -43,7 +41,7 @@ class ProfileBloc{
 
     if(user == null){
       developer.log("user not found, creating it", name: LOG);
-      user=await this._profileService.insertUser(User(0, service.name, "https://foodwithfriends.s3.eu-central-1.amazonaws.com/default.jpg", service.id, service.getIdentifier(), null));
+      user=await this._profileService.insertUser(User(0, service.name, "https://foodwithfriends.s3.eu-central-1.amazonaws.com/default.jpg", service.id, service.getIdentifier(), null));  //TODO URL codieren
     }
     if(currentLocation != null) {
       this._profileService.updateLocation(user, currentLocation);
@@ -122,6 +120,14 @@ class ProfileBloc{
 
     LocationData currentLocation = await location.getLocation();
     return currentLocation;
+  }
+
+  void logout(){
+    FlutterSecureStorage storage = new FlutterSecureStorage();
+
+    storage.delete(key: "id");
+    storage.delete(key: "serviceIdentifier");
+    this._profileController.addError(null);
   }
 
   void dispose() {

@@ -45,7 +45,7 @@ class Home extends StatelessWidget {
           return StreamBuilder(
               stream: profileBloc.profileStream,
               builder: (_, AsyncSnapshot<User> snapshot) {
-                if (snapshot.connectionState != ConnectionState.active) {
+                if (snapshot.connectionState != ConnectionState.active || snapshot.hasError) {
                   return Scaffold(
                       backgroundColor: Colors.white,
                       body: Container(
@@ -60,7 +60,7 @@ class Home extends StatelessWidget {
                   );
                 } else {
                   User user = snapshot.data;
-                  return MainPageWrapper(user.id);
+                  return MainPageWrapper(user.id, profileBloc);
                 }
               }
           );

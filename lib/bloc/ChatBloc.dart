@@ -20,7 +20,7 @@ class ChatBloc {
 
   Future<void> connectService(int dateId, int userId, List<User> users) async {
     if(this.client == null || this.client.connectionStatus.state != MqttConnectionState.connected) {
-      client = MqttServerClient('wss://b-9c6d043a-3ff3-4ee4-b8e1-0d2352d3f377-1.mq.eu-central-1.amazonaws.com', '');
+      client = MqttServerClient('wss://b-9c6d043a-3ff3-4ee4-b8e1-0d2352d3f377-1.mq.eu-central-1.amazonaws.com', '');  //TODO auslagern
       client.useWebSocket = true;
       client.port = 61619;
       client.keepAlivePeriod = 300;
@@ -29,7 +29,7 @@ class ChatBloc {
           .withClientIdentifier(userId.toString())
           .withWillQos(MqttQos.atLeastOnce)
           .keepAliveFor(30)
-          .authenticateAs("***REMOVED***", "***REMOVED******REMOVED***");
+          .authenticateAs("***REMOVED***", "***REMOVED******REMOVED***");  //TODO auslagern
 
       client.connectionMessage = connMess;
       await client.connect();

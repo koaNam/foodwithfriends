@@ -1,7 +1,7 @@
 name: foodwithfriends
 description: FoodWithFriends App
 
-version: 0.1.0
+version: 0.1.1
 
 environment:
   sdk: ">=2.5.0 <3.0.0"

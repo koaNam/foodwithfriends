@@ -45,14 +45,14 @@ class DateCard extends StatelessWidget implements SuggestionCard{
                         this.decline();
                         this.onSwipeRight();
                       },
-                      icon: Icon(Icons.remove_circle_outline),
+                      icon: Icon(Icons.cake),
                     ),
                     IconButton(
                       onPressed: () {
                         this.accept();
                         this.onSwipeLeft();
                       },
-                      icon: Icon(Icons.cake),
+                      icon: Icon(Icons.remove_circle_outline),
                     )
                   ],
                 ),

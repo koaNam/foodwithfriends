@@ -13,12 +13,13 @@ import 'dart:math' as math;
 class ProfilePage extends StatefulWidget {
 
   final int userId;
+  final ProfileBloc profileBloc;
 
-  ProfilePage({this.userId});
+  ProfilePage({this.userId, this.profileBloc});
 
   @override
   State<ProfilePage> createState() {
-    return new ProfilePageState(this.userId);
+    return new ProfilePageState(this.userId, this.profileBloc);
   }
 
 }
@@ -26,13 +27,13 @@ class ProfilePage extends StatefulWidget {
 class ProfilePageState extends State<ProfilePage> with TickerProviderStateMixin{
 
   final int userId;
-  final ProfileBloc _profileBloc = new ProfileBloc();
+  final ProfileBloc _profileBloc;// = new ProfileBloc();
   AnimationController rotationController;
 
 
   bool editMode = false;
 
-  ProfilePageState(this.userId);
+  ProfilePageState(this.userId, this._profileBloc);
 
   @override
   void initState() {
@@ -199,8 +200,11 @@ class ProfilePageState extends State<ProfilePage> with TickerProviderStateMixin{
               IconButton(
                 onPressed: () => Navigator.of(context).push(
                   MaterialPageRoute<void>(
+                    settings: RouteSettings(
+                      name: "/login"
+                    ),
                     builder: (BuildContext context) {
-                      return ProfileDetailPage(this.userId);
+                      return ProfileDetailPage(this.userId, this._profileBloc);
                     }
                   )
                 ),
