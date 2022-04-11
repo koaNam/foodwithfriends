@@ -20,7 +20,7 @@ class MatchingBloc{
     _matchingService=new MatchingService();
   }
 
-  Future<void> loadMatch(int userId, int innerRadius) async{
+  Future<List<DrawableCard>> loadMatch(int userId, int innerRadius) async{
     developer.log("loading matches", name: LOG);
 
     Future<List<UserMatch>> fMatches=this._matchingService.getMatches(userId, innerRadius);
@@ -33,6 +33,11 @@ class MatchingBloc{
     matchingCards.addAll(dates);
     matchingCards.addAll(matches);
 
+    return matchingCards;
+  }
+
+  Future<void> loadMatchIntoStream(int userId, int innerRadius) async{
+    List<DrawableCard> matchingCards = await this.loadMatch(userId, innerRadius);
     this._matchingController.add(matchingCards);
   }
 

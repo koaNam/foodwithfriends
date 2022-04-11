@@ -18,7 +18,6 @@ class ProfileCard extends StatelessWidget implements SuggestionCard{
   final Function() decline;
 
   ProfileCard({this.userMatch, this.accept, this.decline, this.matchingBloc, this.myId});
-  //new BorderRadius.circular(12.0)
   @override
   Widget build(BuildContext context) {
     return new Card(

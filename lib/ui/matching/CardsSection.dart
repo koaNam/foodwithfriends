@@ -41,15 +41,7 @@ class _CardsSectionState extends State<CardsSection>
   @override
   void initState() {
     super.initState();
-    for (Object o in widget.onLoadData(null)) {
-      cards.add(widget.itemBuilder(o, () {
-        frontCardAlign = frontCardAlign.add(Alignment(40.0, 0.0));
-        this.animateCards();
-      }, () {
-        frontCardAlign = frontCardAlign.add(Alignment(-40.0, 0.0));
-        this.animateCards();
-      }));
-    }
+    this.loadCards();
 
     frontCardAlign = cardAlign;
 
@@ -73,7 +65,6 @@ class _CardsSectionState extends State<CardsSection>
       if (this.cards.length >= 2) {
         cardList.add(backCard());
       }
-
       if (this.cards.length >= 1) {
         cardList.add(frontCard());
         cardList.add(
@@ -199,20 +190,27 @@ class _CardsSectionState extends State<CardsSection>
       cards.removeAt(0);
 
       if (cards.length < widget.loadThreshold) {
-        for (Object o in widget.onLoadData(cards.last)) {
-          SuggestionCard card = widget.itemBuilder(o, () {
-            frontCardAlign = frontCardAlign.add(Alignment(40.0, 0.0));
-            this.animateCards();
-          }, () {
-            frontCardAlign = frontCardAlign.add(Alignment(-40.0, 0.0));
-            this.animateCards();
-          });
-          cards.add(card);
-        }
+        this.loadCards();
       }
 
       frontCardAlign = defaultFrontCardAlign;
       frontCardRot = 0.0;
+    });
+  }
+
+  void loadCards() async {
+    List<Object> data = await widget.onLoadData(null);
+    setState(() {
+      for (Object o in data) {
+        SuggestionCard card = widget.itemBuilder(o, () {
+          frontCardAlign = frontCardAlign.add(Alignment(40.0, 0.0));
+          this.animateCards();
+        }, () {
+          frontCardAlign = frontCardAlign.add(Alignment(-40.0, 0.0));
+          this.animateCards();
+        });
+        cards.add(card);
+      }
     });
   }
 

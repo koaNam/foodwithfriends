@@ -13,7 +13,7 @@ class SwipeFeedPage extends StatelessWidget {
   final MatchingBloc _matchingBloc=new MatchingBloc();
 
   SwipeFeedPage({this.userId}){
-    _matchingBloc.loadMatch(this.userId, 0);
+    _matchingBloc.loadMatchIntoStream(this.userId, 0);
   }
 
   @override
@@ -34,9 +34,9 @@ class SwipeFeedPage extends StatelessWidget {
                     new CardsSection(
                       context: context,
                       loadThreshold: 2,
-                      onLoadData: (lastElement) {
-                        _matchingBloc.loadMatch(this.userId, 10); //TODO innerRadius
-                        return data;
+                      onLoadData: (lastElement) async {
+                        List<DrawableCard> matches = await this._matchingBloc.loadMatch(this.userId, 10); //TODO innerRadius
+                        return matches;
                       },
                       itemBuilder: (DrawableCard drawable, Function accept, Function decline) {
                         if(drawable is UserMatch) {
