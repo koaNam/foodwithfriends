@@ -1,0 +1,49 @@
+type User {
+    id: Int!
+    name: String!
+    profile_picture: String!
+    latitude: Float!
+    longitude: Float!
+    properties: [Property]
+}
+ 
+type Property {
+    id: Int!
+    name: String!
+    colour: String!
+}
+
+type Property {
+    id: Int!
+    name: String!
+    colour: String!
+}
+
+type UserMatch{
+	id: Int!
+	user: User!
+	match: User
+}
+
+type DateMatch{
+	id: Int!
+	userDateMatches: [UserDateMatch]!
+}
+
+type UserDateMatch{
+	user: User!
+}
+
+type Date{
+	users: [User]
+}
+
+type Query {
+    matches(userId: Int!, innerRadius: Float!, count: Int!): [UserMatch]!
+    dateMatches(userId: Int!, innerRadius: Float!, count: Int!): [DateMatch]!
+}
+
+type Mutation{
+	setMatchStatus(matchId: Int!, status: Boolean!): UserMatch!
+	setUserDateStatus(userId: Int!, dateMatchId: Int!, status: Boolean!): Date
+}
