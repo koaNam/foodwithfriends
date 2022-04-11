@@ -1,0 +1,13 @@
+type UploadRequest {
+	name: String!
+    data: [byte]!
+}
+ 
+type Query {
+	dummyQuery: String
+}
+
+
+type Mutation{
+	uploadData(name: String!, base64String: String!): Boolean!
+}
