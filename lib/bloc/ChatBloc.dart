@@ -29,7 +29,7 @@ class ChatBloc {
           .withClientIdentifier(userId.toString())
           .withWillQos(MqttQos.atLeastOnce)
           .keepAliveFor(30)
-          .authenticateAs("***REMOVED***", "***REMOVED******REMOVED***");  //TODO auslagern
+          .authenticateAs("user", "password");  //TODO auslagern
 
       client.connectionMessage = connMess;
       await client.connect();
