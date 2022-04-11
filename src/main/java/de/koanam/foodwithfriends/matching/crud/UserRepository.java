@@ -10,8 +10,8 @@ import de.koanam.foodwithfriends.matching.model.User;
 
 public interface UserRepository extends JpaRepository<User, Long>{
 
-	@Query(value = "select * from public.user order by point(longitude, latitude) <@> point(:longitude, :latitude) asc", nativeQuery = true)
-	//@Query(value = "select * from user order by point(longitude, latitude) <@> point(:longitude, :latitude) asc", nativeQuery = true)
+	//@Query(value = "select * from public.user order by point(longitude, latitude) <@> point(:longitude, :latitude) asc", nativeQuery = true)
+	@Query(value = "select * from public.user order by longitude, latitude asc", nativeQuery = true)
 	public List<User> findNearest(Double longitude, Double latitude, Pageable pageable);
 	
 }

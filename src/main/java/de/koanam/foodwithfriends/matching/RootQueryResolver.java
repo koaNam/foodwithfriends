@@ -22,16 +22,16 @@ public class RootQueryResolver implements GraphQLQueryResolver {
 	@Autowired
 	private UserMatchService userMatchService;
 	
-	public List<UserMatch> getMatches(long userId, double innerRadius, int count) {
-		List<UserMatch> matches=this.userService.getMatches(userId, innerRadius, count);
+	public Collection<UserMatch> getMatches(long userId, double innerRadius, int count) {
+		Collection<UserMatch> matches=this.userService.getMatches(userId, innerRadius, count);
 
 		return matches;
 	}
 	
 	public Collection<DateMatch> getDateMatches(long userId, double innerRadius, int count) {
-		Collection<DateMatch> dateMatchs = this.userMatchService.getDateMatches(userId, innerRadius, count);
+		Collection<DateMatch> dateMatches = this.userMatchService.getDateMatches(userId, innerRadius, count);
 		
-		return dateMatchs;
+		return dateMatches;
 	}
 
 }

@@ -21,7 +21,7 @@ public class DateMatch {
 	List<UserDateMatch> userDateMatches;
 	
 	public DateMatch(List<UserDateMatch> userDateMatches) {
-		this.userDateMatches = userDateMatches;
+		this.setUserDateMatches(userDateMatches);
 	}
 	
 	public DateMatch() {
@@ -41,6 +41,9 @@ public class DateMatch {
 
 	public void setUserDateMatches(List<UserDateMatch> userDateMatches) {
 		this.userDateMatches = userDateMatches;
+		for(UserDateMatch udm: userDateMatches){
+			udm.setDateMatch(this);
+		}
 	}
 
 	@Override

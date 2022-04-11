@@ -57,68 +57,70 @@ public class UserMatchService {
 		
 		List<User> baseMatches = this.userMatchRepository.findByUserIdAndAccepted(userId, true).stream().map(e -> e.getMatch()).collect(Collectors.toList());
 		LOG.info("found {} matches for user {}", baseMatches.size(), userId);
+
+		List<List<User>> matchIntersections = this.getMatchIntersections(baseMatches);
+
+		List<DateMatch> dateMatches=new ArrayList<>();
+		for(int i=0; i<matchIntersections.size(); i++) {
+			List<User> primaryIntersection=matchIntersections.get(i);
+			for(int j=0; j<matchIntersections.size(); j++) {
+				if(i==j) {
+					continue;
+				}
+				List<User> secondaryIntersection=matchIntersections.get(j);
+				
+				primaryIntersection.retainAll(secondaryIntersection);
+				if(primaryIntersection.size() >= 3) {
+					List<UserDateMatch> userDateMatches = primaryIntersection.stream().map(e -> new UserDateMatch(e)).collect(Collectors.toList());
+					UserDateMatch myMatch=new UserDateMatch(me);
+					userDateMatches.add(myMatch);
+
+					userDateMatches.sort((UserDateMatch u1, UserDateMatch u2) -> (int)(u1.getUser().getId() - u2.getUser().getId()));
+
+					DateMatch dateMatch=new DateMatch(userDateMatches);
+
+					if(!dateMatches.contains(dateMatch)) {
+						dateMatches.add(dateMatch);
+					}
+				}
+			}
+		}
 		
+		LOG.info("build {} dateMatches from {} potential intersections", dateMatches.size(), matchIntersections.size());
+		
+		List<DateMatch> foundDateMatches=this.dateMatchRepository.findByUserIdAndAcceptedIsNull(userId);
+
+		LOG.info("User with id {} has already {} dateMatches", userId, foundDateMatches.size());
+
+		List<DateMatch> savedDateMatches = this.saveDateMatches(dateMatches.stream().filter(dm -> !foundDateMatches.contains(dm)).collect(Collectors.toList()));
+		foundDateMatches.addAll(savedDateMatches);
+		LOG.info("Added new dateMatches, new count is {}", foundDateMatches.size());
+				
+		return foundDateMatches;
+	}
+
+	private List<DateMatch> saveDateMatches(List<DateMatch> dateMatches) {
+		List<DateMatch> savedDateMatches = new ArrayList<>(dateMatches.size());
+		for(DateMatch d: dateMatches) {
+			savedDateMatches.add(d);
+			this.dateMatchRepository.save(d);
+		}
+		return savedDateMatches;
+	}
+
+	private List<List<User>> getMatchIntersections(List<User> baseMatches) {
 		List<List<User>> matchIntersections=new ArrayList<>();
 		for(User user: baseMatches) {
 			List<User> intersection = new ArrayList<>(baseMatches);
-			
+
 			List<User> matches= this.userMatchRepository.findByUserIdAndAccepted(user.getId(), true).stream().map(e -> e.getMatch()).collect(Collectors.toList());
 			matches.add(user);
 			intersection.retainAll(matches);
 			matchIntersections.add(intersection);
 		}
-		
-		List<DateMatch> intersections=new ArrayList<>();
-		for(int i=0; i<matchIntersections.size(); i++) {
-			List<User> firstIntersection=matchIntersections.get(i);
-			for(int j=0; j<matchIntersections.size(); j++) {
-				if(i==j) {
-					continue;
-				}
-				List<User> secondIntersection=matchIntersections.get(j);
-				
-				List<User> resultIntersection=new ArrayList<>(firstIntersection);
-				resultIntersection.retainAll(secondIntersection);
-				
-				if(resultIntersection.size() >=3) {
-					List<UserDateMatch> udm = resultIntersection.stream().map(e -> new UserDateMatch(e)).collect(Collectors.toList());
-					UserDateMatch myMatch=new UserDateMatch(me);
-					udm.add(myMatch);
-					
-					udm.sort((UserDateMatch u1, UserDateMatch u2) -> (int)(u1.getUser().getId() - u2.getUser().getId()));
-					
-					DateMatch dateMatch=new DateMatch(udm);
-					
-					for(UserDateMatch m: udm) {
-						m.setDateMatch(dateMatch);							
-					}
-					
-					
-					if(!intersections.contains(dateMatch)) {
-						intersections.add(dateMatch);
-					}
-				}
-			}
-		}
-		
-		LOG.info("build {} dateMatches from {} potential intersections", intersections.size(), matchIntersections.size());
-		
-		List<DateMatch> result=new ArrayList<>();
-		
-		result.addAll(this.dateMatchRepository.findByUserIdAndAcceptedIsNull(userId));
-		LOG.info("User with id {} has already {} dateMatches", userId, result.size());
-		
-		for(DateMatch d: intersections) {
-			if(!result.contains(d)) {
-				result.add(d);
-				this.dateMatchRepository.save(d);
-			}
-		}
-		LOG.info("Added new dateMatches, new count is {}", result.size());
-				
-		return result;
+		return matchIntersections;
 	}
-	
+
 	public Date setDateMatchStatus(Long userId, Long dateMatchId, boolean status) throws NoResultException{
 		UserDateMatch userDateMatch=this.userDateMatchRepository.findByUserUserIdAndDateMatchId(userId, dateMatchId);
 		if(userDateMatch == null) {

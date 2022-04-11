@@ -1,5 +1,6 @@
 package de.koanam.foodwithfriends.matching.model;
 
+import java.time.LocalDate;
 import java.util.Set;
 
 import javax.persistence.Entity;
@@ -23,7 +24,16 @@ public class User {
 	private String profilePicture;
 	private Double latitude;
 	private Double longitude;
-	
+
+	private LocalDate birthdate;
+	private int ageMinOffset;
+	private int ageMaxOffset;
+	private boolean hasKitchen;
+	private double cookingSkill;
+	private double skillMinOffset;
+	private double skillMaxOffset;
+	private int maxUsers;
+
 	@ManyToMany
 	@LazyCollection(LazyCollectionOption.FALSE)
 	@JoinTable(name="user_property", joinColumns=@JoinColumn(name="user_id"), inverseJoinColumns=@JoinColumn(name="property_id"))
@@ -49,7 +59,7 @@ public class User {
 	public String getProfilePicture() {
 		return profilePicture;
 	}
-	
+
 	public String getProfile_picture() {
 		return profilePicture;
 	}
@@ -73,8 +83,71 @@ public class User {
 	public void setLongitude(Double longitude) {
 		this.longitude = longitude;
 	}
-	
-	
+
+	public LocalDate getBirthdate() {
+		return birthdate;
+	}
+
+	public void setBirthdate(LocalDate birthDate) {
+		this.birthdate = birthDate;
+	}
+
+	public int getAgeMinOffset() {
+		return ageMinOffset;
+	}
+
+	public void setAgeMinOffset(int ageMinOffset) {
+		this.ageMinOffset = ageMinOffset;
+	}
+
+	public int getAgeMaxOffset() {
+		return ageMaxOffset;
+	}
+
+	public void setAgeMaxOffset(int ageMaxOffset) {
+		this.ageMaxOffset = ageMaxOffset;
+	}
+
+	public boolean isHasKitchen() {
+		return hasKitchen;
+	}
+
+	public void setHasKitchen(boolean hasKitchen) {
+		this.hasKitchen = hasKitchen;
+	}
+
+	public double getCookingSkill() {
+		return cookingSkill;
+	}
+
+	public void setCookingSkill(double cookingSkill) {
+		this.cookingSkill = cookingSkill;
+	}
+
+	public double getSkillMinOffset() {
+		return skillMinOffset;
+	}
+
+	public void setSkillMinOffset(double skillMinOffset) {
+		this.skillMinOffset = skillMinOffset;
+	}
+
+	public double getSkillMaxOffset() {
+		return skillMaxOffset;
+	}
+
+	public void setSkillMaxOffset(double skillMaxOffset) {
+		this.skillMaxOffset = skillMaxOffset;
+	}
+
+	public int getMaxUsers() {
+		return maxUsers;
+	}
+
+	public void setMaxUsers(int maxUsers) {
+		this.maxUsers = maxUsers;
+	}
+
 	public Set<Property> getProperties() {
 		return properties;
 	}

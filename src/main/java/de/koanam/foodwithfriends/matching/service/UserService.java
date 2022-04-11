@@ -1,9 +1,11 @@
 package de.koanam.foodwithfriends.matching.service;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import de.koanam.foodwithfriends.matching.util.SearchUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
@@ -23,7 +25,7 @@ public class UserService {
 	@Autowired
 	private UserMatchRepository userMatchRepository;
 	
-	public List<UserMatch> getMatches(long userId, double innerRadius, int count){
+	public Collection<UserMatch> getMatches(long userId, double innerRadius, int count){
 		User user=this.userRepository.findById(userId).orElseThrow();
 		List<User> userMatches = this.userMatchRepository.findByUserId(userId).stream().map(um -> um.getMatch()).collect(Collectors.toList());
 		
@@ -37,24 +39,58 @@ public class UserService {
 				continue;
 			}
 			
-			int propertyCount=0;
-			for(Property property: user.getProperties()) {
-				if(nearUser.getProperties().contains(property)) {
-					propertyCount++;
-				}
-				if(propertyCount >= Math.min(nearUser.getProperties().size(), user.getProperties().size()) / 3) {
-					UserMatch userMatch=new UserMatch(user, nearUser);					
-					userMatch = this.userMatchRepository.save(userMatch);
-					
-					matches.add(userMatch);
-					break;
-				}
+			if(this.checkProperties(nearUser, user) || this.checkAge(nearUser, user) || this.checkSkill(nearUser, user)){
+				UserMatch userMatch=new UserMatch(user, nearUser);
+				userMatch = this.userMatchRepository.save(userMatch);
+
+				matches.add(userMatch);
 			}
 		}
 		matches.addAll(oldMatches);
 		return matches;
 	}
-	
 
+	private boolean checkProperties(User nearUser, User user){
+		int propertyCount=0;
+		for(Property property: user.getProperties()) {
+			for(Property nearUserProp: nearUser.getProperties()){
+				propertyCount += new SearchUtil().dijkstraPropertySearch(property, nearUserProp);
+			}
+			/*if(nearUser.getProperties().contains(property)) {
+				propertyCount++;
+			}*/
+			if(propertyCount >= Math.min(nearUser.getProperties().size(), user.getProperties().size()) / 5) {
+				return true;
+			}
+		}
+		return false;
+	}
+	
+	private boolean checkAge(User nearUser, User user){
+		if(nearUser.getBirthdate() == null){
+			return true;
+		}
+		if(user.getBirthdate() == null){
+			return false;
+		}
+
+		if(nearUser.getBirthdate().plusYears(nearUser.getAgeMaxOffset()).isAfter(user.getBirthdate()) &&
+				nearUser.getBirthdate().minusYears(nearUser.getAgeMinOffset()).isBefore(user.getBirthdate()) &&
+				user.getBirthdate().plusYears(user.getAgeMaxOffset()).isAfter(nearUser.getBirthdate()) &&
+				user.getBirthdate().minusYears(user.getAgeMinOffset()).isBefore(nearUser.getBirthdate())){
+			return true;
+		}
+		return false;
+	}
+
+	private boolean checkSkill(User nearUser, User user){
+		if(nearUser.getCookingSkill() + nearUser.getSkillMaxOffset() >= user.getCookingSkill() &&
+				nearUser.getCookingSkill() - nearUser.getSkillMinOffset() <= user.getCookingSkill() &&
+				user.getCookingSkill() + user.getSkillMaxOffset() >= nearUser.getCookingSkill() &&
+				user.getCookingSkill() - user.getSkillMinOffset() <= nearUser.getCookingSkill()){
+			return true;
+		}
+		return false;
+	}
 	
 }

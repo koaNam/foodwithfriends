@@ -1,7 +1,7 @@
 package de.koanam.foodwithfriends.matching.model;
 
-import javax.persistence.Entity;
-import javax.persistence.Id;
+import javax.persistence.*;
+import java.util.List;
 
 @Entity
 public class Property {
@@ -10,6 +10,9 @@ public class Property {
 	private Long id;
 	private String name;
 	private String colour;
+
+	@OneToMany(mappedBy = "parent", fetch = FetchType.EAGER)
+	private List<InheritedProperty> inheritedProperties;
 
 	public Long getId() {
 		return id;
@@ -33,6 +36,14 @@ public class Property {
 
 	public void setColour(String colour) {
 		this.colour = colour;
+	}
+
+	public List<InheritedProperty> getInheritedProperties() {
+		return inheritedProperties;
+	}
+
+	public void setInheritedProperties(List<InheritedProperty> inheritedProperties) {
+		this.inheritedProperties = inheritedProperties;
 	}
 
 	public Property() {
